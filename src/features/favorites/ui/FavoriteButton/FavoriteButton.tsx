@@ -41,10 +41,11 @@ export function FavoriteButton({
       aria-label={active ? 'Видалити із закладок' : 'Додати в закладки'}
       aria-pressed={active}
     >
-      {/* Bookmark / flag icon — Zara style. Filled when active. */}
+      {/* Bookmark icon — outer envelope is a square (top/left/right edges
+       *  all equal), V-notch cuts inward from the bottom. */}
       <svg width={size} height={size} viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'}>
         <path
-          d="M6 3.5h12v17.2L12 16.3l-6 4.4V3.5Z"
+          d="M6 6h12v12L12 14.5L6 18Z"
           stroke="currentColor"
           strokeWidth="1.5"
           strokeLinejoin="round"

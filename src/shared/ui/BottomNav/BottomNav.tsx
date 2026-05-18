@@ -45,7 +45,7 @@ export function BottomNav() {
         <span className="bottom-nav__icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             <path
-              d="M6 3.5h12v17.2L12 16.3l-6 4.4V3.5Z"
+              d="M6 6h12v12L12 14.5L6 18Z"
               stroke="currentColor"
               strokeWidth="1.4"
               strokeLinejoin="round"

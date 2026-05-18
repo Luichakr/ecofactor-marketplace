@@ -75,7 +75,7 @@ export function FavoritesPage() {
         >
           ЗАКЛАДКИ
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M6 3.5h12v17.2L12 16.3l-6 4.4V3.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+            <path d="M6 6h12v12L12 14.5L6 18Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
           </svg>
         </button>
       </div>
@@ -113,7 +113,7 @@ export function FavoritesPage() {
                     aria-label="Видалити із закладок"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M6 3.5h12v17.2L12 16.3l-6 4.4V3.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                      <path d="M6 6h12v12L12 14.5L6 18Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                     </svg>
                   </button>
                 </div>
