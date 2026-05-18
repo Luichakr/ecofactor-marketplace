@@ -1,8 +1,15 @@
 .catalog-grid {
   display: grid;
-  gap: var(--space-6) var(--space-1);
-  padding: 0;
+  gap: var(--space-6) var(--space-3);
+  padding: 0 var(--space-4);
 }
+
+/* Prevent any card content from forcing the grid track wider than its
+   fraction — long titles otherwise overflow into the next column. */
+.catalog-grid > .product-card,
+.catalog-grid .product-card__hit,
+.catalog-grid .product-card__body,
+.catalog-grid .product-card__head { min-width: 0; max-width: 100%; }
 
 .catalog-grid--cols-1 {
   grid-template-columns: 1fr;
@@ -16,18 +23,19 @@
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-.catalog-grid--cols-1 .product-card__body {
-  padding: var(--space-4);
-}
-
+/* Views 1 + 2: title left, "+" right, price left under title.
+   Body padding 0 so it aligns with the image's left/right edges. */
+.catalog-grid--cols-1 .product-card__body,
 .catalog-grid--cols-2 .product-card__body {
-  padding: var(--space-2) var(--space-3) var(--space-3);
+  padding: var(--space-2) 0 var(--space-3);
 }
 
-/* View 3: dense — hide title, show only price + "+"
-   This guarantees equal card heights regardless of title length. */
+/* View 3: dense — hide title, stack price on top and "+" below it,
+   both centered. Matches the Zara grid-3 rhythm. */
 .catalog-grid--cols-3 .product-card__body {
-  padding: var(--space-2) var(--space-2) var(--space-3);
+  padding: var(--space-2) 0 var(--space-3);
+  align-items: center;
+  text-align: center;
 }
 
 .catalog-grid--cols-3 .product-card__title {
@@ -35,5 +43,13 @@
 }
 
 .catalog-grid--cols-3 .product-card__head {
-  justify-content: flex-end;
+  order: 2;
+  justify-content: center;
+  width: 100%;
+}
+
+.catalog-grid--cols-3 .product-card__price {
+  order: 1;
+  text-align: center;
+  width: 100%;
 }

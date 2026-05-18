@@ -27,7 +27,6 @@ const PLACEHOLDER_PHOTOS: Array<{ size: string; ratio: string }> = [
   { size: '1248 × 1664', ratio: '3 / 4' },
   { size: '1248 × 1664', ratio: '3 / 4' },
   { size: '1248 × 1664', ratio: '3 / 4' },
-  { size: '1248 × 1664', ratio: '3 / 4' },
 ]
 
 export function AutoProductPage() {

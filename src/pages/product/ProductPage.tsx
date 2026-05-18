@@ -20,10 +20,9 @@ import { FavoriteButton } from '../../features/favorites/ui/FavoriteButton/Favor
 import { REQUEST_PATHS, ROUTES } from '../../shared/config/routes'
 import './ProductPage.css'
 
-/** Six placeholder tiles to match the Zara reference rhythm until upstream
- *  catalogs (EFPF, local mock) start returning richer galleries. */
+/** Five placeholder tiles stacked vertically (1 per row) — the reference
+ *  product card style: one big hero + five identical secondary frames. */
 const PHOTO_PLACEHOLDERS = [
-  { size: '1248 × 1664', ratio: '3 / 4' },
   { size: '1248 × 1664', ratio: '3 / 4' },
   { size: '1248 × 1664', ratio: '3 / 4' },
   { size: '1248 × 1664', ratio: '3 / 4' },

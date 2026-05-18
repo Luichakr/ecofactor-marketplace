@@ -77,12 +77,12 @@
   color: var(--color-bg);
 }
 
-/* ── Photo strip (6 placeholders) ────────────────────────────── */
+/* ── Photo strip (5 stacked placeholders) ────────────────────── */
 .product-page__photos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4) var(--space-4);
 }
 
 .product-page__photo-tile {
