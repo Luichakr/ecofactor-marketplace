@@ -1,0 +1,71 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field__label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.field__required {
+  font-weight: var(--font-weight-bold);
+}
+
+.field__aside {
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.field__input,
+.field__textarea {
+  width: 100%;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body1);
+  color: var(--color-text);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-text);
+  padding: var(--space-2) 0;
+  outline: none;
+  border-radius: 0;
+}
+
+.field__textarea {
+  resize: vertical;
+  min-height: 72px;
+  line-height: var(--line-height-body1);
+}
+
+.field__input::placeholder,
+.field__textarea::placeholder {
+  color: var(--color-text-disabled);
+}
+
+.field--error .field__input,
+.field--error .field__textarea {
+  border-bottom-color: var(--color-error);
+}
+
+.field__error {
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-error);
+  margin: 0;
+}
+
+.field__helper {
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-text-muted);
+  margin: 0;
+}

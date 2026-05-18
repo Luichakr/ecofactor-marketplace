@@ -1,0 +1,299 @@
+.np-delivery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+  padding: var(--space-4);
+}
+
+.np-delivery__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.np-delivery__label {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.np-delivery__required {
+  font-weight: var(--font-weight-bold);
+}
+
+.np-delivery__brand {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #ee2521; /* Nova Poshta red */
+  font-weight: var(--font-weight-bold);
+  border: 1px solid #ee2521;
+  padding: 2px 6px;
+}
+
+.np-delivery__notice {
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-warning);
+  background-color: var(--color-surface-elevated);
+  padding: var(--space-2) var(--space-3);
+  margin: 0;
+  border-left: 2px solid var(--color-warning);
+}
+
+.np-delivery__field-label {
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ──── City ──────────────────────────────────────────────────── */
+.np-delivery__city {
+  position: relative;
+}
+
+.np-delivery__city-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--color-text);
+}
+
+.np-delivery__city-input {
+  flex: 1;
+  border: none;
+  background: none;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body1);
+  color: var(--color-text);
+  padding: var(--space-2) 0;
+  outline: none;
+}
+
+.np-delivery__city-input::placeholder {
+  color: var(--color-text-disabled);
+}
+
+.np-delivery__clear {
+  background: none;
+  border: none;
+  padding: 0 var(--space-2);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  min-height: 0;
+}
+
+.np-delivery__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-text);
+  list-style: none;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: var(--shadow-elevated);
+}
+
+.np-delivery__option {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: none;
+  border: none;
+  font-family: var(--font-family);
+  text-align: left;
+  cursor: pointer;
+  min-height: 0;
+  color: var(--color-text);
+}
+
+.np-delivery__option:hover {
+  background-color: var(--color-surface-elevated);
+}
+
+.np-delivery__option-main {
+  font-size: var(--font-size-body2);
+  color: var(--color-text);
+}
+
+.np-delivery__option-area {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  letter-spacing: var(--letter-spacing-caption);
+}
+
+/* ──── Branch type tabs ──────────────────────────────────────── */
+.np-delivery__type {
+  display: flex;
+  gap: var(--space-1);
+  border: 1px solid var(--color-border);
+}
+
+.np-delivery__type-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: var(--space-2) 0;
+  font-family: var(--font-family);
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  min-height: 0;
+}
+
+.np-delivery__type-tab--active {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* ──── Warehouses ────────────────────────────────────────────── */
+.np-delivery__warehouses {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.np-delivery__wh-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--color-text);
+  background: none;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  color: var(--color-text);
+  padding: var(--space-2) 0;
+  outline: none;
+}
+
+.np-delivery__wh-input::placeholder {
+  color: var(--color-text-disabled);
+}
+
+.np-delivery__wh-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+}
+
+.np-delivery__wh-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  min-height: 0;
+}
+
+.np-delivery__wh-item:last-child {
+  border-bottom: none;
+}
+
+.np-delivery__wh-item:hover {
+  background-color: var(--color-surface-elevated);
+}
+
+.np-delivery__wh-radio {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--color-text);
+  flex-shrink: 0;
+  margin-top: 2px;
+  position: relative;
+}
+
+.np-delivery__wh-item--active .np-delivery__wh-radio::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background-color: var(--color-text);
+}
+
+.np-delivery__wh-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.np-delivery__wh-title {
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.3px;
+  color: var(--color-text);
+}
+
+.np-delivery__wh-addr {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  line-height: 16px;
+}
+
+.np-delivery__wh-item--active .np-delivery__wh-title {
+  font-weight: var(--font-weight-bold);
+}
+
+.np-delivery__hint {
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ──── Selected summary ──────────────────────────────────────── */
+.np-delivery__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3);
+  background-color: var(--color-surface-elevated);
+  border-left: 2px solid var(--color-text);
+}
+
+.np-delivery__summary-label {
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.np-delivery__summary-value {
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.np-delivery__summary-addr {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,108 @@
+.gallery-fs {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-fs__close {
+  position: absolute;
+  top: calc(var(--safe-area-top) + var(--space-3));
+  left: var(--space-3);
+  width: 40px;
+  height: 40px;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  min-height: 0;
+}
+
+.gallery-fs__counter {
+  position: absolute;
+  top: calc(var(--safe-area-top) + var(--space-4));
+  right: var(--space-4);
+  z-index: 10;
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text);
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 4px 8px;
+  font-family: var(--font-family);
+}
+
+.gallery-fs__rail {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.gallery-fs__rail::-webkit-scrollbar { display: none; }
+
+.gallery-fs__slide {
+  flex: 0 0 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: start;
+  background-color: var(--color-surface-elevated);
+}
+
+.gallery-fs__slide .product-image {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto !important;
+}
+
+.gallery-fs__thumbs {
+  position: absolute;
+  bottom: calc(var(--safe-area-bottom) + var(--space-3));
+  left: var(--space-3);
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+}
+
+.gallery-fs__thumb {
+  width: 48px;
+  height: 60px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  min-height: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-label);
+}
+
+.gallery-fs__thumb .product-image {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto !important;
+}
+
+.gallery-fs__thumb--active {
+  border-color: var(--color-text);
+  border-width: 2px;
+}
+
+.gallery-fs__thumb--more {
+  background: var(--color-bg);
+}

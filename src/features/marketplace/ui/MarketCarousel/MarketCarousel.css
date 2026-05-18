@@ -1,0 +1,105 @@
+.market-carousel {
+  display: flex;
+  flex-direction: column;
+}
+
+.market-carousel__slide {
+  position: relative;
+  display: block;
+  width: 100%;
+  /* Slightly shorter than the visible scroll viewport so ~60px of the
+     NEXT slide peeks through above the bottom nav — hints "swipe down
+     for more". */
+  height: calc(var(--shell-h, 100dvh) - var(--bottom-nav-height) - var(--safe-area-bottom) - 60px);
+  min-height: 480px;
+  padding: 0;
+  margin: 0;
+  background: var(--color-bg);
+  cursor: pointer;
+  overflow: hidden;
+  scroll-snap-align: start;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.market-carousel__slide[disabled] {
+  cursor: default;
+}
+
+/* ── Unified frame for all slides (photo + placeholder).
+   Inset 30px on top (plus status-bar safe area), 7px on each side,
+   and leaves ~15% bottom whitespace inside the slide. The frame is
+   a positioned container — its children (image, placeholder, caption,
+   overlay) layout relative to it. */
+.market-carousel__frame {
+  position: absolute;
+  top: calc(var(--safe-area-top) + 30px);
+  left: 7px;
+  right: 7px;
+  /* 95% so the bottom whitespace under the frame is half of what it
+     used to be — the visible gap between adjacent cards shrinks. */
+  height: 95%;
+  display: block;
+  overflow: hidden;
+}
+
+.market-carousel__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.market-carousel__frame .placeholder-image {
+  width: 100%;
+  height: 100%;
+}
+
+/* Soft gradient at the bottom of photo slides for serif label legibility. */
+.market-carousel__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 55%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  pointer-events: none;
+}
+
+.market-carousel__slide--placeholder .market-carousel__overlay {
+  display: none;
+}
+
+/* Caption sits inside the frame, near its lower portion. Same vertical
+   position for photo and placeholder; only the color varies. */
+.market-carousel__caption {
+  position: absolute;
+  bottom: 18%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-family-serif);
+  font-size: 40px;
+  line-height: 44px;
+  font-weight: var(--font-weight-regular);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+  margin: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.market-carousel__slide--placeholder .market-carousel__caption {
+  color: var(--color-text);
+  text-shadow: none;
+}
+
+.market-carousel__slide:active:not([disabled]) .market-carousel__image {
+  opacity: 0.85;
+}

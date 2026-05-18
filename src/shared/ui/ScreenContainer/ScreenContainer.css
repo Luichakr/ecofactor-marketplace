@@ -1,0 +1,14 @@
+.screen-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.screen-container--with-top-inset {
+  padding-top: var(--safe-area-top);
+}
+
+.screen-container--with-nav {
+  padding-bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
+}

@@ -1,0 +1,7 @@
+.marketplace-home {
+  scroll-snap-type: y mandatory;
+}
+
+.marketplace-home__inner {
+  display: contents;
+}

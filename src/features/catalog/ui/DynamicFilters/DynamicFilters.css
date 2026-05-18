@@ -1,0 +1,100 @@
+.dynamic-filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-4);
+}
+
+.dynamic-filters__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.dynamic-filters__label {
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-size: 11px;
+}
+
+.dynamic-filters__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.dynamic-filters__option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  min-height: 36px;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dynamic-filters__option--active {
+  background-color: var(--color-accent-soft);
+  border-color: var(--color-border-accent);
+  color: var(--color-accent);
+}
+
+.dynamic-filters__option:active {
+  opacity: 0.75;
+}
+
+.dynamic-filters__option-count {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.dynamic-filters__range-inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dynamic-filters__range-input {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  color: var(--color-text);
+  min-height: 40px;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.dynamic-filters__range-input::-webkit-inner-spin-button,
+.dynamic-filters__range-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.dynamic-filters__range-input:focus {
+  outline: none;
+  border-color: var(--color-border-accent);
+}
+
+.dynamic-filters__range-input::placeholder {
+  color: var(--color-text-disabled);
+}
+
+.dynamic-filters__range-sep {
+  font-size: var(--font-size-body2);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}

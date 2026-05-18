@@ -1,0 +1,35 @@
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-body2);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 32px;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-chip--active {
+  color: var(--color-accent);
+  background-color: var(--color-accent-soft);
+  border-color: var(--color-border-accent);
+}
+
+.filter-chip:active {
+  opacity: 0.75;
+}
+
+.filter-chip__count {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-left: 2px;
+}

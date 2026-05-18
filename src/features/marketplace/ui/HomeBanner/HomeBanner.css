@@ -1,0 +1,126 @@
+.home-banner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  background: var(--color-bg);
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+.home-banner__hit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 0;
+}
+
+/* ──── Studio: transparent product on light bg, contained ─────── */
+.home-banner--studio .home-banner__image {
+  position: absolute;
+  top: 12%;
+  left: 8%;
+  right: 8%;
+  bottom: 28%;
+  width: 84%;
+  height: 60%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.home-banner--studio .home-banner__label {
+  color: var(--color-text);
+}
+
+/* ──── Full bleed: editorial photo with a soft frame ──────────── */
+/* Photo doesn't go edge-to-edge — small whitespace on every side,
+   bigger margin at the bottom for the serif label (Zara-style).    */
+.home-banner--fullBleed {
+  background: var(--color-bg);
+}
+
+.home-banner--fullBleed .home-banner__image-frame {
+  position: absolute;
+  top: calc(var(--safe-area-top) + 56px);
+  left: 12px;
+  right: 12px;
+  bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + 56px);
+  display: block;
+  overflow: hidden;
+  background-color: var(--color-surface-elevated);
+}
+
+.home-banner--fullBleed .home-banner__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.home-banner--fullBleed .home-banner__overlay {
+  display: none;
+}
+
+.home-banner--fullBleed .home-banner__label {
+  color: #ffffff;
+  font-size: 48px;
+  line-height: 52px;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+  /* Raised over the photo's lower portion, like the Zara wordmark */
+  bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + 90px);
+}
+
+/* ──── Shared ─────────────────────────────────────────────────── */
+.home-banner__placeholder {
+  position: absolute;
+  inset: 0;
+  background: var(--color-surface-elevated);
+}
+
+.home-banner__label {
+  position: absolute;
+  bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + var(--space-10));
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-regular);
+  font-size: 32px;
+  line-height: 38px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+  pointer-events: none;
+}
+
+.home-banner__hit:active .home-banner__image {
+  opacity: 0.85;
+}
+
+.home-banner__top-slot {
+  position: absolute;
+  top: calc(var(--safe-area-top) + var(--space-5));
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.home-banner__top-slot > * {
+  pointer-events: auto;
+}

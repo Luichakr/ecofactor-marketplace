@@ -1,0 +1,16 @@
+.catalog-page__grid {
+  padding: 0 var(--space-1);
+}
+
+.catalog-page__bottom-space {
+  height: var(--space-8);
+}
+
+.catalog-page__status {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}

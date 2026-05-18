@@ -1,0 +1,22 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--mobile-max-width);
+  height: 100dvh;
+  height: 100vh;
+  background-color: var(--color-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Desktop preview: clip the shell to phone-like aspect ratio (≈19.5:9 iPhone) */
+@media (min-width: 600px) {
+  .app-shell {
+    height: min(calc(100dvh - 32px), 932px);
+    height: min(calc(100vh - 32px), 932px);
+    align-self: center;
+    box-shadow: var(--shadow-elevated);
+    border-radius: var(--radius-md, 14px);
+  }
+}

@@ -1,0 +1,27 @@
+.filters-page__reset-btn {
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 0 var(--space-2);
+}
+
+.filters-page__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body2);
+  text-align: center;
+}
+
+.filters-page__cta {
+  padding: var(--space-4);
+  position: sticky;
+  bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + var(--space-4));
+  background: linear-gradient(to top, var(--color-bg) 70%, transparent);
+}

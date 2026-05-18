@@ -1,0 +1,19 @@
+.category-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(120px, 38%);
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.category-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.category-grid > * {
+  scroll-snap-align: start;
+}

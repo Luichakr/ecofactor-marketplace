@@ -1,0 +1,32 @@
+.fav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 0;
+  min-height: 0;
+  border-radius: 50%;
+  transition: transform var(--transition-fast), color var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fav-btn--bare {
+  background: none;
+  border: none;
+  border-radius: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.fav-btn:active {
+  transform: scale(0.92);
+}
+
+.fav-btn--active {
+  color: var(--color-text);
+}

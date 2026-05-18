@@ -1,0 +1,61 @@
+.delivery-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-4);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  min-height: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.delivery-card--selected {
+  border-width: 2px;
+  border-color: var(--color-text);
+  padding: calc(var(--space-4) - 1px);
+}
+
+.delivery-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.delivery-card__title {
+  font-size: var(--font-size-body1);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.delivery-card__price {
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.delivery-card__subtitle {
+  font-size: var(--font-size-body2);
+  line-height: var(--line-height-body2);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.delivery-card__details {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}

@@ -1,0 +1,35 @@
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 0;
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-badge--available,
+.status-badge--inStock {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+.status-badge--inTransit {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-text);
+}
+
+.status-badge--preorder {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-text);
+}
+
+.status-badge--service {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+}

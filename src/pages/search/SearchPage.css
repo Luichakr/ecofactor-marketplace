@@ -1,0 +1,19 @@
+.search-page__input {
+  padding: var(--space-4);
+}
+
+.search-page__count {
+  padding: 0 var(--space-4) var(--space-3);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
+
+.search-page__hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12) var(--space-4);
+  font-size: var(--font-size-body2);
+  color: var(--color-text-muted);
+  text-align: center;
+}

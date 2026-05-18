@@ -1,0 +1,39 @@
+.catalog-grid {
+  display: grid;
+  gap: var(--space-6) var(--space-1);
+  padding: 0;
+}
+
+.catalog-grid--cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.catalog-grid--cols-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.catalog-grid--cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.catalog-grid--cols-1 .product-card__body {
+  padding: var(--space-4);
+}
+
+.catalog-grid--cols-2 .product-card__body {
+  padding: var(--space-2) var(--space-3) var(--space-3);
+}
+
+/* View 3: dense — hide title, show only price + "+"
+   This guarantees equal card heights regardless of title length. */
+.catalog-grid--cols-3 .product-card__body {
+  padding: var(--space-2) var(--space-2) var(--space-3);
+}
+
+.catalog-grid--cols-3 .product-card__title {
+  display: none;
+}
+
+.catalog-grid--cols-3 .product-card__head {
+  justify-content: flex-end;
+}

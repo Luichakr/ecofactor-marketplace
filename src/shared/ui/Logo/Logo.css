@@ -1,0 +1,17 @@
+.logo {
+  display: block;
+  width: auto;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.logo--horizontal {
+  /* Wordmark has a wide aspect ratio; width follows height. */
+}
+
+.logo--icon {
+  /* Square icon. */
+  aspect-ratio: 1 / 1;
+  width: auto;
+}
