@@ -1,0 +1,212 @@
+.bookmarks-page {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 var(--space-12);
+}
+
+/* Top bar — X close + ОПЦІЇ */
+.bookmarks-page__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+}
+
+.bookmarks-page__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-height: 0;
+  padding: 0;
+  margin-left: -4px;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.bookmarks-page__options {
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.bookmarks-page__options[disabled] {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+/* Tabs */
+.bookmarks-page__tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-2) var(--space-4) var(--space-3);
+}
+
+.bookmarks-page__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: var(--space-1) 0;
+  min-height: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.bookmarks-page__tab--active {
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.bookmarks-page__tab-num {
+  color: var(--color-text-muted);
+}
+
+/* List heading "SERGEY'S LIST" */
+.bookmarks-page__list-name {
+  font-family: var(--font-family);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: var(--space-3) 0 var(--space-3);
+  padding: 0 var(--space-4);
+}
+
+/* Grid */
+.bookmarks-page__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  list-style: none;
+  margin: 0;
+}
+
+.bookmark-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.bookmark-card__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border: none;
+  background: var(--color-surface-elevated);
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 0;
+}
+
+.bookmark-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bookmark-card__image-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.bookmark-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.bookmark-card__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bookmark-card__bookmark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-height: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.bookmark-card__price {
+  margin: 0;
+  font-size: 11px;
+  color: var(--color-text);
+}
+
+.bookmark-card__cta {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) 0;
+  min-height: 36px;
+  background: none;
+  border: 1px solid var(--color-text);
+  font-family: var(--font-family);
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.bookmark-card__cta:active {
+  opacity: 0.6;
+}
+
+/* Bottom action row */
+.bookmarks-page__footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  margin-top: auto;
+  border-top: 1px solid var(--color-border);
+}

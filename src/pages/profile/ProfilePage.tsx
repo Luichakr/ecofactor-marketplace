@@ -67,7 +67,7 @@ const ICONS: Record<string, ReactNode> = {
 
 const MENU_ITEMS = [
   { key: 'requests', label: 'Мої заявки' },
-  { key: 'favorites', label: 'Обране' },
+  { key: 'favorites', label: 'Закладки' },
   { key: 'settings', label: 'Налаштування' },
   { key: 'support', label: 'Підтримка' },
 ]

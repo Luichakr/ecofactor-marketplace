@@ -1,0 +1,57 @@
+@keyframes bookmark-toast-in {
+  from { transform: translateY(100%); opacity: 0.6; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.bookmark-toast {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-4);
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  z-index: 200;
+  animation: bookmark-toast-in 200ms ease-out;
+}
+
+.bookmark-toast__label {
+  flex: 1;
+  font-size: var(--font-size-body2);
+  letter-spacing: 0.2px;
+}
+
+.bookmark-toast__link {
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 0;
+  color: var(--color-bg);
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bookmark-toast__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-height: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-bg);
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}

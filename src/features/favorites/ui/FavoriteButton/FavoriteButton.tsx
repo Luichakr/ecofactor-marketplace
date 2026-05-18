@@ -1,4 +1,5 @@
 import { favorites, useIsFavorite } from '../../model/favoritesStore'
+import { showBookmarkToast } from '../BookmarkToast/bus'
 import './FavoriteButton.css'
 
 type Props = {
@@ -7,7 +8,7 @@ type Props = {
   className?: string
   /** Icon size in px. Default 18. */
   size?: number
-  /** Whether the button is visible without a background. Default true. */
+  /** Whether the button is visible without a background. Default false. */
   bare?: boolean
   /** Stop click propagation so card-click doesn't fire. Default true. */
   stopPropagation?: boolean
@@ -27,7 +28,9 @@ export function FavoriteButton({
       e.stopPropagation()
       e.preventDefault()
     }
+    const wasActive = active
     favorites.toggle(productId)
+    if (!wasActive) showBookmarkToast()
   }
 
   return (
@@ -35,15 +38,17 @@ export function FavoriteButton({
       type="button"
       className={`fav-btn ${active ? 'fav-btn--active' : ''} ${bare ? 'fav-btn--bare' : ''} ${className}`}
       onClick={handle}
-      aria-label={active ? 'Видалити з обраного' : 'Додати в обране'}
+      aria-label={active ? 'Видалити із закладок' : 'Додати в закладки'}
       aria-pressed={active}
     >
+      {/* Bookmark / flag icon — Zara style. Filled when active. */}
       <svg width={size} height={size} viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'}>
         <path
-          d="M3 6.5C3 4 4.9 2 7.4 2C8.9 2 10.4 2.7 11.4 3.9L12 4.6L12.6 3.9C13.6 2.7 15.1 2 16.6 2C19.1 2 21 4 21 6.5C21 10.4 17.1 13.9 12 19C6.9 13.9 3 10.4 3 6.5Z"
+          d="M6 3.5h12v17.2L12 16.3l-6 4.4V3.5Z"
           stroke="currentColor"
-          strokeWidth="1.4"
+          strokeWidth="1.5"
           strokeLinejoin="round"
+          strokeLinecap="round"
         />
       </svg>
     </button>

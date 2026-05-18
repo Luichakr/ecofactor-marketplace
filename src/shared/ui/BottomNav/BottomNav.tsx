@@ -45,13 +45,15 @@ export function BottomNav() {
         <span className="bottom-nav__icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             <path
-              d="M12 21L10.5 19.7C5.4 15 2 11.95 2 8.2C2 5.15 4.4 2.75 7.45 2.75C9.2 2.75 10.85 3.55 12 4.8C13.15 3.55 14.8 2.75 16.55 2.75C19.6 2.75 22 5.15 22 8.2C22 11.95 18.6 15 13.5 19.7L12 21Z"
+              d="M6 3.5h12v17.2L12 16.3l-6 4.4V3.5Z"
               stroke="currentColor"
-              strokeWidth="1.2"
+              strokeWidth="1.4"
+              strokeLinejoin="round"
+              strokeLinecap="round"
             />
           </svg>
         </span>
-        <span className="bottom-nav__label">Обране</span>
+        <span className="bottom-nav__label">Закладки</span>
       </NavLink>
 
       <NavLink
