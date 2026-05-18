@@ -3,12 +3,14 @@ import type { EfpfListResponse, EfpfProduct } from './types'
 const BASE = (import.meta.env.VITE_EFPF_API_BASE as string | undefined)
   ?? 'https://ecofactortech.com/wp-json/efpf/v1'
 
-function efpfHeaders(): HeadersInit {
-  const key = (import.meta.env.VITE_EFPF_API_KEY as string | undefined)?.trim() ?? ''
-  return {
-    Accept: 'application/json',
-    ...(key ? { 'X-EFPF-API-Key': key } : {}),
-  }
+/**
+ * EFPF allows the key as `?api_key=...` in the URL or as `X-EFPF-API-Key`
+ * header. We use the query form so cross-origin browser requests don't
+ * trigger a CORS preflight that the server rejects (its
+ * Access-Control-Allow-Headers list does not include X-EFPF-API-Key).
+ */
+function efpfKey(): string {
+  return (import.meta.env.VITE_EFPF_API_KEY as string | undefined)?.trim() ?? ''
 }
 
 export type ListParams = {
@@ -26,6 +28,8 @@ function buildUrl(path: string, params: Record<string, string | number | boolean
     if (v === undefined || v === '' || v === false) continue
     u.searchParams.set(k, String(v === true ? 1 : v))
   }
+  const key = efpfKey()
+  if (key) u.searchParams.set('api_key', key)
   return u
 }
 
@@ -38,14 +42,14 @@ export async function fetchProducts(params: ListParams = {}): Promise<EfpfListRe
     since: params.since,
     include_variations: params.include_variations,
   })
-  const r = await fetch(u, { headers: efpfHeaders() })
+  const r = await fetch(u, { headers: { Accept: 'application/json' } })
   if (!r.ok) throw new Error(`EFPF /products failed: ${r.status}`)
   return r.json()
 }
 
 export async function fetchProduct(id: number | string, lang = 'ua'): Promise<EfpfProduct> {
   const u = buildUrl(`/products/${id}`, { lang })
-  const r = await fetch(u, { headers: efpfHeaders() })
+  const r = await fetch(u, { headers: { Accept: 'application/json' } })
   if (!r.ok) throw new Error(`EFPF /products/${id} failed: ${r.status}`)
   return r.json()
 }
