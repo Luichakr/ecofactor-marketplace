@@ -14,6 +14,7 @@ import { Header } from '../../shared/ui/Header/Header'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { StickyCTA } from '../../shared/ui/StickyCTA/StickyCTA'
 import { ExpandableSection } from '../../shared/ui/ExpandableSection/ExpandableSection'
+import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import { NovaPoshtaDelivery, type NovaPoshtaSelection } from '../../shared/ui/NovaPoshtaDelivery/NovaPoshtaDelivery'
 import { FavoriteButton } from '../../features/favorites/ui/FavoriteButton/FavoriteButton'
 import { REQUEST_PATHS, ROUTES } from '../../shared/config/routes'
@@ -114,10 +115,12 @@ export function ProductPage() {
             className="product-page__gallery"
           />
         ) : (
-          <div className="product-page__hero-placeholder">
-            <span className="product-page__photo-tag">PHOTO TBD</span>
-            <span className="product-page__photo-size">1248 × 1664</span>
-          </div>
+          <PlaceholderImage
+            size="1248 × 1664"
+            caption={product.title}
+            aspectRatio="3 / 4"
+            className="product-page__hero-placeholder"
+          />
         )}
 
         <div className="product-page__content">
@@ -153,14 +156,12 @@ export function ProductPage() {
         {/* 6-tile photo placeholder strip (reference look). */}
         <section className="product-page__photos" aria-label="Фотографії">
           {PHOTO_PLACEHOLDERS.map((p, i) => (
-            <div
+            <PlaceholderImage
               key={i}
-              className="product-page__photo-tile"
-              style={{ aspectRatio: p.ratio }}
-            >
-              <span className="product-page__photo-tag">PHOTO TBD</span>
-              <span className="product-page__photo-size">{p.size}</span>
-            </div>
+              size={p.size}
+              aspectRatio={p.ratio}
+              caption={`${product.title.toUpperCase()} · ${i + 1}`}
+            />
           ))}
         </section>
 

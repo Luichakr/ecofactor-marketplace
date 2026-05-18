@@ -9,6 +9,7 @@ import { ExpandableSection } from '../../shared/ui/ExpandableSection/ExpandableS
 import { ProductGallery } from '../../features/product/ui/ProductGallery/ProductGallery'
 import { ProductGalleryFullscreen } from '../../features/product/ui/ProductGalleryFullscreen/ProductGalleryFullscreen'
 import { NovaPoshtaDelivery, type NovaPoshtaSelection } from '../../shared/ui/NovaPoshtaDelivery/NovaPoshtaDelivery'
+import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import { FavoriteButton } from '../../features/favorites/ui/FavoriteButton/FavoriteButton'
 import { useAutoCar } from '../../features/auto/hooks/useAutoCar'
 import { REQUEST_PATHS, ROUTES } from '../../shared/config/routes'
@@ -103,14 +104,12 @@ export function AutoProductPage() {
         {/* Additional photos strip — placeholders until Lubeavto exposes more */}
         <section className="auto-product__photos" aria-label="Фотографії">
           {PLACEHOLDER_PHOTOS.map((p, i) => (
-            <div
+            <PlaceholderImage
               key={i}
-              className="auto-product__photo-tile"
-              style={{ aspectRatio: p.ratio }}
-            >
-              <span className="auto-product__photo-tag">PHOTO TBD</span>
-              <span className="auto-product__photo-size">{p.size}</span>
-            </div>
+              size={p.size}
+              aspectRatio={p.ratio}
+              caption={`${car.title.toUpperCase()} · ${i + 1}`}
+            />
           ))}
         </section>
 

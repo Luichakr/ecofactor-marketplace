@@ -4,6 +4,7 @@ import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import { Button } from '../../shared/ui/Button/Button'
 import { ROUTES, productPath, autoCarPath } from '../../shared/config/routes'
+import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import { useFavorites, favorites } from '../../features/favorites/model/favoritesStore'
 import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
 import { useAutoElectricInStock } from '../../features/auto/hooks/useAutoCars'
@@ -101,7 +102,7 @@ export function FavoritesPage() {
                   {it.image ? (
                     <img src={it.image} alt={it.title} loading="lazy" />
                   ) : (
-                    <span className="bookmark-card__image-empty">PHOTO TBD</span>
+                    <PlaceholderImage size="1248 × 1664" aspectRatio="3 / 4" caption={it.title} />
                   )}
                 </button>
                 <div className="bookmark-card__head">

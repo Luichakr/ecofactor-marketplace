@@ -8,6 +8,7 @@ import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import { useAutoElectricInStock } from '../../features/auto/hooks/useAutoCars'
 import type { AutoCard } from '../../features/auto/api/lubeavtoApi'
 import { AutoSkeletonList } from '../../features/auto/ui/AutoCardSkeleton/AutoCardSkeleton'
+import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import {
   AutoFiltersSheet,
   applyAutoFilters,
@@ -238,7 +239,7 @@ function CarRow({ car, view, onClick }: { car: AutoCard; view: View; onClick: ()
         {car.image ? (
           <img src={car.image} alt={car.title} loading="lazy" />
         ) : (
-          <div className="auto-card__image-empty">PHOTO TBD</div>
+          <PlaceholderImage size="1248 × 936" aspectRatio="4 / 3" caption={car.title} />
         )}
         <span className={`auto-card__badge auto-card__badge--${car.isElectric ? 'ev' : 'hybrid'}`}>
           {car.isElectric ? 'ELECTRIC' : 'HYBRID'}
