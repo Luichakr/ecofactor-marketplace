@@ -88,7 +88,12 @@ export function AutoProductPage() {
             <SpecRow label="Пробіг" value={car.mileageLabel} />
             <SpecRow label="Паливо" value={car.fuel} />
             {car.engineVolumeL > 0 && (
-              <SpecRow label="Двигун" value={`${car.engineVolumeL.toFixed(1)} L`} />
+              <SpecRow
+                label={car.isElectric ? 'Батарея' : 'Двигун'}
+                value={car.isElectric
+                  ? `${Math.round(car.engineVolumeL)} kWh`
+                  : `${car.engineVolumeL.toFixed(1)} L`}
+              />
             )}
             <SpecRow label="КПП" value={car.transmission} />
             <SpecRow label="Привід" value={car.drive} />
