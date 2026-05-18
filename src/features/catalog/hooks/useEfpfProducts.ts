@@ -3,6 +3,7 @@ import type { MarketplaceProduct } from '../../../entities/product/model/product
 import { fetchAllProducts } from '../../../shared/api/efpf/client'
 import { adaptEfpfProducts } from '../../../shared/api/efpf/adapter'
 import { mockProducts } from '../../../data/mockProducts'
+import { mockTires } from '../../../data/mockTires'
 
 type State = {
   data: MarketplaceProduct[] | null
@@ -13,15 +14,21 @@ type State = {
 let cache: MarketplaceProduct[] | null = null
 let inflight: Promise<MarketplaceProduct[]> | null = null
 
+// Local-only verticals that EFPF doesn't (yet) carry but we still want to
+// surface in the catalog. Merged into every successful response so the
+// Колеса rubric stays visible even on a live EFPF run.
+const LOCAL_EXTRAS: MarketplaceProduct[] = mockTires
+
 async function loadOnce(): Promise<MarketplaceProduct[]> {
   if (cache) return cache
   if (inflight) return inflight
   inflight = (async () => {
     const items = await fetchAllProducts({ lang: 'ua', per_page: 200 })
     const adapted = adaptEfpfProducts(items)
-    cache = adapted
+    const merged = [...adapted, ...LOCAL_EXTRAS]
+    cache = merged
     inflight = null
-    return adapted
+    return merged
   })()
   return inflight
 }
@@ -47,7 +54,7 @@ export function useEfpfProducts(): State {
         // EFPF API unreachable (e.g. missing key on a public Pages build).
         // Fall back to bundled mock so the catalog page is at least browsable.
         if (import.meta.env.DEV) console.warn('EFPF failed, falling back to mocks:', err)
-        setState({ data: mockProducts, loading: false, error: null })
+        setState({ data: [...mockProducts, ...LOCAL_EXTRAS], loading: false, error: null })
       })
     return () => {
       cancelled = true

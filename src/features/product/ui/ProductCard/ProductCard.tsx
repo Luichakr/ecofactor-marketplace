@@ -18,30 +18,38 @@ type Props = {
 export function ProductCard({ product, compact = false }: Props) {
   const navigate = useNavigate()
 
+  function go() {
+    navigate(productPath(product.id))
+  }
+
   return (
-    <button
-      type="button"
-      className={`product-card ${compact ? 'product-card--compact' : ''}`}
-      onClick={() => navigate(productPath(product.id))}
-      aria-label={product.title}
-    >
-      <span className="product-card__hit">
+    <div className={`product-card ${compact ? 'product-card--compact' : ''}`}>
+      <button
+        type="button"
+        className="product-card__hit"
+        onClick={go}
+        aria-label={product.title}
+      >
         <ProductImage
           src={product.image}
           alt={product.title}
           categoryId={product.categoryId}
         />
-      </span>
+      </button>
 
-      <span className="product-card__body">
-        <span className="product-card__head">
+      <button
+        type="button"
+        className="product-card__body"
+        onClick={go}
+      >
+        <div className="product-card__head">
           <h3 className="product-card__title">{product.title}</h3>
           <span className="product-card__plus" aria-hidden="true">+</span>
-        </span>
+        </div>
         {product.price && (
-          <span className="product-card__price">{formatPrice(product.price)}</span>
+          <p className="product-card__price">{formatPrice(product.price)}</p>
         )}
-      </span>
-    </button>
+      </button>
+    </div>
   )
 }

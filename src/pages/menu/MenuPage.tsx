@@ -167,7 +167,7 @@ const SECTIONS: Record<string, Section> = {
 
   wheels: {
     visual: [
-      { id: 'wheels-tires', caption: 'ШИНИ', size: '720 × 960' },
+      { id: 'wheels-tires', caption: 'ШИНИ', size: '720 × 960', href: `${catalogCategoryPath('wheels')}?sub=tires` },
       { id: 'wheels-disks', caption: 'ДИСКИ', size: '720 × 960' },
       { id: 'wheels-mount', caption: 'КРІПЛЕННЯ', size: '720 × 960' },
       { id: 'wheels-hw', caption: 'КРІПИЛЬНІ', size: '720 × 960' },
@@ -177,8 +177,8 @@ const SECTIONS: Record<string, Section> = {
         num: '01',
         title: 'ШИНИ',
         items: [
-          { label: 'Усі шини', tag: 'SOON', bold: true },
-          { label: 'Літні', tag: 'SOON' },
+          { label: 'Усі шини', href: `${catalogCategoryPath('wheels')}?sub=tires`, bold: true },
+          { label: 'Літні', href: `${catalogCategoryPath('wheels')}?sub=tires&season=summer` },
           { label: 'Зимові', tag: 'SOON' },
           { label: 'Всесезонні', tag: 'SOON' },
         ],
