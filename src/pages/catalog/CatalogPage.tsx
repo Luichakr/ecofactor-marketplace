@@ -7,6 +7,7 @@ import { parseCatalogSearchParams } from '../../features/catalog/lib/catalogSear
 import { getActiveFiltersCount } from '../../features/catalog/lib/getActiveFiltersCount'
 import type { SortOption } from '../../features/catalog/model/catalog.types'
 import { CatalogGrid } from '../../features/catalog/ui/CatalogGrid/CatalogGrid'
+import { EditorialLayout } from '../../features/catalog/ui/EditorialLayout/EditorialLayout'
 import { CatalogToolbar } from '../../features/catalog/ui/CatalogToolbar/CatalogToolbar'
 import { SubcategoryTabs } from '../../features/catalog/ui/SubcategoryTabs/SubcategoryTabs'
 import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
@@ -148,15 +149,22 @@ export function CatalogPage() {
         )}
 
         {!isLoading && !liveError && (
-          <div className="catalog-page__grid">
-            <CatalogGrid
-              products={result}
-              columns={view}
-              onReset={() => {
-                setSearchParams(new URLSearchParams(), { replace: true })
-              }}
-            />
-          </div>
+          view === 1 && category ? (
+            // Editorial look-book layout — only when a category is opened.
+            <div className="catalog-page__editorial">
+              <EditorialLayout products={result} categoryTitle={category.title} />
+            </div>
+          ) : (
+            <div className="catalog-page__grid">
+              <CatalogGrid
+                products={result}
+                columns={view}
+                onReset={() => {
+                  setSearchParams(new URLSearchParams(), { replace: true })
+                }}
+              />
+            </div>
+          )
         )}
 
         <div className="catalog-page__bottom-space" />

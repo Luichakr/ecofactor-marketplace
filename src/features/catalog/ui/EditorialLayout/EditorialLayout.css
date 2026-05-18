@@ -1,0 +1,160 @@
+.editorial {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ── Full-width hero card ──────────────────────────────────── */
+.editorial__hit {
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-align: left;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.editorial__hit:active { opacity: 0.7; }
+
+.editorial__hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background-color: var(--color-surface-elevated);
+  overflow: hidden;
+}
+
+.editorial__hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.editorial__hero-eyebrow {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: 4px 10px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 10px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+}
+
+.editorial__hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+}
+
+.editorial__hero-title {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.editorial__hero-plus {
+  font-size: 16px;
+  color: var(--color-text);
+  flex-shrink: 0;
+}
+
+.editorial__hero-price {
+  padding: 0 var(--space-4);
+  font-size: var(--font-size-caption);
+  color: var(--color-text);
+}
+
+/* ── Inline 2-col grid ────────────────────────────────────── */
+.editorial__grid {
+  display: grid;
+  gap: var(--space-5) var(--space-3);
+  padding: 0 var(--space-4);
+}
+
+.editorial__grid--cols-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.editorial__grid > .product-card { min-width: 0; }
+
+.editorial__grid .product-card__body {
+  padding: var(--space-2) 0 var(--space-3);
+}
+
+/* ── Season divider ───────────────────────────────────────── */
+.editorial__season {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.editorial__season-label {
+  font-family: var(--font-family-serif);
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* ── Brand "look-book" row ────────────────────────────────── */
+.editorial__brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.editorial__top-sales-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0;
+  padding: 0 var(--space-4);
+}
+
+/* Horizontal scroll-snap strip — peek of the next slide on the right. */
+.editorial__strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 75%;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: var(--space-4);
+}
+
+.editorial__strip::-webkit-scrollbar { display: none; }
+
+.editorial__strip-slide {
+  scroll-snap-align: start;
+  min-width: 0;
+}
+
+.editorial__strip-slide > .product-card { min-width: 0; }
+.editorial__strip-slide .product-card__body {
+  padding: var(--space-2) 0 var(--space-3);
+}
