@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { MarketplaceProduct } from '../../../entities/product/model/product.types'
 import { fetchAllProducts } from '../../../shared/api/efpf/client'
 import { adaptEfpfProducts } from '../../../shared/api/efpf/adapter'
+import { mockProducts } from '../../../data/mockProducts'
 
 type State = {
   data: MarketplaceProduct[] | null
@@ -43,7 +44,10 @@ export function useEfpfProducts(): State {
       })
       .catch((err: unknown) => {
         if (cancelled) return
-        setState({ data: null, loading: false, error: String(err) })
+        // EFPF API unreachable (e.g. missing key on a public Pages build).
+        // Fall back to bundled mock so the catalog page is at least browsable.
+        if (import.meta.env.DEV) console.warn('EFPF failed, falling back to mocks:', err)
+        setState({ data: mockProducts, loading: false, error: null })
       })
     return () => {
       cancelled = true
