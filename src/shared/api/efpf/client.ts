@@ -1,6 +1,15 @@
 import type { EfpfListResponse, EfpfProduct } from './types'
 
-const BASE = '/api/efpf'
+const BASE = (import.meta.env.VITE_EFPF_API_BASE as string | undefined)
+  ?? 'https://ecofactortech.com/wp-json/efpf/v1'
+
+function efpfHeaders(): HeadersInit {
+  const key = (import.meta.env.VITE_EFPF_API_KEY as string | undefined)?.trim() ?? ''
+  return {
+    Accept: 'application/json',
+    ...(key ? { 'X-EFPF-API-Key': key } : {}),
+  }
+}
 
 export type ListParams = {
   lang?: string
@@ -12,7 +21,7 @@ export type ListParams = {
 }
 
 function buildUrl(path: string, params: Record<string, string | number | boolean | undefined>) {
-  const u = new URL(BASE + path, window.location.origin)
+  const u = new URL(BASE + path)
   for (const [k, v] of Object.entries(params)) {
     if (v === undefined || v === '' || v === false) continue
     u.searchParams.set(k, String(v === true ? 1 : v))
@@ -29,14 +38,14 @@ export async function fetchProducts(params: ListParams = {}): Promise<EfpfListRe
     since: params.since,
     include_variations: params.include_variations,
   })
-  const r = await fetch(u, { headers: { Accept: 'application/json' } })
+  const r = await fetch(u, { headers: efpfHeaders() })
   if (!r.ok) throw new Error(`EFPF /products failed: ${r.status}`)
   return r.json()
 }
 
 export async function fetchProduct(id: number | string, lang = 'ua'): Promise<EfpfProduct> {
   const u = buildUrl(`/products/${id}`, { lang })
-  const r = await fetch(u, { headers: { Accept: 'application/json' } })
+  const r = await fetch(u, { headers: efpfHeaders() })
   if (!r.ok) throw new Error(`EFPF /products/${id} failed: ${r.status}`)
   return r.json()
 }

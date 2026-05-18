@@ -1,11 +1,21 @@
 /**
  * Lubeavto Partner API client.
  *
- * Auth is injected server-side by the Vite proxy (LUBEAVTO_API_TOKEN env var).
- * In browser we only call `/api/lubeavto/...`.
+ * Calls Lubeavto directly from the browser with the Bearer token baked in
+ * at build time via VITE_LUBEAVTO_API_TOKEN. The token IS visible in the
+ * production JS bundle — this is the same trade-off as our bidbiders setup.
+ * Move behind a Cloudflare Worker / Vercel function when the project leaves
+ * the internal-testing stage.
  */
 
-const BASE = '/api/lubeavto'
+const BASE = (import.meta.env.VITE_LUBEAVTO_API_BASE as string | undefined)
+  ?? 'https://api-lubeavto-partner.azurewebsites.net'
+
+function authHeaders(): Record<string, string> {
+  const token = (import.meta.env.VITE_LUBEAVTO_API_TOKEN as string | undefined)?.trim() ?? ''
+  if (!token) return {}
+  return { Authorization: /^Bearer\s+/i.test(token) ? token : `Bearer ${token}` }
+}
 
 type ApiName = { name?: string | null }
 type ApiPhoto = {
@@ -223,7 +233,8 @@ type FetchOpts = {
 async function fetchAllPages({ path, pageSize = 500, maxPages = 20 }: FetchOpts): Promise<ApiLubeavtoCar[]> {
   const url = (page: number) => `${BASE}${path}?pageNumber=${page}&pageSize=${pageSize}`
 
-  const first = await fetch(url(1), { cache: 'no-store' })
+  const headers = authHeaders()
+  const first = await fetch(url(1), { cache: 'no-store', headers })
   if (!first.ok) {
     throw new Error(`Lubeavto ${path} HTTP ${first.status}`)
   }
@@ -237,7 +248,7 @@ async function fetchAllPages({ path, pageSize = 500, maxPages = 20 }: FetchOpts)
 
   const requests: Promise<ApiListResponse>[] = []
   for (let p = 2; p <= totalPages; p += 1) {
-    requests.push(fetch(url(p), { cache: 'no-store' }).then((r) => r.json() as Promise<ApiListResponse>))
+    requests.push(fetch(url(p), { cache: 'no-store', headers }).then((r) => r.json() as Promise<ApiListResponse>))
   }
   const pages = await Promise.all(requests)
   for (const page of pages) {
@@ -253,7 +264,7 @@ async function fetchAllPages({ path, pageSize = 500, maxPages = 20 }: FetchOpts)
 export async function fetchAutoCarById(id: string): Promise<AutoCard | null> {
   const safeId = encodeURIComponent(id)
   for (const path of [`/api/v0/cars/${safeId}`, `/api/v0/cars/in-route/${safeId}`]) {
-    const r = await fetch(`${BASE}${path}`, { cache: 'no-store' })
+    const r = await fetch(`${BASE}${path}`, { cache: 'no-store', headers: authHeaders() })
     if (r.ok) {
       const raw = (await r.json()) as ApiLubeavtoCar
       const norm = normalizeCar(raw)

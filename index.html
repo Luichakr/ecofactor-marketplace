@@ -14,6 +14,23 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Restore SPA path after 404.html redirect on GitHub Pages.
+      // See public/404.html — it encodes the original path as ?/... here.
+      (function () {
+        if (location.search.indexOf('?/') === 0 || location.search.indexOf('&/') >= 0) {
+          var l = location;
+          var decoded = l.search.slice(1).split('&').map(function (s, i) {
+            return s.replace(/~and~/g, '&');
+          });
+          // first segment starts with '/'
+          decoded[0] = decoded[0].replace(/^\//, '');
+          var path = '/' + decoded[0];
+          var query = decoded.slice(1).join('&');
+          history.replaceState(null, '', l.pathname + path + (query ? '?' + query : '') + l.hash);
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
