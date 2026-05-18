@@ -8,7 +8,6 @@ import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import { useAutoElectricInStock } from '../../features/auto/hooks/useAutoCars'
 import type { AutoCard } from '../../features/auto/api/lubeavtoApi'
 import { AutoSkeletonList } from '../../features/auto/ui/AutoCardSkeleton/AutoCardSkeleton'
-import { FavoriteButton } from '../../features/favorites/ui/FavoriteButton/FavoriteButton'
 import {
   AutoFiltersSheet,
   applyAutoFilters,
@@ -244,7 +243,6 @@ function CarRow({ car, view, onClick }: { car: AutoCard; view: View; onClick: ()
         <span className={`auto-card__badge auto-card__badge--${car.isElectric ? 'ev' : 'hybrid'}`}>
           {car.isElectric ? 'ELECTRIC' : 'HYBRID'}
         </span>
-        <FavoriteButton productId={`auto:${car.id}`} className="auto-card__fav" />
       </div>
       <div className="auto-card__body">
         <p className="auto-card__title">{car.title}</p>

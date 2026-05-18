@@ -1,0 +1,43 @@
+.expandable {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.expandable__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4) 0;
+  min-height: 52px;
+  background: none;
+  border: none;
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.expandable__title {
+  flex: 1;
+  min-width: 0;
+}
+
+.expandable__toggle {
+  font-size: 20px;
+  line-height: 1;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text);
+  flex-shrink: 0;
+}
+
+.expandable__body {
+  padding: 0 0 var(--space-4);
+  font-size: var(--font-size-body2);
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}

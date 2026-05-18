@@ -3,7 +3,6 @@ import type { MarketplaceProduct } from '../../../../entities/product/model/prod
 import { formatPrice } from '../../../../entities/product/model/product.types'
 import { productPath } from '../../../../shared/config/routes'
 import { ProductImage } from '../ProductImage/ProductImage'
-import { FavoriteButton } from '../../../favorites/ui/FavoriteButton/FavoriteButton'
 import './ProductCard.css'
 
 type Props = {
@@ -11,39 +10,38 @@ type Props = {
   compact?: boolean
 }
 
+/**
+ * Catalog grid card. No bookmark overlay here — per Zara reference the
+ * bookmark icon lives only inside the product detail header. Catalog
+ * cards keep only the quick-add "+" affordance.
+ */
 export function ProductCard({ product, compact = false }: Props) {
   const navigate = useNavigate()
 
   return (
-    <div className={`product-card ${compact ? 'product-card--compact' : ''}`}>
-      <button
-        type="button"
-        className="product-card__hit"
-        onClick={() => navigate(productPath(product.id))}
-        aria-label={product.title}
-      >
+    <button
+      type="button"
+      className={`product-card ${compact ? 'product-card--compact' : ''}`}
+      onClick={() => navigate(productPath(product.id))}
+      aria-label={product.title}
+    >
+      <span className="product-card__hit">
         <ProductImage
           src={product.image}
           alt={product.title}
           categoryId={product.categoryId}
         />
-      </button>
+      </span>
 
-      <FavoriteButton productId={product.id} className="product-card__fav" />
-
-      <button
-        type="button"
-        className="product-card__body"
-        onClick={() => navigate(productPath(product.id))}
-      >
-        <div className="product-card__head">
+      <span className="product-card__body">
+        <span className="product-card__head">
           <h3 className="product-card__title">{product.title}</h3>
           <span className="product-card__plus" aria-hidden="true">+</span>
-        </div>
+        </span>
         {product.price && (
-          <p className="product-card__price">{formatPrice(product.price)}</p>
+          <span className="product-card__price">{formatPrice(product.price)}</span>
         )}
-      </button>
-    </div>
+      </span>
+    </button>
   )
 }

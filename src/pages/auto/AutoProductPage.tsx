@@ -5,6 +5,7 @@ import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer
 import { StickyCTA } from '../../shared/ui/StickyCTA/StickyCTA'
 import { Button } from '../../shared/ui/Button/Button'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
+import { ExpandableSection } from '../../shared/ui/ExpandableSection/ExpandableSection'
 import { ProductGallery } from '../../features/product/ui/ProductGallery/ProductGallery'
 import { ProductGalleryFullscreen } from '../../features/product/ui/ProductGalleryFullscreen/ProductGalleryFullscreen'
 import { NovaPoshtaDelivery, type NovaPoshtaSelection } from '../../shared/ui/NovaPoshtaDelivery/NovaPoshtaDelivery'
@@ -12,6 +13,21 @@ import { FavoriteButton } from '../../features/favorites/ui/FavoriteButton/Favor
 import { useAutoCar } from '../../features/auto/hooks/useAutoCar'
 import { REQUEST_PATHS, ROUTES } from '../../shared/config/routes'
 import './AutoProductPage.css'
+
+/**
+ * Lubeavto returns at most one main photo; the rest of the gallery isn't
+ * exposed via the public partner API. We render placeholder tiles after
+ * the description so the layout matches the Zara reference and gives a
+ * stable visual rhythm even before real photos are available.
+ */
+const PLACEHOLDER_PHOTOS: Array<{ size: string; ratio: string }> = [
+  { size: '1248 × 1664', ratio: '3 / 4' },
+  { size: '1248 × 1664', ratio: '3 / 4' },
+  { size: '1248 × 1664', ratio: '3 / 4' },
+  { size: '1248 × 1664', ratio: '3 / 4' },
+  { size: '1248 × 1664', ratio: '3 / 4' },
+  { size: '1248 × 1664', ratio: '3 / 4' },
+]
 
 export function AutoProductPage() {
   const { carId } = useParams<{ carId: string }>()
@@ -64,7 +80,7 @@ export function AutoProductPage() {
         />
 
         <div className="auto-product__content">
-          {/* Title + badge */}
+          {/* Title + badge + favorite */}
           <div className="auto-product__title-row">
             <div>
               <h1 className="auto-product__title">{car.title}</h1>
@@ -78,11 +94,29 @@ export function AutoProductPage() {
             </div>
           </div>
 
-          {/* Price */}
-          <div className="auto-product__price">{car.priceLabel}</div>
+          {/* Description first — Zara puts it directly under title */}
+          {car.description && (
+            <p className="auto-product__desc">{car.description}</p>
+          )}
+        </div>
 
-          {/* Spec table */}
-          <h2 className="auto-product__section-title">|01| ХАРАКТЕРИСТИКИ</h2>
+        {/* Additional photos strip — placeholders until Lubeavto exposes more */}
+        <section className="auto-product__photos" aria-label="Фотографії">
+          {PLACEHOLDER_PHOTOS.map((p, i) => (
+            <div
+              key={i}
+              className="auto-product__photo-tile"
+              style={{ aspectRatio: p.ratio }}
+            >
+              <span className="auto-product__photo-tag">PHOTO TBD</span>
+              <span className="auto-product__photo-size">{p.size}</span>
+            </div>
+          ))}
+        </section>
+
+        {/* Spec table */}
+        <div className="auto-product__section">
+          <h2 className="auto-product__section-title">ХАРАКТЕРИСТИКИ</h2>
           <dl className="auto-product__spec">
             <SpecRow label="Рік" value={car.year > 0 ? String(car.year) : '—'} />
             <SpecRow label="Пробіг" value={car.mileageLabel} />
@@ -117,37 +151,60 @@ export function AutoProductPage() {
             )}
             {car.vin && <SpecRow label="VIN" value={car.vin} mono />}
           </dl>
+        </div>
 
-          {/* Description */}
-          {car.description && (
-            <>
-              <h2 className="auto-product__section-title">|02| ОПИС</h2>
-              <p className="auto-product__desc">{car.description}</p>
-            </>
-          )}
+        {/* Zara-style expandable sections */}
+        <div className="auto-product__accordion">
+          <ExpandableSection title="ДОСТАВКА В УКРАЇНУ">
+            <p>
+              Доставка авто з ЄС у будь‑яке місто України. Терміни — від 7 днів
+              після підтвердження замовлення. Менеджер уточнить деталі логістики
+              та митного оформлення.
+            </p>
+          </ExpandableSection>
 
-          {/* Delivery */}
-          <h2 className="auto-product__section-title">|0{car.description ? '3' : '2'}| ДОСТАВКА У ВАШЕ МІСТО</h2>
-          <NovaPoshtaDelivery value={delivery} onChange={setDelivery} label="" />
+          <ExpandableSection title="ПЕРЕВІРКА ТА ГАРАНТІЇ">
+            <p>
+              Перед відправкою авто проходить діагностику дилера. VIN звіт
+              надається на запит. Гарантія на акумулятор/двигун — згідно з
+              умовами виробника.
+            </p>
+          </ExpandableSection>
+
+          <ExpandableSection title="ОПЛАТА">
+            <p>
+              Передоплата 10% бронює лот. Решта — після огляду авто або в день
+              видачі. Безготівковий розрахунок, можлива розстрочка через банк‑партнера.
+            </p>
+          </ExpandableSection>
+
+          <ExpandableSection title="ДОСТАВКА У ВАШЕ МІСТО">
+            <NovaPoshtaDelivery value={delivery} onChange={setDelivery} label="" />
+          </ExpandableSection>
         </div>
 
         <StickyCTA>
-          <Button
-            variant="primary"
-            fullWidth
-            size="lg"
-            onClick={() => navigate(`${REQUEST_PATHS.QUOTE}/${car.id}`)}
-          >
-            ЗАПИТАТИ ВАРТІСТЬ
-          </Button>
-          <Button
-            variant="outline"
-            fullWidth
-            size="lg"
-            onClick={() => navigate(REQUEST_PATHS.CALLBACK)}
-          >
-            ЗАМОВИТИ ДЗВІНОК
-          </Button>
+          <div className="auto-product__cta">
+            <div className="auto-product__cta-row">
+              <Button
+                variant="primary"
+                fullWidth
+                size="lg"
+                onClick={() => navigate(`${REQUEST_PATHS.QUOTE}/${car.id}`)}
+              >
+                ЗАПИТАТИ
+              </Button>
+              <Button
+                variant="outline"
+                fullWidth
+                size="lg"
+                onClick={() => navigate(REQUEST_PATHS.CALLBACK)}
+              >
+                ДЗВІНОК
+              </Button>
+            </div>
+            <div className="auto-product__cta-price">{car.priceLabel}</div>
+          </div>
         </StickyCTA>
       </ScreenContainer>
 
