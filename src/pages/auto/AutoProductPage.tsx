@@ -8,6 +8,7 @@ import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import { ProductGallery } from '../../features/product/ui/ProductGallery/ProductGallery'
 import { ProductGalleryFullscreen } from '../../features/product/ui/ProductGalleryFullscreen/ProductGalleryFullscreen'
 import { NovaPoshtaDelivery, type NovaPoshtaSelection } from '../../shared/ui/NovaPoshtaDelivery/NovaPoshtaDelivery'
+import { FavoriteButton } from '../../features/favorites/ui/FavoriteButton/FavoriteButton'
 import { useAutoCar } from '../../features/auto/hooks/useAutoCar'
 import { REQUEST_PATHS, ROUTES } from '../../shared/config/routes'
 import './AutoProductPage.css'
@@ -69,9 +70,12 @@ export function AutoProductPage() {
               <h1 className="auto-product__title">{car.title}</h1>
               <p className="auto-product__loc">{car.location}</p>
             </div>
-            <span className={`auto-product__badge auto-product__badge--${car.isElectric ? 'ev' : 'hybrid'}`}>
-              {car.isElectric ? 'ELECTRIC' : 'HYBRID'}
-            </span>
+            <div className="auto-product__title-actions">
+              <span className={`auto-product__badge auto-product__badge--${car.isElectric ? 'ev' : 'hybrid'}`}>
+                {car.isElectric ? 'ELECTRIC' : 'HYBRID'}
+              </span>
+              <FavoriteButton productId={`auto:${car.id}`} />
+            </div>
           </div>
 
           {/* Price */}
@@ -83,13 +87,42 @@ export function AutoProductPage() {
             <SpecRow label="Рік" value={car.year > 0 ? String(car.year) : '—'} />
             <SpecRow label="Пробіг" value={car.mileageLabel} />
             <SpecRow label="Паливо" value={car.fuel} />
+            {car.engineVolumeL > 0 && (
+              <SpecRow label="Двигун" value={`${car.engineVolumeL.toFixed(1)} L`} />
+            )}
             <SpecRow label="КПП" value={car.transmission} />
             <SpecRow label="Привід" value={car.drive} />
+            {car.bodyType && <SpecRow label="Кузов" value={car.bodyType} />}
+            {car.color && <SpecRow label="Колір" value={car.color} />}
+            {car.country && <SpecRow label="Країна" value={car.country} />}
+            {car.hasKeys !== null && (
+              <SpecRow label="Ключі" value={car.hasKeys ? 'Так' : 'Ні'} />
+            )}
+            {car.isDamaged !== null && (
+              <SpecRow label="Стан" value={car.isDamaged ? 'Потребує перевірки' : 'Без пошкоджень'} />
+            )}
+            {car.publishDate && (
+              <SpecRow
+                label="Опубліковано"
+                value={(() => {
+                  const d = new Date(car.publishDate)
+                  return Number.isFinite(d.getTime()) ? d.toLocaleDateString('uk-UA') : car.publishDate
+                })()}
+              />
+            )}
             {car.vin && <SpecRow label="VIN" value={car.vin} mono />}
           </dl>
 
+          {/* Description */}
+          {car.description && (
+            <>
+              <h2 className="auto-product__section-title">|02| ОПИС</h2>
+              <p className="auto-product__desc">{car.description}</p>
+            </>
+          )}
+
           {/* Delivery */}
-          <h2 className="auto-product__section-title">|02| ДОСТАВКА У ВАШЕ МІСТО</h2>
+          <h2 className="auto-product__section-title">|0{car.description ? '3' : '2'}| ДОСТАВКА У ВАШЕ МІСТО</h2>
           <NovaPoshtaDelivery value={delivery} onChange={setDelivery} label="" />
         </div>
 

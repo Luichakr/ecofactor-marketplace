@@ -17,6 +17,20 @@
   gap: var(--space-3);
 }
 
+.auto-product__title-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.auto-product__desc {
+  margin: 0;
+  font-size: var(--font-size-body2);
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
 .auto-product__title {
   font-family: var(--font-family-serif);
   font-size: 26px;

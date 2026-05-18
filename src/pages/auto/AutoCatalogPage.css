@@ -86,6 +86,13 @@
   font-weight: var(--font-weight-medium);
 }
 
+.auto-card__fav {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 2;
+}
+
 .auto-card__body {
   display: flex;
   flex-direction: column;
@@ -133,6 +140,14 @@
 .auto-card--v2 .auto-card__badge {
   font-size: 9px;
   padding: 3px 6px;
+}
+
+.auto-card--v2 .auto-card__fav,
+.auto-card--v3 .auto-card__fav {
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
 }
 
 /* View 3 — dense horizontal row */

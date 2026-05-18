@@ -93,6 +93,22 @@ export type AutoCard = {
   image: string
   images: string[]
   location: string
+  /** Country (e.g. "Україна") from the upstream payload. */
+  country: string
+  /** Free-text description, HTML stripped. */
+  description: string
+  /** Exterior color, normalized. */
+  color: string
+  /** Body style (sedan/suv/hatchback/...) — uppercase. */
+  bodyType: string
+  /** Engine displacement in liters (e.g. 2.0). 0 = unknown. */
+  engineVolumeL: number
+  /** ISO date string of when the lot was listed. */
+  publishDate: string
+  /** Whether the seller marked the car as having keys. */
+  hasKeys: boolean | null
+  /** Whether the seller flagged it as damaged. */
+  isDamaged: boolean | null
   isAvailable: boolean
   isSold: boolean
   isElectric: boolean
@@ -199,6 +215,11 @@ export function normalizeCar(car: ApiLubeavtoCar): AutoCard | null {
     : rawDrive === 'ALL' || rawDrive === 'FULL' ? 'AWD'
     : rawDrive
 
+  const color = toName(car.color) || ''
+  const bodyType = String(compl.bodyType ?? '').trim().toUpperCase() || ''
+  const engineVolumeL = Number(car.engineVolume ?? compl.engineVolume ?? 0) || 0
+  const description = String(car.description ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+
   return {
     id,
     title: title || `${make} ${model}`.trim(),
@@ -217,6 +238,14 @@ export function normalizeCar(car: ApiLubeavtoCar): AutoCard | null {
     image,
     images,
     location,
+    country: String(car.country ?? '').trim(),
+    description,
+    color,
+    bodyType,
+    engineVolumeL,
+    publishDate: String(car.publishDate ?? '').trim(),
+    hasKeys: typeof compl.hasKey === 'boolean' ? compl.hasKey : null,
+    isDamaged: typeof compl.isDamaged === 'boolean' ? compl.isDamaged : null,
     isAvailable: car.isAvailable === true,
     isSold: car.isSold === true,
     isElectric: fuel.isElectric && !fuel.isHybrid,

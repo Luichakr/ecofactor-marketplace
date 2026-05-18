@@ -69,6 +69,9 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
+  /* Respect the row's left padding when snap aligns the first card */
+  scroll-padding-left: var(--space-4);
+  scroll-padding-right: var(--space-4);
 }
 
 .menu-page__visual-row::-webkit-scrollbar { display: none; }
