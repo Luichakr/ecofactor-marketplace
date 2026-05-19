@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import { Button } from '../../shared/ui/Button/Button'
-import { ROUTES, productPath, autoCarPath } from '../../shared/config/routes'
+import { ROUTES, productPath } from '../../shared/config/routes'
 import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import { useFavorites, favorites } from '../../features/favorites/model/favoritesStore'
 import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
-import { useAutoElectricInStock } from '../../features/auto/hooks/useAutoCars'
 import { mockProducts } from '../../data/mockProducts'
 import { useCart } from '../../features/cart/model/cartStore'
 import { cart } from '../../features/cart/model/cartStore'
 import { formatPrice } from '../../entities/product/model/product.types'
+import { priceWatch, usePriceWatch } from '../../features/price-watch/model/priceWatchStore'
 import './FavoritesPage.css'
 
 /**
@@ -37,14 +37,12 @@ export function FavoritesPage() {
   const ids = useFavorites()
   const cartItems = useCart()
   const live = useEfpfProducts()
-  const auto = useAutoElectricInStock()
-
-  const items = useMemo(() => buildItems(ids, live.data ?? mockProducts, auto.data), [ids, live.data, auto.data])
+  const items = useMemo(() => buildItems(ids, live.data ?? mockProducts), [ids, live.data])
   const cartCount = cartItems.reduce((s, i) => s + i.qty, 0)
 
   return (
     <ScreenContainer className="bookmarks-page" withTopInset={false}>
-      {/* Top bar — X (close) on the left, ОПЦІЇ on the right */}
+      {/* Top bar — X (close) on the left, ПОДІЛИТИСЯ on the right */}
       <header className="bookmarks-page__topbar">
         <button
           type="button"
@@ -56,8 +54,23 @@ export function FavoritesPage() {
             <path d="M3 3L15 15M15 3L3 15" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
           </svg>
         </button>
-        <button type="button" className="bookmarks-page__options" disabled>
-          ОПЦІЇ
+        <button
+          type="button"
+          className="bookmarks-page__options"
+          disabled={ids.length === 0}
+          onClick={() => {
+            const hash = btoa(JSON.stringify(ids))
+            const url = `${window.location.origin}/wishlist/shared/${hash}`
+            const share = (navigator as Navigator & { share?: (data: { title?: string; url?: string }) => Promise<void> }).share
+            if (typeof share === 'function') {
+              share({ title: 'Мої закладки', url }).catch(() => {})
+            } else {
+              navigator.clipboard?.writeText(url)
+              alert('Посилання скопійовано')
+            }
+          }}
+        >
+          ПОДІЛИТИСЯ
         </button>
       </header>
 
@@ -118,7 +131,7 @@ export function FavoritesPage() {
                     </svg>
                   </button>
                 </div>
-                <p className="bookmark-card__price">{it.priceLabel}</p>
+                <PriceCell item={it} />
                 <button
                   type="button"
                   className="bookmark-card__cta"
@@ -146,26 +159,52 @@ export function FavoritesPage() {
   )
 }
 
+function PriceCell({ item }: { item: BookmarkItem }) {
+  usePriceWatch() // subscribe to store
+  const current = item.rawProduct?.price
+  const watched = priceWatch.isWatched(item.id)
+  const snapshot = priceWatch.getSnapshot(item.id)
+  const drop = current && snapshot && snapshot > current
+    ? Math.round(((snapshot - current) / snapshot) * 100)
+    : 0
+  return (
+    <div className="bookmark-card__price-row">
+      <p className="bookmark-card__price">{item.priceLabel}</p>
+      {drop > 0 && <span className="bookmark-card__drop">−{drop}%</span>}
+      {current && (
+        <button
+          type="button"
+          className={`bookmark-card__watch ${watched ? 'bookmark-card__watch--on' : ''}`}
+          onClick={() => priceWatch.toggle(item.id, current)}
+          aria-label={watched ? 'Скасувати сповіщення про знижку' : 'Сповістити про знижку'}
+          title={watched ? 'Слідкуємо за ціною' : 'Сповістити про знижку'}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M6 16V11C6 7.7 8.7 5 12 5C15.3 5 18 7.7 18 11V16M4 16H20M10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19"
+              stroke="currentColor"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill={watched ? 'currentColor' : 'none'}
+            />
+          </svg>
+        </button>
+      )}
+    </div>
+  )
+}
+
 function buildItems(
   ids: string[],
   efpf: ReturnType<typeof useEfpfProducts>['data'] extends infer T ? NonNullable<T> : never,
-  autoCars: ReturnType<typeof useAutoElectricInStock>['data'],
 ): BookmarkItem[] {
   const out: BookmarkItem[] = []
-  for (const id of ids) {
-    if (id.startsWith('auto:')) {
-      const carId = id.slice(5)
-      const car = autoCars.find((c) => c.id === carId)
-      if (!car) continue
-      out.push({
-        id,
-        href: autoCarPath(car.id),
-        title: car.title,
-        image: car.image,
-        priceLabel: car.priceLabel,
-        isAuto: true,
-      })
-    } else {
+  for (const rawId of ids) {
+    // Legacy: auto:<carId> from before the auto migration — strip the prefix
+    // and look up in the unified feed.
+    const id = rawId.startsWith('auto:') ? rawId.slice(5) : rawId
+    {
       const product = efpf.find((p) => p.id === id)
       if (!product) continue
       out.push({

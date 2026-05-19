@@ -46,7 +46,7 @@ export function RequestLayout({
   const navigate = useNavigate()
 
   // Generate a stable reference per "success" mount.
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+   
   const reference = useMemo(makeReference, [submitted])
 
   if (submitted) {

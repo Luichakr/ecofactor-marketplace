@@ -5,6 +5,7 @@ import { Field } from '../../../shared/ui/Field/Field'
 import { ChipGroup } from '../../../shared/ui/ChipGroup/ChipGroup'
 import { PhoneInput, type PhoneValue } from '../../../shared/ui/PhoneInput/PhoneInput'
 import { PhotoUpload, type LocalPhoto } from '../../../shared/ui/PhotoUpload/PhotoUpload'
+import { leads } from '../../leads/model/leadsStore'
 
 const ISSUE_TYPES = [
   { value: 'defect', label: 'Заводський брак' },
@@ -38,6 +39,14 @@ export function WarrantyForm() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!canSubmit) return
+    leads.add({
+      type: 'warranty',
+      name,
+      phone: phone?.e164,
+      email,
+      message: description,
+      payload: { orderNumber, productName, issueType, photoCount: photos.length },
+    })
     setSubmitted(true)
   }
 

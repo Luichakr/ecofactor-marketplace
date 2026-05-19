@@ -27,18 +27,19 @@
    Body padding 0 so it aligns with the image's left/right edges. */
 .catalog-grid--cols-1 .product-card__body,
 .catalog-grid--cols-2 .product-card__body {
-  padding: var(--space-2) 0 var(--space-3);
+  padding: 4px 0 8px;
 }
 
 /* View 3: dense — hide title, stack price on top and "+" below it,
    both centered. Matches the Zara grid-3 rhythm. */
 .catalog-grid--cols-3 .product-card__body {
-  padding: var(--space-2) 0 var(--space-3);
+  padding: 2px 0 6px;
   align-items: center;
   text-align: center;
 }
 
-.catalog-grid--cols-3 .product-card__title {
+.catalog-grid--cols-3 .product-card__title,
+.catalog-grid--cols-3 .product-card__title-btn {
   display: none;
 }
 
@@ -52,4 +53,11 @@
   order: 1;
   text-align: center;
   width: 100%;
+}
+
+/* Landscape image variant — only the photo crop changes (4:3 wide instead
+   of the default 3:4 portrait). Card layout, body alignment, and grid
+   columns stay identical. Used by /catalog/cars in all 3 views. */
+.catalog-grid--landscape .product-image {
+  aspect-ratio: 4 / 3;
 }

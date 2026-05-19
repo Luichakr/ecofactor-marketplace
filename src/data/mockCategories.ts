@@ -45,4 +45,15 @@ export const mockCategories: MarketplaceCategory[] = [
       { id: 'mounts', title: 'Кріплення' },
     ],
   },
+  {
+    id: 'cars',
+    title: 'Авто',
+    subtitle: 'Електро, гібриди',
+    icon: 'car',
+    description: 'Електромобілі та гібриди в наявності',
+    subcategories: [
+      { id: 'cars-electric', title: 'Електро' },
+      { id: 'cars-hybrid',   title: 'Гібриди' },
+    ],
+  },
 ]

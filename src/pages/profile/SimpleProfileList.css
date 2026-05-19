@@ -1,0 +1,166 @@
+.simple-list {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.simple-list__row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  border: 1px solid var(--color-border);
+}
+
+.simple-list__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3);
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: var(--font-family);
+  color: inherit;
+  cursor: pointer;
+  min-height: 0;
+}
+
+.simple-list__main:active { opacity: 0.6; }
+
+.simple-list__chip {
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.simple-list__title {
+  font-size: var(--font-size-body2);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+}
+
+.simple-list__title--mono {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+.simple-list__sub {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.simple-list__default {
+  margin-top: var(--space-1);
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.simple-list__delete {
+  background: none;
+  border: none;
+  border-left: 1px solid var(--color-border);
+  padding: 0 var(--space-3);
+  font-size: 22px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  min-height: 0;
+}
+
+.simple-list__delete:active { opacity: 0.5; }
+
+.simple-list__cta {
+  padding: var(--space-3) var(--space-4) var(--space-6);
+}
+
+.simple-list__note {
+  margin: var(--space-3) 0 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* Form ─────────────────────────────────── */
+.simple-form {
+  padding: var(--space-3) var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.simple-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.simple-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.simple-form__row--chips {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.simple-form__chip {
+  flex: 1;
+  background: none;
+  border: 1px solid var(--color-border);
+  padding: var(--space-2);
+  font-family: var(--font-family);
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  min-height: 0;
+}
+
+.simple-form__chip--active {
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-color: var(--color-text);
+}
+
+.simple-form__label {
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.simple-form__input {
+  border: none;
+  border-bottom: 1px solid var(--color-text);
+  padding: var(--space-2) 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  background: none;
+  color: var(--color-text);
+  outline: none;
+}
+
+.simple-form__input:focus { border-bottom-color: var(--color-text); }
+
+.simple-form__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-caption);
+  color: var(--color-text);
+  letter-spacing: 0.2px;
+}
+
+.simple-form__toggle input { width: 18px; height: 18px; }

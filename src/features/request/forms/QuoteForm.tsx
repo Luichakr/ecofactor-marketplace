@@ -6,6 +6,7 @@ import { PhoneInput, type PhoneValue } from '../../../shared/ui/PhoneInput/Phone
 import { ProductImage } from '../../product/ui/ProductImage/ProductImage'
 import type { MarketplaceProduct } from '../../../entities/product/model/product.types'
 import { formatPrice } from '../../../entities/product/model/product.types'
+import { leads } from '../../leads/model/leadsStore'
 import './QuoteForm.css'
 
 type Props = {
@@ -30,6 +31,14 @@ export function QuoteForm({ product }: Props) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!canSubmit) return
+    leads.add({
+      type: 'quote',
+      name,
+      phone: phone?.e164,
+      email,
+      message,
+      productId: product?.id,
+    })
     setSubmitted(true)
   }
 

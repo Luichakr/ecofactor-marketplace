@@ -5,11 +5,16 @@ type Props = {
   title: string
   subtitle?: string
   showBack?: boolean
+  /** Custom back handler. When provided, the back button calls this instead
+   *  of `navigate(-1)`. Lets the host page route back to a logical parent
+   *  (e.g. wheels list) rather than the previous history entry which may
+   *  belong to an unrelated category. */
+  onBack?: () => void
   rightSlot?: React.ReactNode
   transparent?: boolean
 }
 
-export function Header({ title, subtitle, showBack = false, rightSlot, transparent = false }: Props) {
+export function Header({ title, subtitle, showBack = false, onBack, rightSlot, transparent = false }: Props) {
   const navigate = useNavigate()
 
   return (
@@ -18,7 +23,7 @@ export function Header({ title, subtitle, showBack = false, rightSlot, transpare
         {showBack && (
           <button
             className="header__back"
-            onClick={() => navigate(-1)}
+            onClick={() => (onBack ? onBack() : navigate(-1))}
             aria-label="Назад"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">

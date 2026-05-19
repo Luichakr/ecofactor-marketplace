@@ -30,20 +30,49 @@
 }
 
 .product-card__body {
-  padding: var(--space-3) 0 var(--space-2);
+  padding: 4px 0 4px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: stretch;
+  gap: 1px;
+  text-align: left;
+  min-width: 0;
+  width: 100%;
+}
+
+.product-card__title-btn {
   background: none;
   border: none;
+  padding: 0;
+  margin: 0;
   text-align: left;
-  cursor: pointer;
   font-family: var(--font-family);
+  cursor: pointer;
+  /* Override global 44px touch-target — card text rows must be flush. */
   min-height: 0;
+  display: block;
+  /* Flex item inside product-card__head — take remaining space */
+  flex: 1;
+  min-width: 0;
   -webkit-tap-highlight-color: transparent;
 }
 
-.product-card__body:active {
+.product-card__price-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font-family: var(--font-family);
+  cursor: pointer;
+  min-height: 0;
+  display: block;
+  min-width: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.product-card__title-btn:active,
+.product-card__price-btn:active {
   opacity: 0.7;
 }
 
@@ -70,13 +99,22 @@
 }
 
 .product-card__plus {
-  font-size: 16px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 300;
   line-height: 1;
   color: var(--color-text);
-  font-weight: var(--font-weight-regular);
   flex-shrink: 0;
-  margin-top: -2px;
+  min-height: 0;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
+
+.product-card__plus:active { opacity: 0.5; }
 
 .product-card__price {
   font-size: var(--font-size-caption);
@@ -85,3 +123,38 @@
   letter-spacing: 0.2px;
   margin: 0;
 }
+
+/* Discount layout — old price strikethrough on the left, new price in
+ * an inverted (fg-bg) chip on the right. Same line. */
+.product-card__price--discount {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.product-card__price-old {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  letter-spacing: 0.2px;
+}
+
+.product-card__rating-row {
+  margin-top: 4px;
+}
+
+.product-card__stock-row {
+  margin-top: 4px;
+}
+
+.product-card__price-new {
+  display: inline-block;
+  padding: 2px 6px;
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.2px;
+}
+

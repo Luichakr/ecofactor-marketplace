@@ -22,9 +22,14 @@ import { FiltersPage } from '../pages/filters/FiltersPage'
 import { ProfilePage } from '../pages/profile/ProfilePage'
 import { MenuPage } from '../pages/menu/MenuPage'
 import { ArkanoidPage } from '../pages/arkanoid/ArkanoidPage'
-import { AutoCatalogPage } from '../pages/auto/AutoCatalogPage'
-import { AutoProductPage } from '../pages/auto/AutoProductPage'
 import { NotFoundPage } from '../pages/not-found/NotFoundPage'
+import { OrdersPage } from '../pages/orders/OrdersPage'
+import { OrderDetailPage } from '../pages/orders/OrderDetailPage'
+import { AddressesPage } from '../pages/profile/AddressesPage'
+import { CardsPage } from '../pages/profile/CardsPage'
+import { SettingsPage } from '../pages/profile/SettingsPage'
+import { ReturnFormPage } from '../pages/orders/ReturnFormPage'
+import { WishlistSharedPage } from '../pages/favorites/WishlistSharedPage'
 
 function PageViewTracker() {
   const { pathname, search } = useLocation()
@@ -61,15 +66,35 @@ export function AppRouter() {
         <Route path={ROUTES.SEARCH} element={<SearchPage />} />
         <Route path={ROUTES.FILTERS} element={<FiltersPage />} />
         <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+        <Route path={ROUTES.ORDERS} element={<OrdersPage />} />
+        <Route path={ROUTES.ORDER_DETAIL} element={<OrderDetailPage />} />
+        <Route path={ROUTES.ADDRESSES} element={<AddressesPage />} />
+        <Route path={ROUTES.PAYMENT_METHODS} element={<CardsPage />} />
+        <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
+        <Route path={ROUTES.RETURN_OPEN} element={<ReturnFormPage />} />
+        <Route path={ROUTES.WISHLIST_SHARED} element={<WishlistSharedPage />} />
         <Route path={ROUTES.MENU} element={<MenuPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
         <Route path={ROUTES.ARKANOID} element={<ArkanoidPage />} />
-        <Route path={ROUTES.AUTO} element={<AutoCatalogPage />} />
-        <Route path={ROUTES.AUTO_CAR} element={<AutoProductPage />} />
+        {/* Auto vertical migrated into the universal catalog. Old links
+            (/auto, /auto/:carId) redirect into /catalog/cars and
+            /product/:productId so previously-shared URLs still resolve. */}
+        <Route path={ROUTES.AUTO} element={<Navigate to="/catalog/cars" replace />} />
+        <Route path={ROUTES.AUTO_CAR} element={<AutoCarRedirect />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
     </>
   )
+}
+
+import { useParams } from 'react-router-dom'
+import { productPath } from '../shared/config/routes'
+
+/** Old /auto/:carId URLs map 1:1 to /product/:productId since the lubeavto
+ *  card id became the universal product id. */
+function AutoCarRedirect() {
+  const { carId } = useParams<{ carId: string }>()
+  return <Navigate to={carId ? productPath(carId) : '/catalog/cars'} replace />
 }

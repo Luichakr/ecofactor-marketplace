@@ -1,7 +1,7 @@
 .editorial {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-8);
 }
 
 /* ── Full-width hero card ──────────────────────────────────── */
@@ -12,7 +12,11 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  /* Override the global `button { align-items: center }` so the info row
+     stays flush with the hero image's left edge. */
+  align-items: stretch;
+  width: 100%;
+  gap: var(--space-3);
   text-align: left;
   font-family: var(--font-family);
   color: var(--color-text);
@@ -50,12 +54,15 @@
   font-weight: var(--font-weight-medium);
 }
 
-.editorial__hero-row {
+/* Info row stacks under the edge-to-edge hero. Horizontal padding
+   matches the placeholder's dashed-outline inset (8px) so the title
+   visually aligns with that border line. */
+.editorial__hero-info {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-  padding: 0 var(--space-4);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 0 8px;
 }
 
 .editorial__hero-title {
@@ -66,35 +73,39 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.editorial__hero-plus {
-  font-size: 16px;
-  color: var(--color-text);
-  flex-shrink: 0;
+  font-weight: var(--font-weight-medium);
 }
 
 .editorial__hero-price {
-  padding: 0 var(--space-4);
   font-size: var(--font-size-caption);
   color: var(--color-text);
 }
 
-/* ── Inline 2-col grid ────────────────────────────────────── */
+/* ── Inline 2-col grid ─────────────────────────────────────
+   Zara reference uses a near-flush gap horizontally (~4px) and a
+   generous vertical gap between rows so each photo reads as its own
+   "block". Edges of the grid stay flush with shell so the cards
+   visually continue the hero above. */
 .editorial__grid {
   display: grid;
-  gap: var(--space-5) var(--space-3);
-  padding: 0 var(--space-4);
+  gap: var(--space-6) 8px;
+  padding: 0;
 }
 
 .editorial__grid--cols-2 {
   grid-template-columns: 1fr 1fr;
 }
 
-.editorial__grid > .product-card { min-width: 0; }
+.editorial__grid > .product-card,
+.editorial__grid .product-card__hit,
+.editorial__grid .product-card__body,
+.editorial__grid .product-card__head { min-width: 0; max-width: 100%; }
 
+/* Horizontal padding (8px) matches the placeholder's dashed-outline
+   inset so the title aligns with that line rather than flush with the
+   raw image edge. */
 .editorial__grid .product-card__body {
-  padding: var(--space-2) 0 var(--space-3);
+  padding: var(--space-2) 8px var(--space-3);
 }
 
 /* ── Season divider ───────────────────────────────────────── */
@@ -157,4 +168,14 @@
 .editorial__strip-slide > .product-card { min-width: 0; }
 .editorial__strip-slide .product-card__body {
   padding: var(--space-2) 0 var(--space-3);
+}
+
+/* ─── Landscape variant (cars view 1) ──────────────────────────────
+   Flip every photo crop inside the editorial layout from portrait 3:4
+   to landscape 4:3. Hero blocks, embedded ProductCards, and brand
+   strips all participate so view 1 reads consistently. */
+.editorial--landscape .editorial__hero,
+.editorial--landscape .product-image,
+.editorial--landscape .season-showcase__image {
+  aspect-ratio: 4 / 3;
 }

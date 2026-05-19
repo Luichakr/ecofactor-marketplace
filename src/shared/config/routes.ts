@@ -15,10 +15,21 @@ export const ROUTES = {
   ARKANOID: '/arkanoid',
   AUTO: '/auto',
   AUTO_CAR: '/auto/:carId',
+  ORDERS: '/orders',
+  ORDER_DETAIL: '/orders/:orderId',
+  ADDRESSES: '/profile/addresses',
+  PAYMENT_METHODS: '/profile/cards',
+  SETTINGS: '/profile/settings',
+  RETURN_OPEN: '/orders/:orderId/return',
+  WISHLIST_SHARED: '/wishlist/shared/:hash',
 } as const
 
-export function autoCarPath(id: string) {
-  return `/auto/${encodeURIComponent(id)}`
+export function orderDetailPath(orderId: string) {
+  return `/orders/${encodeURIComponent(orderId)}`
+}
+
+export function returnOpenPath(orderId: string) {
+  return `/orders/${encodeURIComponent(orderId)}/return`
 }
 
 export function catalogCategoryPath(categoryId: string) {

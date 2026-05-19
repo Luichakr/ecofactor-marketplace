@@ -1,0 +1,133 @@
+.season-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.season-showcase__head {
+  position: relative;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.season-showcase__title {
+  font-family: var(--font-family-serif);
+  font-size: 28px;
+  line-height: 32px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.season-showcase__subtitle {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.season-showcase__counter {
+  position: absolute;
+  left: 8px;
+  bottom: -22px;
+  font-size: var(--font-size-caption);
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.3px;
+}
+
+/* Horizontal scroll rail — same scale as the brand "look-book" strips
+   so seasonal blocks share visual rhythm with the rest of the page.
+   Each slide takes ~75% of viewport width; next slide peeks ~25%. */
+.season-showcase__rail {
+  margin-top: var(--space-5);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 75%;
+  gap: 8px;
+  padding: 0 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 8px;
+}
+
+.season-showcase__rail::-webkit-scrollbar { display: none; }
+
+.season-showcase__slide {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  padding: 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  cursor: pointer;
+  min-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.season-showcase__slide:active { opacity: 0.7; }
+
+.season-showcase__image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background-color: var(--color-surface-elevated);
+  overflow: hidden;
+}
+
+.season-showcase__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.season-showcase__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.season-showcase__name {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.season-showcase__price {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  color: var(--color-text);
+}
+
+.season-showcase__more-colors {
+  margin: var(--space-1) 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
+
+.season-showcase__swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+}

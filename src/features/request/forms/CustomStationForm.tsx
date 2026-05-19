@@ -7,6 +7,7 @@ import { Field } from '../../../shared/ui/Field/Field'
 import { ChipGroup } from '../../../shared/ui/ChipGroup/ChipGroup'
 import { PhoneInput, type PhoneValue } from '../../../shared/ui/PhoneInput/PhoneInput'
 import { REQUEST_PATHS, ROUTES } from '../../../shared/config/routes'
+import { leads } from '../../leads/model/leadsStore'
 import './CustomStationForm.css'
 
 type StepId = 'model' | 'power' | 'connectors' | 'options' | 'contacts'
@@ -107,6 +108,14 @@ export function CustomStationForm() {
   function handleNext() {
     if (!stepValid) return
     if (isLast) {
+      leads.add({
+        type: 'custom-station',
+        name,
+        phone: phone?.e164,
+        email,
+        message: comment,
+        payload: { model, power, connectors, options, count, city },
+      })
       setSubmitted(true)
       return
     }

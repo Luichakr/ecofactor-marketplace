@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useInactivityAutoScroll } from '../../shared/lib/hooks/useInactivityAutoScroll'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import { NewsletterSheet } from '../../features/newsletter/ui/NewsletterSheet/NewsletterSheet'
+import { SearchIconButton } from '../../features/search/ui/SearchTrigger/SearchTrigger'
 import evChargingMenu from '../../assets/menu/ev-charging.webp'
 import solarMenu from '../../assets/menu/solar.webp'
-import { catalogCategoryPath, REQUEST_PATHS, ROUTES } from '../../shared/config/routes'
+import { catalogCategoryPath, REQUEST_PATHS } from '../../shared/config/routes'
 import './MenuPage.css'
 
 type SectionTab = {
@@ -138,9 +139,9 @@ const SECTIONS: Record<string, Section> = {
 
   auto: {
     visual: [
-      { id: 'auto-stock', caption: 'У НАЯВНОСТІ', size: '720 × 960', href: ROUTES.AUTO },
-      { id: 'auto-ev', caption: 'ЕЛЕКТРОМОБІЛІ', size: '720 × 960', href: `${ROUTES.AUTO}?type=electric` },
-      { id: 'auto-hybrid', caption: 'ГІБРИДИ', size: '720 × 960', href: `${ROUTES.AUTO}?type=hybrid` },
+      { id: 'auto-stock', caption: 'У НАЯВНОСТІ', size: '720 × 960', href: catalogCategoryPath('cars') },
+      { id: 'auto-ev', caption: 'ЕЛЕКТРОМОБІЛІ', size: '720 × 960', href: `${catalogCategoryPath('cars')}?subcategory=cars-electric` },
+      { id: 'auto-hybrid', caption: 'ГІБРИДИ', size: '720 × 960', href: `${catalogCategoryPath('cars')}?subcategory=cars-hybrid` },
       { id: 'auto-order', caption: 'ПІД ЗАМОВЛЕННЯ', size: '720 × 960' },
     ],
     groups: [
@@ -148,9 +149,9 @@ const SECTIONS: Record<string, Section> = {
         num: '01',
         title: 'АВТО',
         items: [
-          { label: 'Усі авто в наявності', href: ROUTES.AUTO, bold: true },
-          { label: 'Електромобілі', href: `${ROUTES.AUTO}?type=electric` },
-          { label: 'Гібриди', href: `${ROUTES.AUTO}?type=hybrid` },
+          { label: 'Усі авто в наявності', href: catalogCategoryPath('cars'), bold: true },
+          { label: 'Електромобілі', href: `${catalogCategoryPath('cars')}?subcategory=cars-electric` },
+          { label: 'Гібриди', href: `${catalogCategoryPath('cars')}?subcategory=cars-hybrid` },
           { label: 'Під замовлення', tag: 'SOON' },
         ],
       },
@@ -177,10 +178,10 @@ const SECTIONS: Record<string, Section> = {
         num: '01',
         title: 'ШИНИ',
         items: [
-          { label: 'Усі шини', href: `${catalogCategoryPath('wheels')}?sub=tires`, bold: true },
-          { label: 'Літні', href: `${catalogCategoryPath('wheels')}?sub=tires&season=summer` },
-          { label: 'Зимові', tag: 'SOON' },
-          { label: 'Всесезонні', tag: 'SOON' },
+          { label: 'Усі шини',    href: `${catalogCategoryPath('wheels')}?sub=tires`, bold: true },
+          { label: 'Літні',       href: `${catalogCategoryPath('wheels')}?sub=tires&season=${encodeURIComponent('Літо')}` },
+          { label: 'Зимові',      href: `${catalogCategoryPath('wheels')}?sub=tires&season=${encodeURIComponent('Зима')}` },
+          { label: 'Всесезонні',  href: `${catalogCategoryPath('wheels')}?sub=tires&season=${encodeURIComponent('Всесезон')}` },
         ],
       },
       {
@@ -258,9 +259,26 @@ const SECTIONS: Record<string, Section> = {
 
 export function MenuPage() {
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState<string>('charging')
+  const [searchParams, setSearchParams] = useSearchParams()
+  // Tab selection persists in the URL (?tab=wheels) so the menu remembers
+  // where the user was when they come back from a catalog page or refresh.
+  const tabFromUrl = searchParams.get('tab') ?? 'charging'
+  const initialTab = SECTION_TABS.some((t) => t.id === tabFromUrl) ? tabFromUrl : 'charging'
+  const [activeTab, setActiveTabState] = useState<string>(initialTab)
   const [visualRow, setVisualRow] = useState<HTMLElement | null>(null)
   const [newsletterOpen, setNewsletterOpen] = useState(false)
+
+  function setActiveTab(id: string) {
+    setActiveTabState(id)
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev)
+        next.set('tab', id)
+        return next
+      },
+      { replace: true },
+    )
+  }
 
   const section = useMemo(() => SECTIONS[activeTab] ?? SECTIONS.charging, [activeTab])
 
@@ -280,15 +298,18 @@ export function MenuPage() {
   return (
     <ScreenContainer withTopInset className="menu-page">
       <header className="menu-page__tabs">
-        {SECTION_TABS.map((t) => (
-          <button
-            key={t.id}
-            className={`menu-page__tab ${activeTab === t.id ? 'menu-page__tab--active' : ''}`}
-            onClick={() => setActiveTab(t.id)}
-          >
-            {t.label}
-          </button>
-        ))}
+        <div className="menu-page__tabs-scroll">
+          {SECTION_TABS.map((t) => (
+            <button
+              key={t.id}
+              className={`menu-page__tab ${activeTab === t.id ? 'menu-page__tab--active' : ''}`}
+              onClick={() => setActiveTab(t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <SearchIconButton className="menu-page__search" />
       </header>
 
       <section key={activeTab} className="menu-page__visual-row" ref={setVisualRow}>

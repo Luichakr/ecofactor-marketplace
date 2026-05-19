@@ -1,17 +1,511 @@
-.autoservice__service-list {
+/*
+ * Autoservice wizard — 5 steps, EV-only catalog.
+ * Visual language mirrors CustomStationForm.css but with a horizontal
+ * step indicator and a cascading service picker (direction → tasks).
+ */
+
+.autoservice {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-4) 0 calc(var(--space-12) + 88px);
+}
+
+/* ──── Horizontal step indicator ───────────────────────────────── */
+.autoservice__steps {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 0 var(--space-4) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.autoservice__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-family);
+  min-height: 0;
+  flex-shrink: 0;
+}
+
+.autoservice__step[disabled] { cursor: default; }
+
+.autoservice__step-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-text-disabled);
+  margin: 14px 2px 0;
+}
+
+.autoservice__step-line--done { background-color: var(--color-text); }
+
+.autoservice__step-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--color-text-disabled);
+  background-color: var(--color-bg);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+}
+
+.autoservice__step--active .autoservice__step-circle,
+.autoservice__step--done .autoservice__step-circle {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* ──── Panel ───────────────────────────────────────────────────── */
+.autoservice__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: 0 var(--space-4);
+}
+
+.autoservice__panel-title {
+  font-family: var(--font-family-serif);
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.autoservice__hint {
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ──── Generic option list (city, slot) ────────────────────────── */
+.autoservice__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.autoservice__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  min-height: 56px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.autoservice__option:active { opacity: 0.5; }
+
+.autoservice__option--active { font-weight: var(--font-weight-medium); }
+
+.autoservice__option-label { font-size: var(--font-size-body1); }
+.autoservice__option-meta  { font-size: var(--font-size-caption); color: var(--color-text-muted); }
+
+.autoservice__option-tick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-text);
+}
+
+/* ──── Service direction cards (cascading picker) ──────────────── */
+.autoservice__directions {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-2);
 }
 
-.autoservice__row {
+.autoservice__direction {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface-elevated);
+  border: 1px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  min-height: 0;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+.autoservice__direction--open { border-color: var(--color-text); }
+
+.autoservice__direction-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  min-height: 0;
+  width: 100%;
+  text-align: left;
+}
+
+.autoservice__direction-title {
+  font-size: var(--font-size-subtitle1);
+  font-weight: var(--font-weight-medium);
+}
+
+.autoservice__direction-count {
+  font-size: var(--font-size-caption);
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.autoservice__direction-chev {
+  color: var(--color-text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.autoservice__direction--open .autoservice__direction-chev { transform: rotate(90deg); }
+
+.autoservice__direction-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+.autoservice__service {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  min-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.autoservice__service-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-text-muted);
+  background-color: var(--color-bg);
+  color: var(--color-bg);
+}
+
+.autoservice__service--active .autoservice__service-checkbox {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+.autoservice__service-label {
+  font-size: var(--font-size-body2);
+  line-height: var(--line-height-body2);
+}
+
+.autoservice__service--active .autoservice__service-label { font-weight: var(--font-weight-medium); }
+
+/* ──── Date + time step ────────────────────────────────────────── */
+.autoservice__dates {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.autoservice__date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: var(--space-3) 4px;
+  background-color: var(--color-surface-elevated);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  min-height: 0;
+}
+
+.autoservice__date--active {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+.autoservice__date-day { font-size: 18px; font-weight: var(--font-weight-medium); line-height: 1; }
+.autoservice__date-weekday {
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.autoservice__date--active .autoservice__date-weekday { color: var(--color-bg); }
+
+.autoservice__slots-title {
+  font-size: var(--font-size-subtitle2);
+  font-weight: var(--font-weight-medium);
+  margin: var(--space-4) 0 0;
+}
+
+.autoservice__slots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.autoservice__slot {
+  padding: var(--space-3) 0;
+  background-color: var(--color-surface-elevated);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  min-height: 0;
+}
+
+.autoservice__slot--active {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* ──── Contacts step ───────────────────────────────────────────── */
+.autoservice__contacts {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-4);
 }
 
-@media (max-width: 380px) {
-  .autoservice__row {
-    grid-template-columns: 1fr;
-  }
+/* ──── Summary card (step 5) ───────────────────────────────────── */
+.autoservice__summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background-color: var(--color-surface-elevated);
+}
+
+.autoservice__summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.autoservice__summary-label {
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.autoservice__summary-value {
+  color: var(--color-text);
+  text-align: right;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body2);
+}
+
+.autoservice__services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-elevated);
+}
+
+.autoservice__services-item {
+  font-size: var(--font-size-body2);
+  color: var(--color-text);
+  padding-left: 12px;
+  position: relative;
+}
+
+.autoservice__services-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--color-text);
+}
+
+/* ──── Sticky bottom controls ──────────────────────────────────── */
+.autoservice__controls {
+  position: fixed;
+  bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--mobile-max-width);
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  z-index: 50;
+}
+
+.autoservice__back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  min-height: 0;
+}
+
+.autoservice__back[disabled] { opacity: 0.3; cursor: not-allowed; }
+.autoservice__next { flex: 1; }
+
+/* ──── Success ─────────────────────────────────────────────────── */
+.autoservice__success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding: var(--space-12) var(--space-4) var(--space-8);
+}
+
+.autoservice__success-icon { color: var(--color-text); }
+
+.autoservice__success-title {
+  font-family: var(--font-family-serif);
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: var(--font-weight-regular);
+  margin: 0;
+}
+
+.autoservice__success-desc {
+  font-size: var(--font-size-body2);
+  line-height: var(--line-height-body2);
+  color: var(--color-text-muted);
+  margin: 0;
+  max-width: 320px;
+}
+
+/* ──── Month calendar ──────────────────────────────────────────── */
+.autoservice__cal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background-color: var(--color-surface-elevated);
+}
+
+.autoservice__cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.autoservice__cal-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: 1px solid transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  min-height: 0;
+}
+
+.autoservice__cal-nav[disabled] { opacity: 0.25; cursor: not-allowed; }
+
+.autoservice__cal-month {
+  font-size: var(--font-size-subtitle1);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+}
+
+.autoservice__cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.autoservice__cal-weekday {
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 4px 0;
+}
+
+.autoservice__cal-weekday--closed { color: var(--color-text-disabled); }
+
+.autoservice__cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.autoservice__cal-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: var(--font-size-body2);
+  font-family: var(--font-family);
+  color: var(--color-text);
+  min-height: 0;
+  padding: 0;
+}
+
+.autoservice__cal-cell--empty { visibility: hidden; }
+
+.autoservice__cal-cell--disabled {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.autoservice__cal-cell--active {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+  font-weight: var(--font-weight-medium);
 }

@@ -1,6 +1,23 @@
 import type { MarketplaceProduct } from '../entities/product/model/product.types'
 
-export const mockProducts: MarketplaceProduct[] = [
+// Per-id enrichment table — applied as defaults below so we don't have to
+// touch each entry's attribute list. Keeps the diff focused.
+const ENRICH: Record<string, Partial<MarketplaceProduct>> = {
+  'car-001': { stock: 2, sellerId: 'ecofactor-store', rating: { average: 4.8, count: 142 }, stats: { viewersNow: 18, monthlyPurchases: 24 } },
+  'car-002': { stock: 1, sellerId: 'ecofactor-store', rating: { average: 4.6, count: 38 }, stats: { viewersNow: 11 } },
+  'car-003': { stock: 0, sellerId: 'ecofactor-store', rating: { average: 4.4, count: 67 } },
+  'cs-001':  { stock: 47, sellerId: 'ecofactor-store', rating: { average: 4.9, count: 412 }, stats: { viewersNow: 9, monthlyPurchases: 78, weeklyPurchases: 21 }, bundle: ['cs-003'] },
+  'cs-002':  { stock: 4, sellerId: 'ecofactor-store', rating: { average: 4.7, count: 56 } },
+  'cs-003':  { stock: 23, sellerId: 'ecofactor-store', rating: { average: 4.5, count: 198 }, bundle: ['cs-001'] },
+  'ins-001': { sellerId: 'ecofactor-store', rating: { average: 4.3, count: 1820 } },
+  'ins-002': { sellerId: 'ecofactor-store', rating: { average: 4.5, count: 612 } },
+  'ins-003': { sellerId: 'ecofactor-store', rating: { average: 4.6, count: 87 } },
+  'tire-001':{ stock: 16, sellerId: 'tire-pro', rating: { average: 4.8, count: 230 }, stats: { viewersNow: 14, weeklyPurchases: 12 }, bundle: ['tire-002', 'tire-003'] },
+  'tire-002':{ stock: 3, sellerId: 'tire-pro', rating: { average: 4.6, count: 154 } },
+  'tire-003':{ stock: 0, sellerId: 'tire-pro', rating: { average: 4.4, count: 89 } },
+}
+
+const RAW: MarketplaceProduct[] = [
   // ─── Cars ───────────────────────────────────────────────────
   {
     id: 'car-001',
@@ -81,7 +98,7 @@ export const mockProducts: MarketplaceProduct[] = [
   // ─── Charging Stations ──────────────────────────────────────
   {
     id: 'cs-001',
-    categoryId: 'charging-stations',
+    categoryId: 'ev-charging',
     title: 'DTEK Home Charger 11 кВт',
     subtitle: 'Домашня станція з розумним управлінням',
     description:
@@ -104,7 +121,7 @@ export const mockProducts: MarketplaceProduct[] = [
   },
   {
     id: 'cs-002',
-    categoryId: 'charging-stations',
+    categoryId: 'ev-charging',
     title: 'Schneider EVlink Pro 22 кВт',
     subtitle: 'Комерційна зарядна станція',
     description:
@@ -127,7 +144,7 @@ export const mockProducts: MarketplaceProduct[] = [
   },
   {
     id: 'cs-003',
-    categoryId: 'charging-stations',
+    categoryId: 'ev-charging',
     title: 'Wallbox Pulsar Plus 7.4 кВт',
     subtitle: 'Компактна домашня станція',
     description:
@@ -149,7 +166,8 @@ export const mockProducts: MarketplaceProduct[] = [
     ],
   },
 
-  // ─── Insurance ──────────────────────────────────────────────
+  // ─── Insurance ── REMOVED (no matching marketplace category). ───
+  /*
   {
     id: 'ins-001',
     categoryId: 'insurance',
@@ -216,11 +234,12 @@ export const mockProducts: MarketplaceProduct[] = [
       { key: 'fleetMin', label: 'Мін. авто у парку', value: 5, type: 'number', unit: 'авто', visibleInDetails: true, priority: 7 },
     ],
   },
+  */
 
   // ─── Tires ──────────────────────────────────────────────────
   {
     id: 'tire-001',
-    categoryId: 'tires',
+    categoryId: 'wheels',
     title: 'Michelin Pilot Sport 5',
     subtitle: 'Літня спортивна, 225/45 R18',
     description:
@@ -243,7 +262,7 @@ export const mockProducts: MarketplaceProduct[] = [
   },
   {
     id: 'tire-002',
-    categoryId: 'tires',
+    categoryId: 'wheels',
     title: 'Continental WinterContact TS870',
     subtitle: 'Зимова, 205/55 R16',
     description:
@@ -266,7 +285,7 @@ export const mockProducts: MarketplaceProduct[] = [
   },
   {
     id: 'tire-003',
-    categoryId: 'tires',
+    categoryId: 'wheels',
     title: 'Bridgestone Turanza Eco',
     subtitle: 'Всесезонна, 235/50 R19',
     description:
@@ -288,3 +307,8 @@ export const mockProducts: MarketplaceProduct[] = [
     ],
   },
 ]
+
+export const mockProducts: MarketplaceProduct[] = RAW.map((p) => ({
+  ...p,
+  ...ENRICH[p.id],
+}))

@@ -5,3 +5,36 @@
 .marketplace-home__inner {
   display: contents;
 }
+
+/* Floating search button — top-right, respects safe-area. White over hero
+   imagery so it stays visible against MarketCarousel slides. */
+.marketplace-home__search {
+  position: fixed;
+  top: calc(var(--safe-area-top) + var(--space-3));
+  right: var(--space-4);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  color: #000 !important;
+  border-radius: 50% !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Categories block — shown below the lifestyle carousel + RecentlyViewed. */
+.marketplace-home__categories {
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+.marketplace-home__categories-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  margin: 0 0 var(--space-3);
+}

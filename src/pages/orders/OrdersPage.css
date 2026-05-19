@@ -1,0 +1,99 @@
+.orders-page__tabs {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.orders-page__tab {
+  background: none;
+  border: none;
+  padding: var(--space-1) 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 0;
+}
+
+.orders-page__tab--active {
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+}
+
+.orders-page__list {
+  padding: var(--space-3) var(--space-4) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.orders-page__card {
+  display: block;
+  border: 1px solid var(--color-border);
+  padding: var(--space-3);
+  text-decoration: none;
+  color: inherit;
+}
+
+.orders-page__card:active { opacity: 0.6; }
+
+.orders-page__card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-2);
+}
+
+.orders-page__card-num {
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-label);
+}
+
+.orders-page__card-date {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.3px;
+}
+
+.orders-page__card-items {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  line-height: 1.4;
+}
+
+.orders-page__card-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.orders-page__card-status {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+}
+
+.orders-page__card-total {
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+}
+
+.orders-page__card-eta {
+  margin: var(--space-1) 0 0;
+  font-size: 10px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.2px;
+}

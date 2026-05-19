@@ -51,6 +51,13 @@ export function CartPage() {
   )
 
   if (items.length === 0) {
+    // Populate the empty-cart screen with two strips of suggestions —
+    // favorites first (highest signal of intent), then a popular feed.
+    // Keeps the user inside the shopping loop instead of bouncing.
+    const favoriteProducts = allProducts.filter((p) => favoriteIds.includes(p.id)).slice(0, 6)
+    const popular = allProducts
+      .filter((p) => !favoriteIds.includes(p.id))
+      .slice(0, 6)
     return (
       <>
         <Header title="КОШИК" showBack />
@@ -60,6 +67,12 @@ export function CartPage() {
             description="Додайте товари з каталогу — звідси можна швидко оформити доставку та оплату."
             action={{ label: 'До каталогу', onClick: () => navigate(ROUTES.CATALOG) }}
           />
+          {favoriteProducts.length > 0 && (
+            <RecommendStrip title="ВАШІ ЗАКЛАДКИ" products={favoriteProducts} />
+          )}
+          {popular.length > 0 && (
+            <RecommendStrip title="ПОПУЛЯРНЕ ЗАРАЗ" products={popular} />
+          )}
         </ScreenContainer>
       </>
     )

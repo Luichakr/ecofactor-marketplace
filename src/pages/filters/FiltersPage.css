@@ -1,13 +1,156 @@
-.filters-page__reset-btn {
-  font-size: var(--font-size-body2);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-accent);
+.filters-page {
+  /* keep horizontal flush so section dividers reach the shell edges;
+     ScreenContainer.with-nav already adds bottom padding so the CTA
+     isn't hidden under the floating bottom nav. */
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ── Numbered section row ─────────────────────────────────────
+   Two-column split: left column holds |NN| + title (uppercase,
+   small caps), right column stacks the options vertically. */
+.filter-section {
+  display: grid;
+  grid-template-columns: minmax(110px, 30%) 1fr;
+  column-gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.filter-section__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-self: start;
+}
+
+.filter-section__num {
+  font-size: var(--font-size-caption);
+  letter-spacing: 0.3px;
+  color: var(--color-text);
+}
+
+.filter-section__title {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  font-weight: var(--font-weight-regular);
+}
+
+.filter-section__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  /* Grid items default to min-width: auto; without this override the
+     range inputs (number type, intrinsic width) push the column wider
+     than its 1fr track and overflow the shell. */
+  min-width: 0;
+}
+
+/* ── Option row — plain text, bold when active ─────────────── */
+.filter-option {
   background: none;
   border: none;
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  display: inline-flex;
+  align-items: center;
+  text-align: left;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  color: var(--color-text);
   cursor: pointer;
-  min-height: 44px;
-  padding: 0 var(--space-2);
+  -webkit-tap-highlight-color: transparent;
 }
+
+.filter-option:active { opacity: 0.5; }
+
+.filter-option--active {
+  font-weight: var(--font-weight-bold);
+}
+
+.filter-option--more {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+/* ── Range block (numbers + min..max hint) ─────────────────── */
+.filter-range {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.filter-range__inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.filter-range__num {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  height: 40px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  font-size: var(--font-size-body2);
+  color: var(--color-text);
+  font-family: var(--font-family);
+}
+
+/* Strip native number-input spinners — they pad the right side and
+   make the field look unbalanced inside the tight grid track. */
+.filter-range__num::-webkit-inner-spin-button,
+.filter-range__num::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.filter-range__num { appearance: textfield; -moz-appearance: textfield; }
+
+.filter-range__num:focus {
+  outline: 1px solid var(--color-text);
+  outline-offset: -1px;
+}
+
+.filter-range__dash { color: var(--color-text-muted); }
+
+.filter-range__hint {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  letter-spacing: 0.3px;
+}
+
+/* ── Sticky-ish CTA at the bottom ──────────────────────────── */
+.filters-page__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-4) var(--space-8);
+}
+
+.filters-page__reset {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.filters-page__reset:active { opacity: 0.5; }
 
 .filters-page__empty {
   display: flex;
@@ -17,11 +160,4 @@
   color: var(--color-text-muted);
   font-size: var(--font-size-body2);
   text-align: center;
-}
-
-.filters-page__cta {
-  padding: var(--space-4);
-  position: sticky;
-  bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + var(--space-4));
-  background: linear-gradient(to top, var(--color-bg) 70%, transparent);
 }

@@ -1,0 +1,120 @@
+.settings-page {
+  padding: var(--space-3) var(--space-4) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.settings-page__group-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.settings-page__group-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.settings-page__segment {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  border: 1px solid var(--color-border);
+}
+
+.settings-page__seg {
+  background: none;
+  border: none;
+  padding: var(--space-3);
+  font-family: var(--font-family);
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  min-height: 0;
+  border-right: 1px solid var(--color-border);
+}
+
+.settings-page__seg:last-child { border-right: none; }
+
+.settings-page__seg--active {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+.settings-page__hint {
+  margin: var(--space-1) 0 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.settings-page__toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) 0;
+  font-size: var(--font-size-body2);
+  letter-spacing: 0.2px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-page__toggle:last-child { border-bottom: none; }
+
+.settings-page__toggle-cb {
+  width: 36px;
+  height: 20px;
+  appearance: none;
+  background: var(--color-surface-elevated);
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+.settings-page__toggle-cb::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  left: 2px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  transition: left 200ms ease;
+}
+
+.settings-page__toggle-cb:checked {
+  background: var(--color-text);
+}
+
+.settings-page__toggle-cb:checked::after {
+  left: 18px;
+}
+
+.settings-page__link {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  padding: var(--space-3) 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  color: var(--color-text);
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  min-height: 0;
+}
+
+.settings-page__link:last-child { border-bottom: none; color: #b00020; }
+
+.settings-page__version {
+  margin: var(--space-5) 0 0;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text-muted);
+}

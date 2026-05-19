@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { mockProducts } from '../../data/mockProducts'
+import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
 import { filterProducts } from '../../features/catalog/lib/filterProducts'
 import { CatalogGrid } from '../../features/catalog/ui/CatalogGrid/CatalogGrid'
 import { SearchInput } from '../../shared/ui/SearchInput/SearchInput'
@@ -9,11 +9,12 @@ import './SearchPage.css'
 
 export function SearchPage() {
   const [query, setQuery] = useState('')
+  const live = useEfpfProducts()
 
   const results = useMemo(() => {
     if (!query.trim()) return []
-    return filterProducts({ products: mockProducts, filters: {}, search: query })
-  }, [query])
+    return filterProducts({ products: live.data ?? [], filters: {}, search: query })
+  }, [query, live.data])
 
   return (
     <>

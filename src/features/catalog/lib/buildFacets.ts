@@ -5,10 +5,17 @@ import type { FacetDefinition, FacetOption } from '../model/catalog.types'
 export function buildFacets(
   products: MarketplaceProduct[],
   categoryId?: MarketplaceCategoryId,
+  subcategoryValue?: string | null,
 ): FacetDefinition[] {
-  const filtered = categoryId
+  let filtered = categoryId
     ? products.filter((p) => p.categoryId === categoryId)
     : products
+
+  if (subcategoryValue) {
+    filtered = filtered.filter((p) =>
+      p.attributes.some((a) => a.key === 'subcategory' && a.value === subcategoryValue),
+    )
+  }
 
   if (filtered.length === 0) return []
 
@@ -24,9 +31,14 @@ export function buildFacets(
     }
   >()
 
+  // `subcategory` is selected via top-of-catalog tabs, not via the filter
+  // sheet — exclude it from the facet list so it doesn't render twice.
+  const RESERVED_FACET_KEYS = new Set(['subcategory'])
+
   for (const product of filtered) {
     for (const attr of product.attributes) {
       if (!attr.filterable) continue
+      if (RESERVED_FACET_KEYS.has(attr.key)) continue
 
       if (!attrMap.has(attr.key)) {
         attrMap.set(attr.key, {
@@ -89,6 +101,28 @@ export function buildFacets(
         unit: meta.unit,
         options,
         priority: meta.priority,
+      })
+    }
+  }
+
+  // Synthesize a universal "price" facet from product.price.value when the
+  // category doesn't already declare price as a filterable attribute. This
+  // way every category (cars, chargers, insurance, …) gets a price slider
+  // automatically, without copy-pasting the attribute into every fixture.
+  const PRICE_KEY = 'price'
+  if (!attrMap.has(PRICE_KEY)) {
+    const prices = filtered
+      .map((p) => p.price?.value)
+      .filter((v): v is number => typeof v === 'number' && !isNaN(v))
+    if (prices.length > 0) {
+      facets.push({
+        key: PRICE_KEY,
+        label: 'Ціна',
+        type: 'number',
+        unit: '₴',
+        min: Math.min(...prices),
+        max: Math.max(...prices),
+        priority: 4,
       })
     }
   }

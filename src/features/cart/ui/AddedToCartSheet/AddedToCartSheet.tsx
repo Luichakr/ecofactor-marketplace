@@ -4,7 +4,7 @@ import type { MarketplaceProduct } from '../../../../entities/product/model/prod
 import { formatPrice } from '../../../../entities/product/model/product.types'
 import { BottomSheet } from '../../../../shared/ui/BottomSheet/BottomSheet'
 import { ProductImage } from '../../../product/ui/ProductImage/ProductImage'
-import { RecommendStrip } from '../RecommendStrip/RecommendStrip'
+import { ProductCard } from '../../../product/ui/ProductCard/ProductCard'
 import { recommendFor } from '../../../../shared/lib/recommend/recommend'
 import { ROUTES } from '../../../../shared/config/routes'
 import './AddedToCartSheet.css'
@@ -32,7 +32,7 @@ export function AddedToCartSheet({ open, onClose, product, allProducts, qty = 1,
       cartCategories: new Set([product.categoryId]),
       cartSubcategories: new Set(subValue ? [subValue] : []),
       mode: 'similar',
-      limit: 6,
+      limit: 18,
     })
   }, [allProducts, product])
 
@@ -53,7 +53,7 @@ export function AddedToCartSheet({ open, onClose, product, allProducts, qty = 1,
           Переглянути
         </button>
       }
-      maxHeightPct={88}
+      maxHeightPct={35}
     >
       <div className="added-sheet">
         {/* Added item preview */}
@@ -71,13 +71,16 @@ export function AddedToCartSheet({ open, onClose, product, allProducts, qty = 1,
           </div>
         </article>
 
-        {/* Recommendations */}
+        {/* Recommendations — 3-column grid (same rhythm as quick-add sheet). */}
         {recommendations.length > 0 && (
-          <RecommendStrip
-            title="ВАС ТАКОЖ МОЖЕ ЗАЦІКАВИТИ"
-            products={recommendations}
-            layout="row"
-          />
+          <>
+            <h3 className="added-sheet__recs-title">ВАС ТАКОЖ МОЖЕ ЗАЦІКАВИТИ</h3>
+            <div className="added-sheet__recs catalog-grid catalog-grid--cols-3">
+              {recommendations.map((p) => (
+                <ProductCard key={p.id} product={p} pool={recommendations} />
+              ))}
+            </div>
+          </>
         )}
 
         <div className="added-sheet__actions">

@@ -3,6 +3,7 @@ import { RequestLayout } from '../ui/RequestLayout/RequestLayout'
 import { FormSection } from '../ui/FormSection/FormSection'
 import { Field } from '../../../shared/ui/Field/Field'
 import { PhoneInput, type PhoneValue } from '../../../shared/ui/PhoneInput/PhoneInput'
+import { leads } from '../../leads/model/leadsStore'
 
 export function CallbackForm() {
   const [name, setName] = useState('')
@@ -15,6 +16,7 @@ export function CallbackForm() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!canSubmit) return
+    leads.add({ type: 'callback', name, phone: phone?.e164 })
     setSubmitted(true)
   }
 

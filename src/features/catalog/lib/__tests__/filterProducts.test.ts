@@ -6,7 +6,7 @@ describe('filterProducts — tires', () => {
   it('filters by season=Літо', () => {
     const result = filterProducts({
       products: mockProducts,
-      categoryId: 'tires',
+      categoryId: 'wheels',
       filters: { season: ['Літо'] },
       search: '',
     })
@@ -20,7 +20,7 @@ describe('filterProducts — tires', () => {
   it('filters by diameter_min=18 (partial range)', () => {
     const result = filterProducts({
       products: mockProducts,
-      categoryId: 'tires',
+      categoryId: 'wheels',
       filters: { diameter: { min: 18 } },
       search: '',
     })
@@ -34,7 +34,7 @@ describe('filterProducts — tires', () => {
   it('filters by diameter_max=17 (partial range)', () => {
     const result = filterProducts({
       products: mockProducts,
-      categoryId: 'tires',
+      categoryId: 'wheels',
       filters: { diameter: { max: 17 } },
       search: '',
     })
@@ -47,7 +47,7 @@ describe('filterProducts — tires', () => {
   it('filters by diameter full range [16,18]', () => {
     const result = filterProducts({
       products: mockProducts,
-      categoryId: 'tires',
+      categoryId: 'wheels',
       filters: { diameter: { min: 16, max: 18 } },
       search: '',
     })
@@ -64,7 +64,7 @@ describe('filterProducts — charging-stations boolean', () => {
   it('filters smartFeatures=true', () => {
     const result = filterProducts({
       products: mockProducts,
-      categoryId: 'charging-stations',
+      categoryId: 'ev-charging',
       filters: { smartFeatures: ['true'] },
       search: '',
     })
@@ -76,31 +76,18 @@ describe('filterProducts — charging-stations boolean', () => {
   })
 })
 
-describe('filterProducts — insurance boolean', () => {
-  it('filters forBusiness=false', () => {
-    const result = filterProducts({
-      products: mockProducts,
-      categoryId: 'insurance',
-      filters: { forBusiness: ['false'] },
-      search: '',
-    })
-    expect(result.length).toBeGreaterThan(0)
-    result.forEach((p) => {
-      const fb = p.attributes.find((a) => a.key === 'forBusiness')
-      expect(String(fb?.value)).toBe('false')
-    })
-  })
-})
+// Insurance fixtures removed — no matching marketplace category. The
+// boolean-filter contract is still covered by smartFeatures above.
 
 describe('filterProducts — category isolation', () => {
   it('only returns products for the given category', () => {
     const result = filterProducts({
       products: mockProducts,
-      categoryId: 'tires',
+      categoryId: 'wheels',
       filters: {},
       search: '',
     })
-    result.forEach((p) => expect(p.categoryId).toBe('tires'))
+    result.forEach((p) => expect(p.categoryId).toBe('wheels'))
   })
 
   it('returns all products when no categoryId', () => {

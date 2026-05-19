@@ -1,0 +1,274 @@
+.filter-panel {
+  /* keep horizontal flush so section dividers reach the shell edges;
+     ScreenContainer.with-nav already adds bottom padding so the CTA
+     isn't hidden under the floating bottom nav. */
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ── Numbered section row ─────────────────────────────────────
+   Two-column split: left column holds |NN| + title (uppercase,
+   small caps), right column stacks the options vertically. */
+.filter-section {
+  display: grid;
+  grid-template-columns: minmax(110px, 30%) 1fr;
+  column-gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.filter-section__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-self: start;
+}
+
+.filter-section__num {
+  font-size: var(--font-size-caption);
+  letter-spacing: 0.3px;
+  color: var(--color-text);
+}
+
+.filter-section__title {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  font-weight: var(--font-weight-regular);
+}
+
+.filter-section__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  /* Grid items default to min-width: auto; without this override the
+     range inputs (number type, intrinsic width) push the column wider
+     than its 1fr track and overflow the shell. */
+  min-width: 0;
+}
+
+/* ── Option row — plain text, bold when active ─────────────── */
+.filter-option {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  color: var(--color-text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-option__count {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+.filter-option:active { opacity: 0.5; }
+
+.filter-option--active {
+  font-weight: var(--font-weight-bold);
+}
+
+.filter-option--more {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+/* ── Range block (numbers + min..max hint) ─────────────────── */
+.filter-range {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.filter-range__inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.filter-range__num {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  height: 40px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  font-size: var(--font-size-body2);
+  color: var(--color-text);
+  font-family: var(--font-family);
+}
+
+/* Strip native number-input spinners — they pad the right side and
+   make the field look unbalanced inside the tight grid track. */
+.filter-range__num::-webkit-inner-spin-button,
+.filter-range__num::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.filter-range__num { appearance: textfield; -moz-appearance: textfield; }
+
+.filter-range__num:focus {
+  outline: 1px solid var(--color-text);
+  outline-offset: -1px;
+}
+
+.filter-range__dash { color: var(--color-text-muted); }
+
+.filter-range__hint {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  letter-spacing: 0.3px;
+}
+
+/* ── Composite РОЗМІР block (3 mini ranges) ─────────────────── */
+.size-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.size-block__row {
+  display: grid;
+  grid-template-columns: minmax(70px, 30%) 1fr;
+  column-gap: var(--space-2);
+  align-items: center;
+}
+
+.size-block__label {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ── Visual dual-thumb price slider ─────────────────────────── */
+.price-slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.price-slider__rail {
+  position: relative;
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.price-slider__rail::before {
+  /* The base track — a thin grey line spanning the rail. */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-border);
+  border-radius: 1px;
+}
+
+.price-slider__fill {
+  position: absolute;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: 1px;
+}
+
+/* Two range inputs stacked on top of each other. Native track is
+ * hidden; we only show their thumbs. */
+.price-slider__thumb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 28px;
+  background: none;
+  pointer-events: none; /* Re-enabled on thumb element below. */
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.price-slider__thumb::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-text);
+  border: 2px solid var(--color-bg);
+  box-shadow: 0 0 0 1px var(--color-text);
+  cursor: pointer;
+}
+
+.price-slider__thumb::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-text);
+  border: 2px solid var(--color-bg);
+  box-shadow: 0 0 0 1px var(--color-text);
+  cursor: pointer;
+}
+
+.price-slider__thumb::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+.price-slider__hint {
+  font-size: var(--font-size-caption);
+  color: var(--color-text);
+  letter-spacing: 0.3px;
+}
+
+/* ── Sticky-ish CTA at the bottom ──────────────────────────── */
+.filter-panel__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-4) var(--space-8);
+}
+
+.filter-panel__reset {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.filter-panel__reset:active { opacity: 0.5; }
+
+.filter-panel__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body2);
+  text-align: center;
+}

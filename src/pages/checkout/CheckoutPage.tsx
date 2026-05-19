@@ -12,8 +12,10 @@ import { ProductImage } from '../../features/product/ui/ProductImage/ProductImag
 import { DeliveryMethodCard } from '../../features/checkout/ui/DeliveryMethodCard/DeliveryMethodCard'
 import { PaymentMethodGrid, type PaymentMethod } from '../../features/checkout/ui/PaymentMethodGrid/PaymentMethodGrid'
 import { cart, useCart, useCartTotals } from '../../features/cart/model/cartStore'
+import { orders, type Order } from '../../features/orders/model/ordersStore'
+import { useAddresses, useCards } from '../../features/profile/model/profileStore'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
-import { ROUTES } from '../../shared/config/routes'
+import { ROUTES, orderDetailPath } from '../../shared/config/routes'
 import './CheckoutPage.css'
 
 type DeliveryType = 'home' | 'pickup' | 'np' | null
@@ -50,21 +52,37 @@ export function CheckoutPage() {
   const items = useCart()
   const { count, subtotal, currency } = useCartTotals()
 
+  // Saved address/card store — preselect defaults so the form arrives
+  // already partially filled for returning users. The user can still edit
+  // every field manually below.
+  const savedAddresses = useAddresses()
+  const savedCards = useCards()
+  const defaultAddress = savedAddresses.find((a) => a.isDefault) ?? savedAddresses[0]
+  const defaultCard = savedCards.find((c) => c.isDefault) ?? savedCards[0]
+
   const [step, setStep] = useState<Step>('delivery')
   const [reference] = useState(makeReference)
+  // Persisted on confirm so the success screen can deep-link into the
+  // freshly-created order detail page.
+  const [createdOrderId, setCreatedOrderId] = useState<string | null>(null)
 
   const [deliveryType, setDeliveryType] = useState<DeliveryType>(null)
   const [npSelection, setNpSelection] = useState<NovaPoshtaSelection | undefined>()
   const [npPickerOpen, setNpPickerOpen] = useState(false)
-  const [homeCity, setHomeCity] = useState('')
-  const [homeAddress, setHomeAddress] = useState('')
+  const [homeCity, setHomeCity] = useState(defaultAddress?.city ?? '')
+  const [homeAddress, setHomeAddress] = useState(defaultAddress?.street ?? '')
   const [homeComment, setHomeComment] = useState('')
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState(defaultAddress?.recipient ?? '')
   const [phone, setPhone] = useState<PhoneValue | undefined>()
   const [email, setEmail] = useState('')
 
   const [payment, setPayment] = useState<PaymentMethod['id']>('card')
+  // When the default card exists we surface it in the payment summary so the
+  // user sees "•••• 4242" rather than a blank line. They can still pick a
+  // different payment method.
+  const [usedCardId, setUsedCardId] = useState<string | null>(defaultCard?.id ?? null)
+  const activeCard = savedCards.find((c) => c.id === usedCardId) ?? null
 
   const deliveryCost = useMemo(() => {
     if (deliveryType === 'pickup') return 0
@@ -136,7 +154,17 @@ export function CheckoutPage() {
               <span className="checkout-page__ref-label">НОМЕР ЗАМОВЛЕННЯ</span>
               <span className="checkout-page__ref-value">#{reference}</span>
             </div>
-            <Button variant="primary" size="lg" fullWidth onClick={() => navigate(ROUTES.MARKETPLACE)}>
+            {createdOrderId && (
+              <Button
+                variant="primary"
+                size="lg"
+                fullWidth
+                onClick={() => navigate(orderDetailPath(createdOrderId))}
+              >
+                ПЕРЕГЛЯНУТИ ЗАМОВЛЕННЯ
+              </Button>
+            )}
+            <Button variant="outline" size="lg" fullWidth onClick={() => navigate(ROUTES.MARKETPLACE)}>
               На головну
             </Button>
           </div>
@@ -211,6 +239,35 @@ export function CheckoutPage() {
             {/* Details for the selected delivery method */}
             {deliveryType === 'home' && (
               <div className="checkout-page__form">
+                {/* Saved-address picker — quick switch between known addresses
+                    instead of typing the same city/street again. */}
+                {savedAddresses.length > 0 && (
+                  <div className="checkout-page__saved-list">
+                    <span className="checkout-page__saved-label">Збережені адреси</span>
+                    <div className="checkout-page__saved-row">
+                      {savedAddresses.map((a) => {
+                        const active = homeCity === a.city && homeAddress === (a.street ?? '')
+                        return (
+                          <button
+                            key={a.id}
+                            type="button"
+                            className={`checkout-page__saved-chip ${active ? 'checkout-page__saved-chip--active' : ''}`}
+                            onClick={() => {
+                              setHomeCity(a.city)
+                              setHomeAddress(a.street ?? a.branch ?? '')
+                              if (a.recipient && !name) setName(a.recipient)
+                            }}
+                          >
+                            <span className="checkout-page__saved-chip-type">{a.label}</span>
+                            <span className="checkout-page__saved-chip-meta">
+                              {a.city}{a.street ? `, ${a.street}` : ''}
+                            </span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
                 <Field
                   label="Місто"
                   placeholder="Київ, Одеса..."
@@ -368,6 +425,33 @@ export function CheckoutPage() {
         {step === 'payment' && (
           <section className="checkout-page__section">
             <h2 className="checkout-page__step-title">ОБЕРІТЬ СПОСІБ ОПЛАТИ</h2>
+
+            {/* Saved-card quick picker — only when the user already has cards
+                and they picked the "card" payment method. Selecting a saved
+                card just bookmarks which one will be used; the actual flow
+                stays the same demo-mode stub. */}
+            {payment === 'card' && savedCards.length > 0 && (
+              <div className="checkout-page__saved-list">
+                <span className="checkout-page__saved-label">Збережені картки</span>
+                <div className="checkout-page__saved-row">
+                  {savedCards.map((c) => {
+                    const active = usedCardId === c.id
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        className={`checkout-page__saved-chip ${active ? 'checkout-page__saved-chip--active' : ''}`}
+                        onClick={() => setUsedCardId(c.id)}
+                      >
+                        <span className="checkout-page__saved-chip-type">{c.brand.toUpperCase()}</span>
+                        <span className="checkout-page__saved-chip-meta">•••• {c.last4} · {c.expiry}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
             <PaymentMethodGrid options={PAYMENT_OPTIONS} value={payment} onChange={setPayment} />
 
             <p className="checkout-page__payment-summary-hint">
@@ -388,6 +472,48 @@ export function CheckoutPage() {
                   size="lg"
                   className="checkout-page__bar-cta"
                   onClick={() => {
+                    // Persist the order before clearing the cart so the
+                    // user can immediately see it under /orders and we
+                    // never lose items if cart.clear() ran while orders.add()
+                    // failed.
+                    const now = new Date().toISOString()
+                    const branch =
+                      deliveryType === 'np'
+                        ? npSelection?.warehouse?.Description
+                        : deliveryType === 'pickup'
+                          ? PICKUP_ADDRESS
+                          : homeAddress
+                    const city =
+                      deliveryType === 'np'
+                        ? npSelection?.city?.MainDescription ?? ''
+                        : deliveryType === 'pickup'
+                          ? 'Одеса'
+                          : homeCity
+                    const order: Order = {
+                      id: `o-${Date.now()}`,
+                      number: reference.replace('-', ''),
+                      createdAt: now,
+                      status: payment === 'cod' ? 'placed' : 'paid',
+                      paidAt: payment === 'cod' ? undefined : now,
+                      items: items.map((it) => ({
+                        productId: it.productId,
+                        title: it.title,
+                        subtitle: it.subtitle,
+                        image: it.image,
+                        qty: it.qty,
+                        price: it.price ?? 0,
+                        currency: it.currency ?? 'UAH',
+                        variant: it.variant,
+                      })),
+                      total,
+                      currency,
+                      deliveryCity: city,
+                      deliveryBranch: branch,
+                      deliveryPrice: deliveryCost,
+                      paymentLast4: payment === 'card' ? activeCard?.last4 : undefined,
+                    }
+                    orders.add(order)
+                    setCreatedOrderId(order.id)
                     cart.clear()
                     setStep('success')
                   }}

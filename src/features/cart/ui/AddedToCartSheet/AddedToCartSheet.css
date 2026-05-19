@@ -103,3 +103,17 @@
   cursor: pointer;
   min-height: 52px;
 }
+
+.added-sheet__recs-title {
+  font-size: var(--font-size-body2);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  padding: 0 var(--space-4);
+}
+
+/* Higher specificity to beat .catalog-grid's own horizontal gutters. */
+.added-sheet .added-sheet__recs.catalog-grid {
+  padding: 0 var(--space-4);
+}

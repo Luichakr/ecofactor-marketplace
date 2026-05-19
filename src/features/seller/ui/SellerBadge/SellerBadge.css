@@ -1,0 +1,122 @@
+.seller-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-family);
+  text-align: left;
+  cursor: pointer;
+  min-height: 0;
+  color: inherit;
+}
+
+.seller-badge:active { opacity: 0.6; }
+
+.seller-badge__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-text);
+  color: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.seller-badge__avatar--lg {
+  width: 48px;
+  height: 48px;
+  font-size: 14px;
+}
+
+.seller-badge__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.seller-badge__name {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.2px;
+}
+
+.seller-badge__check {
+  color: #1f9d55;
+  margin-left: 4px;
+}
+
+.seller-badge__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.seller-badge__count {
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.seller-badge__sheet {
+  padding: var(--space-3) var(--space-4) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.seller-badge__sheet-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.seller-badge__sheet-name {
+  margin: 0 0 4px;
+  font-size: var(--font-size-body1);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.seller-badge__desc {
+  margin: 0;
+  font-size: var(--font-size-body2);
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.seller-badge__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--color-border);
+  padding: 1px 0;
+}
+
+.seller-badge__stats > div {
+  background: var(--color-bg);
+  padding: var(--space-3) var(--space-2);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seller-badge__stat-val {
+  font-size: 20px;
+  font-weight: var(--font-weight-medium);
+}
+
+.seller-badge__stat-label {
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}

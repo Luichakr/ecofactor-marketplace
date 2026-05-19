@@ -4,6 +4,8 @@ import { fetchAllProducts } from '../../../shared/api/efpf/client'
 import { adaptEfpfProducts } from '../../../shared/api/efpf/adapter'
 import { mockProducts } from '../../../data/mockProducts'
 import { mockTires } from '../../../data/mockTires'
+import { fetchAutoElectricInStock } from '../../auto/api/lubeavtoApi'
+import { autoCardToProduct } from '../../auto/lib/autoCardToProduct'
 
 type State = {
   data: MarketplaceProduct[] | null
@@ -23,9 +25,17 @@ async function loadOnce(): Promise<MarketplaceProduct[]> {
   if (cache) return cache
   if (inflight) return inflight
   inflight = (async () => {
-    const items = await fetchAllProducts({ lang: 'ua', per_page: 200 })
-    const adapted = adaptEfpfProducts(items)
-    const merged = [...adapted, ...LOCAL_EXTRAS]
+    // Run EFPF + Lubeavto in parallel. Each catches its own failure so one
+    // dead vertical doesn't strand the whole feed.
+    const [adapted, cars] = await Promise.all([
+      fetchAllProducts({ lang: 'ua', per_page: 200 })
+        .then(adaptEfpfProducts)
+        .catch(() => [] as MarketplaceProduct[]),
+      fetchAutoElectricInStock()
+        .then((list) => list.map(autoCardToProduct))
+        .catch(() => [] as MarketplaceProduct[]),
+    ])
+    const merged = [...adapted, ...cars, ...LOCAL_EXTRAS]
     cache = merged
     inflight = null
     return merged

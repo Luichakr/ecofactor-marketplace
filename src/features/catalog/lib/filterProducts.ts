@@ -31,6 +31,14 @@ export function filterProducts({ products, categoryId, filters, search }: Filter
     if (Array.isArray(selected) && selected.length === 0) continue
 
     result = result.filter((p) => {
+      // `price` is special — it lives on product.price.value, not in
+      // attributes. The "price" facet is synthesized for every category
+      // (see buildFacets), so the matching path needs a special case too.
+      if (key === 'price') {
+        const v = p.price?.value
+        if (typeof v !== 'number') return false
+        return matchesFilter(v, selected)
+      }
       const attr = p.attributes.find((a) => a.key === key)
       if (!attr) return false
       return matchesFilter(attr.value, selected)

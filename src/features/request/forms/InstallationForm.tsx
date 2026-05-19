@@ -4,6 +4,7 @@ import { FormSection } from '../ui/FormSection/FormSection'
 import { Field } from '../../../shared/ui/Field/Field'
 import { ChipGroup } from '../../../shared/ui/ChipGroup/ChipGroup'
 import { PhoneInput, type PhoneValue } from '../../../shared/ui/PhoneInput/PhoneInput'
+import { leads } from '../../leads/model/leadsStore'
 
 const POWER_OPTIONS = ['3.5 кВт', '7 кВт', '11 кВт', '22 кВт', 'Більше 22 кВт', 'Потрібна порада']
 
@@ -28,6 +29,14 @@ export function InstallationForm() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!canSubmit) return
+    leads.add({
+      type: 'installation',
+      name,
+      phone: phone?.e164,
+      email,
+      message: comment,
+      payload: { city, power },
+    })
     setSubmitted(true)
   }
 

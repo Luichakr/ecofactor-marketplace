@@ -1,0 +1,28 @@
+.social-proof {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-1) 0;
+}
+
+.social-proof--compact {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.2px;
+  color: var(--color-text-muted);
+}
+
+.social-proof__line {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.social-proof--compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}

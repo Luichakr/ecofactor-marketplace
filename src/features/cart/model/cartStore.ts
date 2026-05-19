@@ -13,6 +13,9 @@ export type CartItem = {
   qty: number
   /** Optional variant string (size, color, etc.). */
   variant?: string
+  /** Remaining units on hand at the moment of add. Used to cap qty when
+   *  the user bumps quantity in the cart so we never exceed inventory. */
+  stock?: number
 }
 
 const STORAGE_KEY = 'ecofactor-cart'
@@ -53,10 +56,22 @@ function getSnapshot(): CartItem[] {
 }
 
 function addItem(item: Omit<CartItem, 'qty'> & { qty?: number }): void {
-  const qty = item.qty ?? 1
+  // Stock guard — refuse adds for out-of-stock SKUs and cap quantity to
+  // remaining inventory. Callers (ProductCard, QuickAdd, ProductPage)
+  // also short-circuit before reaching here so the user sees a clear
+  // OOS state, but this is the last line of defence.
+  if (item.stock === 0) {
+    track('cart_add_blocked_oos', { product_id: item.productId })
+    return
+  }
+  const requested = item.qty ?? 1
   const existingIdx = items.findIndex(
     (i) => i.productId === item.productId && i.variant === item.variant,
   )
+  const existingQty = existingIdx >= 0 ? items[existingIdx].qty : 0
+  const cap = item.stock ?? Infinity
+  const qty = Math.max(0, Math.min(requested, cap - existingQty))
+  if (qty === 0) return
   if (existingIdx >= 0) {
     items = items.map((it, i) => (i === existingIdx ? { ...it, qty: it.qty + qty } : it))
   } else {
@@ -78,9 +93,11 @@ function setQty(productId: string, qty: number, variant?: string): void {
   if (qty <= 0) {
     items = items.filter((i) => !(i.productId === productId && i.variant === variant))
   } else {
-    items = items.map((i) =>
-      i.productId === productId && i.variant === variant ? { ...i, qty } : i,
-    )
+    items = items.map((i) => {
+      if (i.productId !== productId || i.variant !== variant) return i
+      const capped = i.stock != null ? Math.min(qty, i.stock) : qty
+      return { ...i, qty: capped }
+    })
   }
   emit()
 }
