@@ -96,12 +96,40 @@ export function ProductImageSlider({ images, alt, categoryId, onTap }: Props) {
         ))}
       </div>
       <div className="product-slider__dots" aria-hidden="true">
-        {images.map((_, i) => (
-          <span
-            key={i}
-            className={`product-slider__dot ${i === activeIdx ? 'product-slider__dot--active' : ''}`}
-          />
-        ))}
+        {(() => {
+          // Sliding-window dot strip — Instagram/Snap pattern. Capped at
+          // MAX_DOTS visible at once; window slides as the user swipes so
+          // the active dot stays roughly centered. Dots that border more
+          // off-screen photos shrink ("edge fade") so the viewer
+          // intuitively reads "there's more in that direction".
+          const MAX_DOTS = 7
+          const total = images.length
+          const half = Math.floor(MAX_DOTS / 2)
+          let start = total <= MAX_DOTS ? 0 : Math.max(0, Math.min(activeIdx - half, total - MAX_DOTS))
+          const end = Math.min(start + MAX_DOTS, total)
+          const visible: number[] = []
+          for (let i = start; i < end; i++) visible.push(i)
+
+          return visible.map((i, posInWindow) => {
+            const isFirstVisible = posInWindow === 0
+            const isLastVisible = posInWindow === visible.length - 1
+            const hasMoreLeft = start > 0
+            const hasMoreRight = end < total
+            const isEdgeShrink =
+              (isFirstVisible && hasMoreLeft) ||
+              (isLastVisible && hasMoreRight)
+            return (
+              <span
+                key={i}
+                className={[
+                  'product-slider__dot',
+                  i === activeIdx && 'product-slider__dot--active',
+                  isEdgeShrink && 'product-slider__dot--edge',
+                ].filter(Boolean).join(' ')}
+              />
+            )
+          })
+        })()}
       </div>
     </div>
   )

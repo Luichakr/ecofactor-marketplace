@@ -370,17 +370,21 @@ export function ProductPage() {
           )}
         </div>
 
-        {/* 6-tile photo placeholder strip (reference look). */}
-        <section className="product-page__photos" aria-label="Фотографії">
-          {PHOTO_PLACEHOLDERS.map((p, i) => (
-            <PlaceholderImage
-              key={i}
-              size={p.size}
-              aspectRatio={p.ratio}
-              caption={`${product.title.toUpperCase()} · ${i + 1}`}
-            />
-          ))}
-        </section>
+        {/* 6-tile photo placeholder strip (reference look). Hidden for
+            cars — those have real photos via the Lubeavto gallery, so
+            stacking blank "1248 × 1664" tiles underneath would look weird. */}
+        {product.categoryId !== 'cars' && (
+          <section className="product-page__photos" aria-label="Фотографії">
+            {PHOTO_PLACEHOLDERS.map((p, i) => (
+              <PlaceholderImage
+                key={i}
+                size={p.size}
+                aspectRatio={p.ratio}
+                caption={`${product.title.toUpperCase()} · ${i + 1}`}
+              />
+            ))}
+          </section>
+        )}
 
         {/* Spec table */}
         {detailSpecs.length > 0 && (

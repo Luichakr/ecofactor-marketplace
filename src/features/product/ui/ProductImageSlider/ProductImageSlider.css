@@ -51,13 +51,25 @@
   height: 5px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.55);
-  transition: background-color var(--transition-fast), width var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    width var(--transition-fast),
+    height var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .product-slider__dot--active {
   background-color: #ffffff;
   width: 14px;
   border-radius: 3px;
+}
+
+/* Edge dot — visible at the window boundary while more photos still
+   exist off-screen in that direction. Shrunk to ~60% so the viewer
+   intuitively reads "more this way" without crowding the rail. */
+.product-slider__dot--edge {
+  transform: scale(0.6);
+  opacity: 0.7;
 }
 
 /* Fallback single-photo wrapper — looks exactly like the original

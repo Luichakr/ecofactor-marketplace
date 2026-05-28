@@ -54,10 +54,22 @@
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.45);
   border: 1px solid rgba(0, 0, 0, 0.15);
-  transition: background-color var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    width var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .product-gallery__dot--active {
   background-color: rgba(0, 0, 0, 0.85);
   border-color: rgba(255, 255, 255, 0.85);
+  width: 16px;
+  border-radius: 3px;
+}
+
+/* Edge dot in the sliding window — visible at the boundary while more
+   photos exist off-screen. Shrunk so the viewer reads "more this way". */
+.product-gallery__dot--edge {
+  transform: scale(0.6);
+  opacity: 0.7;
 }
