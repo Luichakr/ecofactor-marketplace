@@ -35,4 +35,18 @@ export const SPONSORED_CARDS: SponsoredCard[] = [
     href: REQUEST_PATHS.AUTOSERVICE,
     partner: 'service.ecofactor.ua',
   },
+  {
+    id: 'sp-installation',
+    title: 'МОНТАЖ "ПІД КЛЮЧ"',
+    subtitle: 'Наш фахівець виїде на обʼєкт, прорахує комплект та встановить станцію за 1-2 дні.',
+    href: REQUEST_PATHS.INSTALLATION,
+    partner: 'install.ecofactor.ua',
+  },
+  {
+    id: 'sp-location',
+    title: 'ВАША ЛОКАЦІЯ ПІД СТАНЦІЮ',
+    subtitle: 'Маєте паркомісце, СТО або ТЦ? Запропонуйте локацію — ділимо дохід від кожної зарядки.',
+    href: REQUEST_PATHS.LOCATION,
+    partner: 'partners.ecofactor.ua',
+  },
 ]

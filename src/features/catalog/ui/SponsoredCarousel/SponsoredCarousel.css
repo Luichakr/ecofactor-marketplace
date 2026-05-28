@@ -1,0 +1,75 @@
+/*
+ * Sponsored carousel — horizontal scroll-snap rail with auto-advance.
+ * Each slide is 94% of the rail width; centered snap leaves ~3% of the
+ * neighbouring slide peeking on each side (Yandex Market pattern).
+ */
+
+.sponsored-carousel {
+  position: relative;
+  margin: var(--space-3) 0 var(--space-4);
+  padding: 0; /* the rail itself adds the side gutter via scroll-padding */
+}
+
+.sponsored-carousel__rail {
+  display: flex;
+  /* No gap — the symmetric peek comes purely from slide width vs viewport,
+     and any gap would break the math by adding asymmetric pixels. */
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.sponsored-carousel__rail::-webkit-scrollbar { display: none; }
+
+/* Outer spacers (3% wide) so the first and last slides can centre with
+   the same 3% gap on each side. Without them, the leading/trailing
+   slide would jam against the rail edge and the peek would look
+   asymmetric — exactly the bug we're fixing. */
+.sponsored-carousel__spacer {
+  flex: 0 0 3%;
+}
+
+.sponsored-carousel__slide {
+  flex: 0 0 94%;
+  /* center-align so the 3% spacers on either side become the peek tails. */
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  /* Inside each slide, breathe a little from the snap edge so the
+     SponsoredSlot card doesn't visually crash into the neighbour peek. */
+  padding: 0 6px;
+  box-sizing: border-box;
+}
+
+/* Neutralise the internal SponsoredSlot's own page-edge margins — inside
+   the carousel each slot is positioned by the rail, not by a margin. */
+.sponsored-carousel__slide .sponsored-slot {
+  margin: 0;
+  width: 100%;
+}
+
+/* ─── Dots indicator ──────────────────────────────────────────── */
+.sponsored-carousel__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding-top: var(--space-3);
+}
+
+.sponsored-carousel__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--color-text-disabled);
+  transition:
+    background-color var(--transition-fast),
+    width var(--transition-fast);
+}
+
+.sponsored-carousel__dot--active {
+  background-color: var(--color-text);
+  width: 16px;
+  border-radius: 3px;
+}

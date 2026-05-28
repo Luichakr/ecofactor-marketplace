@@ -1,40 +1,146 @@
-.marketplace-home {
-  scroll-snap-type: y mandatory;
+/*
+ * Marketplace home — shop-style landing. Vertical stack of sections:
+ * search → shortcuts → promo → product grid → recents → promo →
+ * categories. No edge-to-edge carousel any more (felt too brand-y for a
+ * marketplace; users want products immediately).
+ */
+
+.market-home {
+  background-color: var(--color-bg);
 }
 
-.marketplace-home__inner {
-  display: contents;
+/* ─── Sticky search header ────────────────────────────────────── */
+.market-home__top {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding: calc(var(--safe-area-top) + var(--space-3)) var(--space-4) var(--space-3);
+  background-color: var(--color-bg);
 }
 
-/* Floating search button — top-right, respects safe-area. White over hero
-   imagery so it stays visible against MarketCarousel slides. */
-.marketplace-home__search {
-  position: fixed;
-  top: calc(var(--safe-area-top) + var(--space-3));
-  right: var(--space-4);
-  z-index: 10;
-  width: 40px;
-  height: 40px;
+.market-home__search {
+  width: 100%;
   display: flex;
   align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-muted);
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  text-align: left;
+  cursor: pointer;
+  min-height: 0;
+}
+
+.market-home__search:active { opacity: 0.7; }
+.market-home__search svg { flex-shrink: 0; }
+
+/* ─── Category shortcuts row ──────────────────────────────────── */
+.market-home__shortcuts {
+  display: flex;
+  gap: var(--space-3);
+  padding: 0 var(--space-4) var(--space-4);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.market-home__shortcuts::-webkit-scrollbar { display: none; }
+
+.market-home__shortcut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: var(--color-text);
+  min-width: 64px;
+}
+
+.market-home__shortcut:active { opacity: 0.6; }
+
+.market-home__shortcut-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--color-surface-elevated);
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.88) !important;
-  color: #000 !important;
-  border-radius: 50% !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-text);
 }
 
-/* Categories block — shown below the lifestyle carousel + RecentlyViewed. */
-.marketplace-home__categories {
-  padding: var(--space-6) var(--space-4) var(--space-8);
+.market-home__shortcut-label {
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  text-align: center;
+  color: var(--color-text-muted);
 }
 
-.marketplace-home__categories-title {
+/* ─── Hero / promo wrapper ────────────────────────────────────── */
+.market-home__hero {
+  margin: 0 0 var(--space-2);
+}
+
+.market-home__hero .sponsored-slot {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* ─── Section heading ─────────────────────────────────────────── */
+.market-home__section {
+  margin: var(--space-5) 0 var(--space-4);
+}
+
+.market-home__section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+.market-home__section-title {
+  margin: 0;
   font-family: var(--font-family);
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
   text-transform: uppercase;
   color: var(--color-text);
+}
+
+.market-home__section-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-family);
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  min-height: 0;
+}
+
+.market-home__section-link:active { opacity: 0.6; }
+
+/* ─── Categories bottom block ─────────────────────────────────── */
+.market-home__categories {
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+.market-home__categories .market-home__section-title {
   margin: 0 0 var(--space-3);
+}
+
+.market-home__loading {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
 }
