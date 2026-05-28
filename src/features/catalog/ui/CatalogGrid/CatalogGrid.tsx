@@ -1,6 +1,9 @@
+import { Fragment } from 'react'
 import type { MarketplaceProduct } from '../../../../entities/product/model/product.types'
 import { ProductCard } from '../../../product/ui/ProductCard/ProductCard'
 import { EmptyState } from '../../../../shared/ui/EmptyState/EmptyState'
+import { SponsoredSlot } from '../SponsoredSlot/SponsoredSlot'
+import { SPONSORED_CARDS } from '../../../../data/sponsored'
 import './CatalogGrid.css'
 
 type Props = {
@@ -30,15 +33,32 @@ export function CatalogGrid({
     )
   }
 
+  /** Inject a sponsored "РЕКЛАМА" row every N product cards. The slot
+   *  spans the full grid width (grid-column: 1 / -1) so it doesn't break
+   *  the 2/3-column rhythm. Cycles through SPONSORED_CARDS so the same
+   *  ad doesn't repeat on long scrolls. */
+  const AD_EVERY = 8
+
   return (
     <div
       className={`catalog-grid catalog-grid--cols-${columns} ${
         imageAspect === 'landscape' ? 'catalog-grid--landscape' : ''
       }`}
     >
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} pool={products} />
-      ))}
+      {products.map((product, i) => {
+        const adIndex = Math.floor(i / AD_EVERY) - 1
+        const showAd = i > 0 && i % AD_EVERY === 0 && SPONSORED_CARDS[adIndex % SPONSORED_CARDS.length]
+        return (
+          <Fragment key={product.id}>
+            {showAd && (
+              <div className="catalog-grid__ad">
+                <SponsoredSlot card={SPONSORED_CARDS[adIndex % SPONSORED_CARDS.length]} />
+              </div>
+            )}
+            <ProductCard product={product} pool={products} />
+          </Fragment>
+        )
+      })}
     </div>
   )
 }

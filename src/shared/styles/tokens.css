@@ -26,16 +26,20 @@
   --color-accent-dim: rgba(0, 0, 0, 0.03);
   --color-border-accent: #000000;
 
-  /* Status colors — muted, minimal */
-  --color-success: #1f7a3a;
+  /* Status colors — minimal, brand green */
+  --color-success: #10B452;
   --color-warning: #b3722e;
   --color-error: #c0392b;
   --color-info: #2a6cb0;
 
-  /* Typography — Zara uses custom serif for display, sans for body.
-     We use system serif + system sans (zero network cost). */
-  --font-family-serif: 'Times New Roman', 'Times', Georgia, serif;
-  --font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* Typography — matches the partner Flutter app which uses .SF Pro Text
+     everywhere (no serif). On iOS / macOS the `-apple-system` stack already
+     resolves to San Francisco. On Android / Windows the same stack falls
+     through to Roboto / Segoe UI which keeps the geometric sans feel.
+     The "serif" token is kept for backward compatibility but now points
+     to the same sans family so headings render in one consistent voice. */
+  --font-family-serif: -apple-system, BlinkMacSystemFont, system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-family: -apple-system, BlinkMacSystemFont, system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   --font-size-display: 28px;
   --font-size-h1: 18px;
@@ -64,12 +68,13 @@
   --letter-spacing-button: 1.2px;
   --letter-spacing-label: 1px;
 
-  /* Radius — Zara uses sharp corners everywhere */
-  --radius-xs: 0;
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
+  /* Radius — Material 3-style hierarchy. Buttons get --radius-full (pill),
+     surfaces get --radius-md/lg, nested thumbs get --radius-xs/sm. */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
 
   /* Shadows — Zara is flat */
@@ -104,27 +109,29 @@
 }
 
 [data-theme="dark"] {
-  --color-bg: #000000;
-  --color-surface: #000000;
-  --color-surface-elevated: #1a1a1a;
-  --color-surface-hover: #262626;
-  --color-overlay: rgba(0, 0, 0, 0.92);
+  /* Brand-specified dark palette: #393939 base with calibrated elevated
+     surfaces that step up by ~5% each so cards/sheets read as lifted. */
+  --color-bg: #393939;
+  --color-surface: #393939;
+  --color-surface-elevated: #444444;
+  --color-surface-hover: #4f4f4f;
+  --color-overlay: rgba(57, 57, 57, 0.92);
 
-  --color-text: #ffffff;
-  --color-text-muted: #8a8a8a;
-  --color-text-disabled: #4a4a4a;
-  --color-border: #262626;
-  --color-border-strong: #ffffff;
+  --color-text: #f5f5f7;
+  --color-text-muted: #a8a8ad;
+  --color-text-disabled: #6b6b6f;
+  --color-border: #4a4a4a;
+  --color-border-strong: #f5f5f7;
 
-  --color-accent: #ffffff;
+  --color-accent: #f5f5f7;
   --color-accent-soft: rgba(255, 255, 255, 0.06);
   --color-accent-dim: rgba(255, 255, 255, 0.03);
-  --color-border-accent: #ffffff;
+  --color-border-accent: #f5f5f7;
 
-  --color-success: #5cce80;
+  --color-success: #10B452;
   --color-warning: #e3b556;
   --color-error: #ff6b6b;
   --color-info: #7ab8ff;
 
-  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.45);
 }

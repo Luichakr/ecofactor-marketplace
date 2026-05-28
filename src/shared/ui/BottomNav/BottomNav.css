@@ -1,16 +1,43 @@
+/*
+ * Floating frosted-glass bottom nav.
+ *
+ * Layout: pill (4 nav items) + circular Cart FAB sit side-by-side, both
+ * lifted off the screen edges with a margin. Background is a translucent
+ * surface + backdrop-filter blur so the page content shows through as
+ * matte glass.
+ */
+
 .bottom-nav {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
-  padding-bottom: var(--safe-area-bottom);
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: calc(var(--safe-area-bottom) + var(--space-3));
   display: flex;
-  align-items: flex-start;
-  background-color: var(--color-bg);
-  border-top: 1px solid var(--color-border);
+  align-items: center;
+  justify-content: center;
   z-index: 100;
+  pointer-events: none; /* let the page below catch taps in the empty gap */
+}
+
+.bottom-nav__pill {
+  pointer-events: auto;
+  background-color: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 6px;
+  border-radius: 999px;
+  min-height: 56px;
+}
+
+[data-theme="dark"] .bottom-nav__pill {
+  background-color: rgba(28, 28, 30, 0.62);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .bottom-nav__item {
@@ -19,21 +46,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: var(--space-2) 0;
+  gap: 2px;
+  padding: 6px 4px;
   min-height: 44px;
-  color: var(--color-text);
-  opacity: 0.55;
-  transition: opacity var(--transition-fast);
+  color: var(--color-text-muted);
   text-decoration: none;
+  border-radius: 999px;
+  transition: color var(--transition-fast);
 }
 
 .bottom-nav__item--active {
-  opacity: 1;
+  color: #10B452;
 }
 
 .bottom-nav__item:active {
-  opacity: 0.4;
+  opacity: 0.5;
 }
 
 .bottom-nav__icon {
@@ -45,6 +72,20 @@
   position: relative;
 }
 
+.bottom-nav__label {
+  font-size: 9px;
+  line-height: 11px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.4px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.bottom-nav__item--active .bottom-nav__label {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ─── Cart badge — sits on top of the icon, green dot with count ─ */
 .bottom-nav__badge {
   position: absolute;
   top: -4px;
@@ -52,8 +93,8 @@
   min-width: 16px;
   height: 16px;
   border-radius: 8px;
-  background-color: var(--color-text);
-  color: var(--color-bg);
+  background-color: #10B452;
+  color: #fff;
   font-size: 10px;
   font-weight: var(--font-weight-bold);
   display: inline-flex;
@@ -61,13 +102,4 @@
   justify-content: center;
   padding: 0 4px;
   letter-spacing: 0;
-}
-
-.bottom-nav__label {
-  font-size: 9px;
-  line-height: 12px;
-  font-weight: var(--font-weight-regular);
-  letter-spacing: var(--letter-spacing-label);
-  text-align: center;
-  text-transform: uppercase;
 }

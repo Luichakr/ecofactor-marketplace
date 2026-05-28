@@ -61,3 +61,16 @@
 .catalog-grid--landscape .product-image {
   aspect-ratio: 4 / 3;
 }
+
+/* Sponsored slot inside the product grid — spans every column so it
+   breaks the 2/3-column rhythm into a wide row, naturally drawing
+   attention without disrupting the surrounding cards. The internal
+   SponsoredSlot already has its own padding so reset its margins. */
+.catalog-grid__ad {
+  grid-column: 1 / -1;
+}
+
+.catalog-grid__ad .sponsored-slot {
+  margin: 0;
+  width: 100%;
+}

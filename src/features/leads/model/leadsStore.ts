@@ -8,6 +8,7 @@ export type LeadType =
   | 'warranty'
   | 'autoservice'
   | 'custom-station'
+  | 'reservation'
 
 export type Lead = {
   id: string
@@ -72,4 +73,5 @@ export const LEAD_TYPE_LABELS: Record<LeadType, string> = {
   warranty: 'Гарантійний випадок',
   autoservice: 'Автосервіс',
   'custom-station': 'Кастомна станція',
+  reservation: 'Бронювання авто',
 }

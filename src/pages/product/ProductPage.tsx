@@ -17,7 +17,6 @@ import { ExpandableSection } from '../../shared/ui/ExpandableSection/ExpandableS
 import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import { NovaPoshtaDelivery, type NovaPoshtaSelection } from '../../shared/ui/NovaPoshtaDelivery/NovaPoshtaDelivery'
 import { FavoriteButton } from '../../features/favorites/ui/FavoriteButton/FavoriteButton'
-import { ProductCard } from '../../features/product/ui/ProductCard/ProductCard'
 import { StarRating } from '../../shared/ui/StarRating/StarRating'
 import { ReviewsSection } from '../../features/reviews/ui/ReviewsSection/ReviewsSection'
 import { QASection } from '../../features/reviews/ui/QASection/QASection'
@@ -25,7 +24,9 @@ import { DeliveryEstimate } from '../../features/delivery/ui/DeliveryEstimate/De
 import { StockIndicator } from '../../features/product/ui/StockIndicator/StockIndicator'
 import { SocialProof } from '../../features/product/ui/SocialProof/SocialProof'
 import { SellerBadge } from '../../features/seller/ui/SellerBadge/SellerBadge'
-import { BundleSection } from '../../features/bundles/ui/BundleSection/BundleSection'
+import { RecsTabs } from '../../features/product/ui/RecsTabs/RecsTabs'
+import { CarReservationSheet } from '../../features/car-reservation/ui/CarReservationSheet/CarReservationSheet'
+import { useAutoCarPhotos } from '../../features/auto/hooks/useAutoCarPhotos'
 import { getRatingFor } from '../../data/mockReviews'
 import { Skeleton } from '../../shared/ui/Skeleton/Skeleton'
 import { REQUEST_PATHS, ROUTES } from '../../shared/config/routes'
@@ -49,6 +50,7 @@ export function ProductPage() {
   const [delivery, setDelivery] = useState<NovaPoshtaSelection | undefined>()
   const [added, setAdded] = useState(false)
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [reserveOpen, setReserveOpen] = useState(false)
   const [fullscreen, setFullscreen] = useState<number | null>(null)
   const [ctaCompact, setCtaCompact] = useState(false)
   const [ctaHidden, setCtaHidden] = useState(false)
@@ -79,20 +81,43 @@ export function ProductPage() {
   const heroRef = useRef<HTMLDivElement | null>(null)
   const recsSecondRowRef = useRef<HTMLDivElement | null>(null)
   // Show the "back to top" fab once the user has scrolled past the hero.
-  // Tracking via the same .screen-container scroll listener pattern.
+  // The fab doubles as a depth gauge — black fills from the bottom in lock
+  // step with the scroll position. To keep the fill perfectly synced with
+  // the finger, the percentage is written straight to a CSS custom
+  // property via a ref (no React re-render per frame). Only the
+  // boolean "should we even show the fab" goes through state.
   const [showTopFab, setShowTopFab] = useState(false)
+  const fabRef = useRef<HTMLButtonElement | null>(null)
   useEffect(() => {
     const el = heroRef.current
     if (!el) return
     const scroller = (el.closest('.screen-container') as HTMLElement | null) ?? window
+    let visible = false
     function check() {
-      const y = scroller instanceof Window ? window.scrollY : (scroller as HTMLElement).scrollTop
-      setShowTopFab(y > 600)
+      let y: number
+      let max: number
+      if (scroller instanceof Window) {
+        y = window.scrollY
+        max = document.documentElement.scrollHeight - window.innerHeight
+      } else {
+        const s = scroller as HTMLElement
+        y = s.scrollTop
+        max = s.scrollHeight - s.clientHeight
+      }
+      const shouldShow = y > 600
+      if (shouldShow !== visible) {
+        visible = shouldShow
+        setShowTopFab(shouldShow)
+      }
+      const pct = max > 0 ? Math.min(100, Math.max(0, (y / max) * 100)) : 0
+      if (fabRef.current) {
+        fabRef.current.style.setProperty('--fab-fill', `${pct}%`)
+      }
     }
     check()
     scroller.addEventListener('scroll', check, { passive: true })
     return () => scroller.removeEventListener('scroll', check)
-  }, [])
+  }, [showTopFab])
 
   function scrollToTop() {
     const scroller = (heroRef.current?.closest('.screen-container') as HTMLElement | null)
@@ -206,7 +231,36 @@ export function ProductPage() {
     setSheetOpen(true)
   }
 
-  const galleryImages = [product.image, ...(product.gallery ?? [])].filter(Boolean) as string[]
+  /** Express path — add to cart and jump straight to /checkout. Skips the
+   *  AddedToCartSheet because the user is already committing to buy. */
+  function handleBuyNow() {
+    if (!product) return
+    if (product.stock === 0) return
+    cart.add({
+      productId: product.id,
+      title: product.title,
+      subtitle: product.subtitle,
+      image: product.image,
+      price: product.price?.value,
+      currency: product.price?.currency,
+      qty,
+      stock: product.stock,
+    })
+    navigate(ROUTES.CHECKOUT)
+  }
+
+  // Cars come from the Lubeavto list endpoint with just 1 photo each.
+  // Lazy-fetch the detail endpoint to backfill the full gallery — when it
+  // resolves, swap into galleryImages below.
+  const carPhotos = useAutoCarPhotos(product.id, product.categoryId === 'cars')
+
+  const galleryImages = (() => {
+    const fromProduct = [product.image, ...(product.gallery ?? [])].filter(Boolean) as string[]
+    if (product.categoryId === 'cars' && carPhotos && carPhotos.length > fromProduct.length) {
+      return carPhotos
+    }
+    return fromProduct
+  })()
 
   return (
     <>
@@ -218,7 +272,9 @@ export function ProductPage() {
               images={galleryImages}
               alt={product.title}
               categoryId={product.categoryId}
-              aspectRatio="3 / 4"
+              /* Cars use a 4:3 landscape ratio because Lubeavto delivers
+                 wide source photos and they should show the whole car. */
+              aspectRatio={product.categoryId === 'cars' ? '4 / 3' : '3 / 4'}
               onSlideClick={(i) => setFullscreen(i)}
               className="product-page__gallery"
             />
@@ -226,7 +282,7 @@ export function ProductPage() {
             <PlaceholderImage
               size="1248 × 1664"
               caption={product.title}
-              aspectRatio="3 / 4"
+              aspectRatio={product.categoryId === 'cars' ? '4 / 3' : '3 / 4'}
               className="product-page__hero-placeholder"
             />
           )}
@@ -374,52 +430,67 @@ export function ProductPage() {
 
         </div>
 
-        {/* Bundle deals */}
+        {/* Reviews + Q&A */}
+        <ReviewsSection productId={product.id} />
+        <QASection productId={product.id} />
+
+        {/* Tabbed recommendations — replaces the old separate BundleSection
+            and "ВАС ТАКОЖ МОЖЕ ЗАЦІКАВИТИ" grid. Yandex-style pills. */}
         {(() => {
           const allCat = [...(live.data ?? []), ...mockProducts, ...mockTires].filter(
             (p) => p.categoryId === product.categoryId,
           )
           const dedup = new Map<string, typeof allCat[number]>()
           for (const p of allCat) if (!dedup.has(p.id)) dedup.set(p.id, p)
-          return <BundleSection current={product} pool={[...dedup.values()]} />
-        })()}
-
-        {/* Reviews + Q&A */}
-        <ReviewsSection productId={product.id} />
-        <QASection productId={product.id} />
-
-        {/* "ВАС ТАКОЖ МОЖЕ ЗАЦІКАВИТИ" — 3-column grid of same-category items. */}
-        {(() => {
-          const sameCatRaw = [...(live.data ?? []), ...mockProducts, ...mockTires].filter(
-            (p) =>
-              p.categoryId === product.categoryId &&
-              p.id !== product.id &&
-              !viewedIds.has(p.id),
-          )
-          // Dedupe by id — live API and mock fixtures can share entries.
-          const sameCatById = new Map<string, typeof sameCatRaw[number]>()
-          for (const p of sameCatRaw) if (!sameCatById.has(p.id)) sameCatById.set(p.id, p)
-          const sameCat = [...sameCatById.values()]
-          if (sameCat.length === 0) return null
+          const pool = [...dedup.values()]
+          const sameCat = pool.filter((p) => p.id !== product.id && !viewedIds.has(p.id))
+          // Hook for the sticky-CTA hide-on-recs scroll listener — give it
+          // a real DOM node to observe.
           return (
-            <section className="product-page__recs" aria-label="Вас також може зацікавити">
-              <h3 className="product-page__recs-title">ВАС ТАКОЖ МОЖЕ ЗАЦІКАВИТИ</h3>
-              <div className="product-page__recs-grid catalog-grid catalog-grid--cols-3">
-                {sameCat.map((p, i) => (
-                  <div
-                    key={p.id}
-                    ref={i === 3 ? recsSecondRowRef : undefined}
-                  >
-                    <ProductCard product={p} pool={sameCat} />
-                  </div>
-                ))}
-              </div>
-            </section>
+            <div ref={recsSecondRowRef}>
+              <RecsTabs current={product} sameCat={sameCat} bundlePool={pool} />
+            </div>
           )
         })()}
 
-        {/* Sticky CTA: two equal-width buttons + always-visible price */}
+        {/* Sticky CTA: two equal-width buttons + always-visible price.
+            Cars get a completely different bar — reserve / consult / call —
+            because a one-tap $56k checkout doesn't match how people buy
+            vehicles in the real world (Tesla / Xiaomi pattern). */}
         <StickyCTA className={ctaHidden ? 'sticky-cta--hidden' : ''}>
+          {product.categoryId === 'cars' ? (
+            <div className="product-page__cta product-page__cta--car">
+              <div className="product-page__cta-info" aria-hidden={ctaCompact}>
+                <span className="product-page__cta-title">{product.title}</span>
+                {product.price && (
+                  <span className="product-page__cta-price">{formatPrice(product.price)}</span>
+                )}
+              </div>
+              <div className="product-page__cta-row product-page__cta-row--primary">
+                <Button
+                  variant="primary"
+                  fullWidth
+                  size="lg"
+                  onClick={() => setReserveOpen(true)}
+                >
+                  ЗАБРОНЮВАТИ
+                </Button>
+              </div>
+              <div className="product-page__cta-row product-page__cta-row--car-actions">
+                <Button
+                  variant="outline"
+                  fullWidth
+                  size="md"
+                  onClick={() => navigate(`${REQUEST_PATHS.QUOTE}/${product.id}`)}
+                >
+                  КОНСУЛЬТАЦІЯ
+                </Button>
+                <a className="btn btn--outline btn--md btn--full" href="tel:+380501234567">
+                  ПОДЗВОНИТИ
+                </a>
+              </div>
+            </div>
+          ) : (
           <div className={`product-page__cta ${ctaCompact ? 'product-page__cta--compact' : ''}`}>
             <div className="product-page__cta-info" aria-hidden={ctaCompact}>
               <span className="product-page__cta-title">{product.title}</span>
@@ -447,6 +518,16 @@ export function ProductPage() {
                 </div>
               )}
             </div>
+            {/* Express buy — primary CTA that adds + opens checkout in one
+             *  tap. Hidden in compact (collapsed) mode to keep that bar
+             *  minimal, and skipped for OOS / no-price items. */}
+            {product.stock !== 0 && hasPrice && !ctaCompact && (
+              <div className="product-page__cta-row product-page__cta-row--primary">
+                <Button variant="primary" fullWidth size="lg" onClick={handleBuyNow}>
+                  КУПИТИ ОДРАЗУ
+                </Button>
+              </div>
+            )}
             <div className="product-page__cta-row">
               {product.stock === 0 ? (
                 // Out-of-stock — channel the user into the stock-notify
@@ -493,18 +574,27 @@ export function ProductPage() {
               )}
             </div>
           </div>
+          )}
         </StickyCTA>
 
         {/* Back-to-top fab — only after user has scrolled past the hero.
             Positioned above the StickyCTA so it doesn't overlap. */}
         {showTopFab && (
           <button
+            ref={fabRef}
             type="button"
             className="product-page__top-fab"
             onClick={scrollToTop}
             aria-label="Нагору"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <span className="product-page__top-fab-fill" aria-hidden="true" />
+            <svg
+              className="product-page__top-fab-icon"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
               <path d="M12 19V5M5 12L12 5L19 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
@@ -518,6 +608,14 @@ export function ProductPage() {
         allProducts={live.data ?? []}
         qty={qty}
       />
+
+      {product.categoryId === 'cars' && (
+        <CarReservationSheet
+          open={reserveOpen}
+          onClose={() => setReserveOpen(false)}
+          car={product}
+        />
+      )}
 
       <ProductGalleryFullscreen
         open={fullscreen !== null}

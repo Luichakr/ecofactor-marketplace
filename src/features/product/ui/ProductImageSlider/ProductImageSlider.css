@@ -1,0 +1,76 @@
+/*
+ * Catalog-card photo carousel. Native horizontal scroll with snap so the
+ * rail tracks the finger instantly (no JS animation). Pagination dots
+ * sit at the bottom edge of the photo, fading the card body below to
+ * leave a tiny gap so the dots don't crash into the title.
+ */
+
+.product-slider {
+  position: relative;
+  width: 100%;
+}
+
+.product-slider__rail {
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* Hide scrollbar in WebKit too. */
+}
+
+.product-slider__rail::-webkit-scrollbar { display: none; }
+
+.product-slider__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.product-slider__slide .product-image {
+  border-radius: 0; /* don't double-clip — parent decides */
+}
+
+/* Pagination dots — small, low-contrast on the photo so they don't
+   compete with product imagery. Active dot uses inverted color. */
+.product-slider__dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.product-slider__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.55);
+  transition: background-color var(--transition-fast), width var(--transition-fast);
+}
+
+.product-slider__dot--active {
+  background-color: #ffffff;
+  width: 14px;
+  border-radius: 3px;
+}
+
+/* Fallback single-photo wrapper — looks exactly like the original
+   ProductImage hit area so existing layouts don't shift. */
+.product-slider__single {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  min-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.product-slider__single:active { opacity: 0.7; }

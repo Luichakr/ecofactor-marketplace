@@ -1,5 +1,6 @@
 .product-page__gallery {
-  aspect-ratio: 3 / 4;
+  /* Aspect-ratio is now set via the `aspectRatio` prop on ProductGallery
+     (inline style) — cars use 4:5 portrait, everything else 3:4. */
 }
 
 .product-page__hero-placeholder {
@@ -238,8 +239,12 @@
 }
 
 .product-page__cta--compact .product-page__cta-info {
-  /* ~70% shrink from natural ~31px → ~9px (visual breathing room remains). */
-  max-height: 9px;
+  /* Fully collapse — anything > 0 here leaves a "ghost" strip above the
+     button which breaks vertical centering of the compact bar. The
+     transition still animates smoothly because max-height interpolates. */
+  max-height: 0;
+  margin: 0;
+  padding: 0;
   opacity: 0;
   transform: translateY(-4px);
 }
@@ -435,7 +440,10 @@
 .product-page__share:active { opacity: 0.5; }
 
 /* Back-to-top FAB — sits above the sticky CTA so they never overlap.
-   Inverted colour scheme so it remains visible on white backgrounds. */
+   Doubles as a scroll-depth gauge: the inner ::fill grows from 0% (at the
+   top of the page) to 100% (at the bottom) like water filling a glass.
+   The icon uses mix-blend-mode: difference so it stays visible on both
+   the white empty portion and the black filled portion. */
 .product-page__top-fab {
   position: fixed;
   right: var(--space-4);
@@ -445,13 +453,67 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-text);
-  color: var(--color-bg);
-  border: none;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-text);
   cursor: pointer;
   z-index: 60;
   box-shadow: var(--shadow-elevated);
   border-radius: 50%;
+  overflow: hidden;
+  padding: 0;
+  /* Custom property set per-frame from React (0%..100%). */
+  --fab-fill: 0%;
+}
+
+/* Black water level rising from the bottom. Animates smoothly between
+   consecutive scroll samples so the rise feels continuous. */
+.product-page__top-fab-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--fab-fill, 0%);
+  background-color: var(--color-text);
+  /* No transition — the fill IS the scroll position, not an animation
+     chasing it. Any tween makes the gauge feel like it lags. */
+  pointer-events: none;
+}
+
+/* Arrow sits on top of the fill. White ink + mix-blend-mode: difference
+   keeps the icon readable whether it crosses the empty or filled half. */
+.product-page__top-fab-icon {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  mix-blend-mode: difference;
 }
 
 .product-page__top-fab:active { opacity: 0.7; }
+
+/* ─── Car CTA (reserve / consult / call) ──────────────────────── */
+.product-page__cta--car {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.product-page__cta--car .product-page__cta-info {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  max-height: none;
+  opacity: 1;
+  transform: none;
+}
+
+.product-page__cta--car .product-page__cta-price {
+  font-size: var(--font-size-subtitle1);
+  font-weight: var(--font-weight-medium);
+}
+
+.product-page__cta-row--car-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: var(--space-2) !important;
+}

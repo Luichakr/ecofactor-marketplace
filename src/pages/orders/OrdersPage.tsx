@@ -56,6 +56,7 @@ export function OrdersPage() {
 
         {filtered.length === 0 ? (
           <EmptyState
+            variant="orders"
             title="Замовлень поки немає"
             description="Тут з'являться всі ваші покупки — від оформлення до доставки."
           />

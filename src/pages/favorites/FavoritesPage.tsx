@@ -96,6 +96,7 @@ export function FavoritesPage() {
 
       {items.length === 0 ? (
         <EmptyState
+          variant="favorites"
           title="Закладок поки немає"
           description="Зберігайте товари в закладки, щоб повернутися до них пізніше."
           action={{ label: 'До каталогу', onClick: () => navigate(ROUTES.CATALOG) }}

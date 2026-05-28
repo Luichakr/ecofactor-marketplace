@@ -90,6 +90,7 @@
   text-transform: uppercase;
   cursor: pointer;
   min-height: 52px;
+  border-radius: 999px;
 }
 
 .added-sheet__secondary {
@@ -98,6 +99,7 @@
   color: var(--color-text);
   padding: var(--space-3);
   font-family: var(--font-family);
+  border-radius: 999px;
   font-size: 13px;
   letter-spacing: var(--letter-spacing-button);
   cursor: pointer;

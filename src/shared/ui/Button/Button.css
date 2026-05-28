@@ -9,7 +9,9 @@
   line-height: var(--line-height-button);
   letter-spacing: var(--letter-spacing-button);
   text-transform: uppercase;
-  border-radius: 0;
+  /* Pill — matches the partner app reference. 999px clips to half-height
+     for every size (sm/md/lg) so all buttons read as the same shape family. */
+  border-radius: 999px;
   border: none;
   cursor: pointer;
   transition: opacity var(--transition-fast), background-color var(--transition-fast);

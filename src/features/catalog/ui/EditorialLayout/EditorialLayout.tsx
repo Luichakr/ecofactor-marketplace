@@ -5,6 +5,8 @@ import { PlaceholderImage } from '../../../../shared/ui/PlaceholderImage/Placeho
 import { productPath } from '../../../../shared/config/routes'
 import { formatPrice } from '../../../../entities/product/model/product.types'
 import { SeasonShowcase } from '../SeasonShowcase/SeasonShowcase'
+import { SponsoredSlot } from '../SponsoredSlot/SponsoredSlot'
+import { SPONSORED_CARDS } from '../../../../data/sponsored'
 import './EditorialLayout.css'
 
 type Props = {
@@ -151,6 +153,10 @@ export function EditorialLayout({
           />
         ))}
 
+      {/* First sponsored "РЕКЛАМА" slot — between the pre-brand showcases
+       *  and the brand rows. In-house promo for now (config / autoservice). */}
+      {SPONSORED_CARDS[0] && <SponsoredSlot card={SPONSORED_CARDS[0]} />}
+
       {/* Three brand "look-book" rows between the subcategory showcases. */}
       {byBrand.map(([brand]) => {
         const seedItems = pickStripItems(brand)
@@ -167,6 +173,11 @@ export function EditorialLayout({
           </section>
         )
       })}
+
+      {/* Second sponsored slot — between brand rows and the tail of
+       *  subcategory showcases. Different placement gives the slot more
+       *  variety than two ads back-to-back. */}
+      {SPONSORED_CARDS[1] && <SponsoredSlot card={SPONSORED_CARDS[1]} />}
 
       {/* Second half of subcategory showcases. */}
       {populatedSubs

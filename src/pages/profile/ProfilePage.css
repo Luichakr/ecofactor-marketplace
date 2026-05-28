@@ -7,6 +7,7 @@
 }
 
 .profile-page__avatar {
+  position: relative;
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -18,7 +19,59 @@
   font-size: 18px;
   font-weight: var(--font-weight-medium);
   letter-spacing: 0.5px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+  min-height: 0;
 }
+
+.profile-page__avatar:active { opacity: 0.7; }
+
+.profile-page__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-page__avatar-initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pencil chip on the bottom-right of the avatar — clear "tap to edit". */
+.profile-page__avatar-edit {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #10B452;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-bg);
+}
+
+.profile-page__avatar-remove {
+  background: none;
+  border: none;
+  padding: 4px 0 0;
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  min-height: 0;
+  text-align: left;
+}
+
+.profile-page__avatar-remove:active { opacity: 0.6; }
 
 .profile-page__user-info {
   display: flex;
@@ -263,7 +316,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text);
+  color: #10B452; /* brand green — matches BottomNav active state */
 }
 
 .profile-page__menu-text {
@@ -292,4 +345,44 @@
   color: var(--color-text-muted);
   text-align: right;
   min-width: 24px;
+}
+
+/* Group label between menu sections — small uppercase pill of muted text
+   on a subtle elevated band. Mirrors Yandex Market profile structure. */
+.profile-page__menu-group-label {
+  padding: var(--space-3) var(--space-4) var(--space-2);
+  background-color: var(--color-surface-elevated);
+  font-size: 11px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: var(--space-3);
+}
+
+.profile-page__menu-group-label:first-of-type {
+  margin-top: 0;
+}
+
+/* Chat shortcut in profile header — small circular button right of the
+   user info column. Same surface treatment as other secondary actions. */
+.profile-page__chat {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  min-height: 0;
+  margin-left: auto;
+}
+
+.profile-page__chat:active { opacity: 0.6; }
+
+.profile-page__user {
+  gap: var(--space-3);
 }

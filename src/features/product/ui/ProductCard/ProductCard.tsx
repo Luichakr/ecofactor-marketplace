@@ -2,9 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import type { MarketplaceProduct } from '../../../../entities/product/model/product.types'
 import { formatPrice, formatOldPrice } from '../../../../entities/product/model/product.types'
 import { productPath } from '../../../../shared/config/routes'
-import { ProductImage } from '../ProductImage/ProductImage'
+import { ProductImageSlider } from '../ProductImageSlider/ProductImageSlider'
 import { quickAdd } from '../../../quick-add/model/quickAddStore'
-import { StockIndicator } from '../StockIndicator/StockIndicator'
 import './ProductCard.css'
 
 type Props = {
@@ -34,18 +33,14 @@ export function ProductCard({ product, compact = false, pool }: Props) {
 
   return (
     <div className={`product-card ${compact ? 'product-card--compact' : ''}`}>
-      <button
-        type="button"
-        className="product-card__hit"
-        onClick={go}
-        aria-label={product.title}
-      >
-        <ProductImage
-          src={product.image}
+      <div className="product-card__hit">
+        <ProductImageSlider
+          images={[product.image, ...(product.gallery ?? [])].filter(Boolean) as string[]}
           alt={product.title}
           categoryId={product.categoryId}
+          onTap={go}
         />
-      </button>
+      </div>
 
       <div className="product-card__body">
         <div className="product-card__head">
@@ -82,11 +77,6 @@ export function ProductCard({ product, compact = false, pool }: Props) {
               <p className="product-card__price">{formatPrice(product.price)}</p>
             )}
           </button>
-        )}
-        {(product.stock === 0 || (typeof product.stock === 'number' && product.stock <= 5)) && (
-          <div className="product-card__stock-row">
-            <StockIndicator productId={product.id} stock={product.stock} size="sm" />
-          </div>
         )}
       </div>
     </div>

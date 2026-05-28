@@ -63,6 +63,7 @@ export function CartPage() {
         <Header title="КОШИК" showBack />
         <ScreenContainer withTopInset={false}>
           <EmptyState
+            variant="cart"
             title="Кошик порожній"
             description="Додайте товари з каталогу — звідси можна швидко оформити доставку та оплату."
             action={{ label: 'До каталогу', onClick: () => navigate(ROUTES.CATALOG) }}

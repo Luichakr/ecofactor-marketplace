@@ -40,7 +40,7 @@ export function WishlistSharedPage() {
       <Header title="СПИСОК БАЖАНЬ" showBack onBack={() => navigate(-1)} />
       <ScreenContainer withTopInset={false}>
         {products.length === 0 ? (
-          <EmptyState title="Список порожній" description="Можливо, посилання застаріло." />
+          <EmptyState variant="favorites" title="Список порожній" description="Можливо, посилання застаріло." />
         ) : (
           <>
             <div style={{ padding: 'var(--space-3) var(--space-4)' }}>

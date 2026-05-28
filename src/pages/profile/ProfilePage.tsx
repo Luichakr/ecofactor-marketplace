@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { mockUser } from '../../data/mockUser'
 import { Header } from '../../shared/ui/Header/Header'
@@ -11,6 +11,7 @@ import {
 } from '../../features/orders/model/ordersStore'
 import { useAddresses, useCards } from '../../features/profile/model/profileStore'
 import { useFavorites } from '../../features/favorites/model/favoritesStore'
+import { openSupport } from '../../features/support/ui/SupportLauncher/SupportLauncher'
 import './ProfilePage.css'
 
 function dateUA(iso: string): string {
@@ -77,12 +78,60 @@ const ICONS = {
   ),
 }
 
+const AVATAR_KEY = 'mp:avatar'
+
 export function ProfilePage() {
   const navigate = useNavigate()
   const orders = useOrders()
   const addresses = useAddresses()
   const cards = useCards()
   const favorites = useFavorites()
+
+  // Avatar — hydrated from localStorage on mount. Stored as a data: URL so
+  // it survives reloads without a backend. ~200KB-ish quota is fine for one
+  // photo; oversized images get downscaled before save.
+  const fileRef = useRef<HTMLInputElement | null>(null)
+  const [avatar, setAvatar] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null
+    try { return window.localStorage.getItem(AVATAR_KEY) } catch { return null }
+  })
+
+  function pickAvatar() {
+    fileRef.current?.click()
+  }
+
+  function onAvatarFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    // Downscale to 256px so the data URL stays small (~30-60KB).
+    const url = URL.createObjectURL(file)
+    const img = new Image()
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      const size = 256
+      canvas.width = size
+      canvas.height = size
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+      // Cover-crop: fill the square with the centre of the source.
+      const min = Math.min(img.width, img.height)
+      const sx = (img.width - min) / 2
+      const sy = (img.height - min) / 2
+      ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size)
+      const data = canvas.toDataURL('image/jpeg', 0.82)
+      try { window.localStorage.setItem(AVATAR_KEY, data) } catch {}
+      setAvatar(data)
+      URL.revokeObjectURL(url)
+    }
+    img.src = url
+    // Reset input so the same file can be picked again later.
+    e.target.value = ''
+  }
+
+  function removeAvatar() {
+    try { window.localStorage.removeItem(AVATAR_KEY) } catch {}
+    setAvatar(null)
+  }
 
   const activeOrders = orders.filter((o) => !['delivered', 'cancelled', 'returned'].includes(o.status))
   const recent = orders.slice(0, 3)
@@ -93,12 +142,47 @@ export function ProfilePage() {
       <ScreenContainer withTopInset={false}>
         {/* User card */}
         <div className="profile-page__user">
-          <div className="profile-page__avatar">{mockUser.avatarInitials}</div>
+          <button
+            type="button"
+            className="profile-page__avatar"
+            onClick={pickAvatar}
+            aria-label={avatar ? 'Змінити аватар' : 'Завантажити аватар'}
+          >
+            {avatar ? (
+              <img src={avatar} alt="" className="profile-page__avatar-img" />
+            ) : (
+              <span className="profile-page__avatar-initials">{mockUser.avatarInitials}</span>
+            )}
+          </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            onChange={onAvatarFile}
+            style={{ display: 'none' }}
+          />
           <div className="profile-page__user-info">
             <p className="profile-page__name">{mockUser.name}</p>
             <p className="profile-page__phone">{mockUser.phone}</p>
             {mockUser.email && <p className="profile-page__email">{mockUser.email}</p>}
+            {avatar && (
+              <button type="button" className="profile-page__avatar-remove" onClick={removeAvatar}>
+                Прибрати фото
+              </button>
+            )}
           </div>
+          {/* Chat shortcut — replaces the floating SupportLauncher FAB on
+              this page so we don't show two entry points to support. */}
+          <button
+            type="button"
+            className="profile-page__chat"
+            onClick={openSupport}
+            aria-label="Відкрити чат з підтримкою"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M4 5H20V17H13L8 21V17H4V5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+            </svg>
+          </button>
         </div>
 
         {/* Quick stats — orders count, favorites count, active deliveries.
@@ -128,13 +212,23 @@ export function ProfilePage() {
           </ProfileSection>
         )}
 
-        {/* Sections grid */}
+        {/* Menu — grouped into labeled sections (Yandex-style) so a long
+            list of rows reads as 3 small scannable groups. */}
+        <div className="profile-page__menu-group-label">ПОКУПКИ</div>
         <div className="profile-page__menu">
           <MenuRow to={ROUTES.ORDERS} icon={ICONS.orders} label="МОЇ ЗАМОВЛЕННЯ" badge={String(orders.length)} />
           <MenuRow to={ROUTES.FAVORITES} icon={ICONS.favorites} label="ЗАКЛАДКИ" badge={String(favorites.length)} />
+        </div>
+
+        <div className="profile-page__menu-group-label">АККАУНТ</div>
+        <div className="profile-page__menu">
           <MenuRow to={ROUTES.ADDRESSES} icon={ICONS.address} label="АДРЕСИ ДОСТАВКИ" sub={addresses[0] ? `${addresses[0].city} · ${addresses[0].branch ?? ''}` : 'Не задано'} />
           <MenuRow to={ROUTES.PAYMENT_METHODS} icon={ICONS.card} label="ПЛАТІЖНІ КАРТКИ" sub={cards[0] ? `•••• ${cards[0].last4}` : 'Не додано'} />
           <MenuRow to={ROUTES.SETTINGS} icon={ICONS.settings} label="НАЛАШТУВАННЯ" />
+        </div>
+
+        <div className="profile-page__menu-group-label">ПІДТРИМКА</div>
+        <div className="profile-page__menu">
           <MenuRow to={`${ROUTES.REQUEST}/callback`} icon={ICONS.support} label="ПІДТРИМКА" />
         </div>
       </ScreenContainer>

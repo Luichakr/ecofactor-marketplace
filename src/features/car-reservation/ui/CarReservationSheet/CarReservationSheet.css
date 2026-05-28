@@ -1,0 +1,105 @@
+.car-reservation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.car-reservation__car {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.car-reservation__car-title {
+  margin: 0;
+  font-size: var(--font-size-subtitle1);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.car-reservation__car-price {
+  margin: 0;
+  font-size: var(--font-size-body2);
+  color: var(--color-text-muted);
+}
+
+.car-reservation__deposit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4);
+  background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-lg);
+}
+
+.car-reservation__deposit-label {
+  font-size: 10px;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.car-reservation__deposit-amount {
+  font-size: 36px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-success);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.car-reservation__deposit-hint {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-caption);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  max-width: 320px;
+}
+
+.car-reservation__perks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.car-reservation__perk {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  font-size: var(--font-size-body2);
+  color: var(--color-text);
+}
+
+.car-reservation__perk svg {
+  color: var(--color-success);
+  flex-shrink: 0;
+}
+
+.car-reservation__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.car-reservation__agree {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--font-size-caption);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.car-reservation__agree input {
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: var(--color-success);
+}

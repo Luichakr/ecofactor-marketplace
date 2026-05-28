@@ -19,6 +19,7 @@ export type MarketCard = {
 export const MARKET_CARDS: MarketCard[] = [
   { id: 'new', caption: 'НОВИНКИ', size: '1248 × 2304', href: ROUTES.ARKANOID },
   { id: 'ev-charging', caption: 'EV-ЗАРЯДКА', image: evChargingPhoto, href: catalogCategoryPath('ev-charging') },
+  { id: 'custom-station', caption: 'КОНФІГУРАТОР СТАНЦІЇ', size: '1248 × 2304', href: REQUEST_PATHS.CUSTOM_STATION },
   { id: 'solar', caption: 'СОНЯЧНА СТАНЦІЯ', image: solarPhoto, href: catalogCategoryPath('solar') },
   { id: 'autoservice', caption: 'АВТОСЕРВІС', image: autoservicePhoto, href: REQUEST_PATHS.AUTOSERVICE },
   { id: 'service', caption: 'СЕРВІС', image: servicePhoto, href: REQUEST_PATHS.INSTALLATION },

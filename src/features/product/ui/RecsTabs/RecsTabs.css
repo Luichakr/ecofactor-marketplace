@@ -1,0 +1,48 @@
+/*
+ * Tabbed recommendations block — three pills at the top, single body
+ * underneath that swaps content per active tab. Mirrors the Yandex
+ * Market product page (Рекомендуємо · Часто купують разом · Подібні).
+ */
+
+.recs-tabs {
+  margin: var(--space-5) 0;
+}
+
+.recs-tabs__header {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.recs-tabs__header::-webkit-scrollbar { display: none; }
+
+.recs-tabs__tab {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-muted);
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  min-height: 0;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.recs-tabs__tab--active {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+.recs-tabs__tab:active { opacity: 0.7; }
+
+.recs-tabs__body {
+  display: block;
+}

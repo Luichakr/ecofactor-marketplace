@@ -1,0 +1,105 @@
+/*
+ * Sponsored "РЕКЛАМА" card. Two-column layout (square media + copy),
+ * a subtle elevated surface so it reads as distinct from real product
+ * cards, plus a small uppercase label top-right.
+ */
+
+.sponsored-slot {
+  position: relative;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: stretch;
+  gap: var(--space-3);
+  width: calc(100% - var(--space-4) * 2);
+  margin: var(--space-5) var(--space-4);
+  padding: var(--space-3);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  min-height: 0;
+}
+
+.sponsored-slot:active { opacity: 0.7; }
+
+.sponsored-slot__label {
+  position: absolute;
+  top: var(--space-2);
+  right: 32px;
+  font-size: 9px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.sponsored-slot__info {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  color: var(--color-text-muted);
+  display: inline-flex;
+}
+
+.sponsored-slot__media {
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-hover);
+  flex-shrink: 0;
+}
+
+.sponsored-slot__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.sponsored-slot__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  padding-right: var(--space-2);
+}
+
+.sponsored-slot__title {
+  margin: 0;
+  font-size: var(--font-size-subtitle2);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  line-height: 1.2;
+  /* Clamp to 2 lines so a long headline never crashes the layout. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sponsored-slot__subtitle {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sponsored-slot__partner {
+  margin-top: 4px;
+  font-size: var(--font-size-caption);
+  color: var(--color-success);
+  letter-spacing: 0.2px;
+  font-weight: var(--font-weight-medium);
+}
