@@ -2,12 +2,15 @@ import { useState } from 'react'
 import { RequestLayout } from '../ui/RequestLayout/RequestLayout'
 import { FormSection } from '../ui/FormSection/FormSection'
 import { Field } from '../../../shared/ui/Field/Field'
-import { PhoneInput, type PhoneValue } from '../../../shared/ui/PhoneInput/PhoneInput'
+import { PhoneInput, phoneValueFromE164, type PhoneValue } from '../../../shared/ui/PhoneInput/PhoneInput'
 import { leads } from '../../leads/model/leadsStore'
+import { getLaunchParams } from '../../../shared/lib/webview/launchParams'
+
+const launch = getLaunchParams()
 
 export function CallbackForm() {
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState<PhoneValue | undefined>()
+  const [name, setName] = useState(launch.name ?? '')
+  const [phone, setPhone] = useState<PhoneValue | undefined>(() => phoneValueFromE164(launch.phone))
   const [submitted, setSubmitted] = useState(false)
 
   const canSubmit =

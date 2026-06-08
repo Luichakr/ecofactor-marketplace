@@ -2,12 +2,15 @@ import { useState } from 'react'
 import { RequestLayout } from '../ui/RequestLayout/RequestLayout'
 import { FormSection } from '../ui/FormSection/FormSection'
 import { Field } from '../../../shared/ui/Field/Field'
-import { PhoneInput, type PhoneValue } from '../../../shared/ui/PhoneInput/PhoneInput'
+import { PhoneInput, phoneValueFromE164, type PhoneValue } from '../../../shared/ui/PhoneInput/PhoneInput'
 import { ProductImage } from '../../product/ui/ProductImage/ProductImage'
 import type { MarketplaceProduct } from '../../../entities/product/model/product.types'
 import { formatPrice } from '../../../entities/product/model/product.types'
 import { leads } from '../../leads/model/leadsStore'
+import { getLaunchParams } from '../../../shared/lib/webview/launchParams'
 import './QuoteForm.css'
+
+const launch = getLaunchParams()
 
 type Props = {
   /** Product the user is requesting a quote for (price hidden by seller, etc.). */
@@ -15,9 +18,9 @@ type Props = {
 }
 
 export function QuoteForm({ product }: Props) {
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState<PhoneValue | undefined>()
-  const [email, setEmail] = useState('')
+  const [name, setName] = useState(launch.name ?? '')
+  const [phone, setPhone] = useState<PhoneValue | undefined>(() => phoneValueFromE164(launch.phone))
+  const [email, setEmail] = useState(launch.email ?? '')
   const [message, setMessage] = useState('')
   const [submitted, setSubmitted] = useState(false)
 

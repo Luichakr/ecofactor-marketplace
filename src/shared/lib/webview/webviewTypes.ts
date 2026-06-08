@@ -3,6 +3,7 @@ export type WebViewEventType =
   | 'marketplace:navigate'
   | 'marketplace:request_created'
   | 'marketplace:product_viewed'
+  | 'marketplace:close'
   | 'native:back'
   | 'native:auth_token'
 

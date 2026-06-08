@@ -44,6 +44,26 @@ export function onNativeAuth(callback: (payload: NativeAuthPayload) => void): ()
   return () => window.removeEventListener('message', handler)
 }
 
+/**
+ * The URL the native shell watches for to close the marketplace WebView.
+ * Navigating the page here is the agreed "return to app" signal — the
+ * native side intercepts the request, cancels it, and dismisses the view.
+ * Overridable via VITE_RETURN_URL for staging.
+ */
+export const RETURN_URL =
+  (import.meta.env.VITE_RETURN_URL as string | undefined) ??
+  'https://network.ecofactor.eu/market-place/close'
+
+/**
+ * Closes the marketplace and returns the user to the host app. Also fires
+ * a bridge event first (in case the native side prefers postMessage), then
+ * navigates to RETURN_URL as the canonical signal.
+ */
+export function closeMarketplace(): void {
+  sendWebViewEvent({ type: 'marketplace:close' })
+  window.location.href = RETURN_URL
+}
+
 export function onNativeBack(callback: () => void): () => void {
   // Android hardware back button via postMessage from native side
   function handler(e: MessageEvent) {

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { RecentlyViewed } from '../../features/recently-viewed/ui/RecentlyViewed/RecentlyViewed'
 import { useSearchTrigger } from '../../features/search/ui/SearchTrigger/SearchTrigger'
+import { closeMarketplace } from '../../shared/lib/webview/webviewBridge'
 import { CategoryGrid } from '../../features/marketplace/ui/CategoryGrid/CategoryGrid'
 import { CatalogGrid } from '../../features/catalog/ui/CatalogGrid/CatalogGrid'
 import { SponsoredCarousel } from '../../features/catalog/ui/SponsoredCarousel/SponsoredCarousel'
@@ -103,8 +104,18 @@ export function MarketplaceHomePage() {
 
   return (
     <ScreenContainer className="market-home" withTopInset={false}>
-      {/* Sticky search header — tappable opens the full SearchOverlay. */}
+      {/* Sticky search header — close (return-to-app) + tappable search. */}
       <header className="market-home__top">
+        <button
+          type="button"
+          className="market-home__close"
+          onClick={closeMarketplace}
+          aria-label="Закрити маркетплейс"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </button>
         <button
           type="button"
           className="market-home__search"

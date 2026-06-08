@@ -4,18 +4,29 @@ import './shared/styles/global.css'
 import { App } from './app/App'
 import { identify, initAnalytics, setSuperProps } from './shared/lib/analytics/analytics'
 import { isInsideWebView, onNativeAuth } from './shared/lib/webview/webviewBridge'
+import { getLaunchParams } from './shared/lib/webview/launchParams'
 
 initAnalytics()
+
+// Read the identity/context the host app passed in the opening URL
+// (?user_id=…&lang=uk&currency=UAH&phone=…). Persisted for the session.
+const launch = getLaunchParams()
+
 setSuperProps({
   app: 'ecofactor-marketplace',
   surface: isInsideWebView() ? 'webview' : 'web',
+  ...(launch.lang ? { lang: launch.lang } : {}),
+  ...(launch.currency ? { currency: launch.currency } : {}),
 })
 
-// When ECOFACTOR native app sends user identity over the bridge, attach the
-// stable userId to subsequent PostHog events. We intentionally do NOT send
-// raw email/phone as person properties — shipping PII to a US analytics
-// vendor without an explicit consent flow is a GDPR risk for public testing.
-// Re-add identifiable props behind a consent gate when that's built.
+// Identify by the URL-supplied user id immediately (covers the common
+// case where the host opens us with ?user_id=…). Only the stable id goes
+// to analytics — never raw phone/email (GDPR; see analytics.ts).
+if (launch.userId) {
+  identify(launch.userId)
+}
+
+// Also honour the postMessage bridge path if the native app prefers it.
 onNativeAuth((payload) => {
   if (payload.userId) {
     identify(payload.userId)

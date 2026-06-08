@@ -5,7 +5,7 @@ import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer
 import { Button } from '../../shared/ui/Button/Button'
 import { StickyCTA } from '../../shared/ui/StickyCTA/StickyCTA'
 import { Field } from '../../shared/ui/Field/Field'
-import { PhoneInput, type PhoneValue } from '../../shared/ui/PhoneInput/PhoneInput'
+import { PhoneInput, phoneValueFromE164, type PhoneValue } from '../../shared/ui/PhoneInput/PhoneInput'
 import type { NovaPoshtaSelection } from '../../shared/ui/NovaPoshtaDelivery/NovaPoshtaDelivery'
 import { NovaPoshtaPicker } from '../../shared/ui/NovaPoshtaPicker/NovaPoshtaPicker'
 import { ProductImage } from '../../features/product/ui/ProductImage/ProductImage'
@@ -16,7 +16,11 @@ import { orders, type Order } from '../../features/orders/model/ordersStore'
 import { useAddresses, useCards } from '../../features/profile/model/profileStore'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import { ROUTES, orderDetailPath } from '../../shared/config/routes'
+import { getLaunchParams } from '../../shared/lib/webview/launchParams'
 import './CheckoutPage.css'
+
+// Identity passed from the host app via the opening URL.
+const launch = getLaunchParams()
 
 type DeliveryType = 'home' | 'pickup' | 'np' | null
 type Step = 'delivery' | 'summary' | 'payment' | 'success'
@@ -94,9 +98,11 @@ export function CheckoutPage() {
   const [homeAddress, setHomeAddress] = useState(defaultAddress?.street ?? '')
   const [homeComment, setHomeComment] = useState('')
 
-  const [name, setName] = useState(defaultAddress?.recipient ?? '')
-  const [phone, setPhone] = useState<PhoneValue | undefined>()
-  const [email, setEmail] = useState('')
+  // Prefill from host-app launch params first, then fall back to a saved
+  // address. The user can still edit every field.
+  const [name, setName] = useState(launch.name ?? defaultAddress?.recipient ?? '')
+  const [phone, setPhone] = useState<PhoneValue | undefined>(() => phoneValueFromE164(launch.phone))
+  const [email, setEmail] = useState(launch.email ?? '')
 
   const [payment, setPayment] = useState<PaymentMethod['id']>('card')
   // When the default card exists we surface it in the payment summary so the

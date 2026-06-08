@@ -14,7 +14,9 @@ type Props = {
   car: MarketplaceProduct
 }
 
-const DEPOSIT_USD = 500
+// Refundable hold deposit, in UAH (Ukraine-only store).
+const DEPOSIT_UAH = 20000
+const DEPOSIT_LABEL = `${DEPOSIT_UAH.toLocaleString('uk-UA')} ₴`
 
 /**
  * Reservation flow for /catalog/cars — same pattern as Tesla / Xiaomi EV
@@ -39,7 +41,7 @@ export function CarReservationSheet({ open, onClose, car }: Props) {
       phone: phone?.e164,
       productId: car.id,
       payload: {
-        depositUsd: DEPOSIT_USD,
+        depositUah: DEPOSIT_UAH,
         carTitle: car.title,
         carPrice: car.price?.value,
       },
@@ -65,7 +67,7 @@ export function CarReservationSheet({ open, onClose, car }: Props) {
 
         <section className="car-reservation__deposit">
           <span className="car-reservation__deposit-label">ЗАВДАТОК</span>
-          <span className="car-reservation__deposit-amount">${DEPOSIT_USD}</span>
+          <span className="car-reservation__deposit-amount">{DEPOSIT_LABEL}</span>
           <p className="car-reservation__deposit-hint">
             100% повертається. Авто резервується на 14 днів — за цей час менеджер
             узгодить умови та доставку. Якщо передумаєте — повертаємо завдаток.
@@ -114,7 +116,7 @@ export function CarReservationSheet({ open, onClose, car }: Props) {
         </section>
 
         <Button variant="primary" size="lg" fullWidth type="submit" disabled={!canSubmit}>
-          {sent ? 'ЗАБРОНЬОВАНО ✓' : `ЗАБРОНЮВАТИ ЗА $${DEPOSIT_USD}`}
+          {sent ? 'ЗАБРОНЬОВАНО ✓' : `ЗАБРОНЮВАТИ ЗА ${DEPOSIT_LABEL}`}
         </Button>
       </form>
     </BottomSheet>

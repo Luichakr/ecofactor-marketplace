@@ -66,6 +66,26 @@ export type PhoneValue = {
   e164: string
 }
 
+/**
+ * Build a PhoneValue from an E.164 string (e.g. "+380501234567"), matching
+ * the dial prefix against the known country list. Returns undefined if the
+ * string is empty or no known country prefix matches — callers should treat
+ * that as "no prefill". Used to seed the input from host-app launch params.
+ */
+export function phoneValueFromE164(raw: string | undefined): PhoneValue | undefined {
+  if (!raw) return undefined
+  const e164 = raw.trim().replace(/[^\d+]/g, '')
+  if (!e164.startsWith('+')) return undefined
+  // Longest dial prefix wins (e.g. +1 vs +44 vs +380).
+  const match = [...COUNTRIES]
+    .sort((a, b) => b.dial.length - a.dial.length)
+    .find((c) => e164.startsWith(c.dial))
+  if (!match) return undefined
+  const digits = e164.slice(match.dial.length)
+  if (!digits) return undefined
+  return { country: match.code, dial: match.dial, digits, e164: `${match.dial}${digits}` }
+}
+
 type Props = {
   value?: PhoneValue
   onChange?: (value: PhoneValue) => void

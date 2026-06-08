@@ -14,12 +14,32 @@
   position: sticky;
   top: 0;
   z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   padding: calc(var(--safe-area-top) + var(--space-3)) var(--space-4) var(--space-3);
   background-color: var(--color-bg);
 }
 
+.market-home__close {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: 0;
+}
+
+.market-home__close:active { opacity: 0.6; }
+
 .market-home__search {
-  width: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   gap: var(--space-2);
