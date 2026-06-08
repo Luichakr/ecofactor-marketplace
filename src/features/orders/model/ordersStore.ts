@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { IS_DEMO } from '../../../shared/config/runtime'
 
 export type OrderStatus =
   | 'placed'
@@ -68,17 +69,19 @@ const listeners = new Set<() => void>()
 let snapshot: Order[] = load()
 
 function load(): Order[] {
-  if (typeof window === 'undefined') return seed()
+  // Production: start empty. Real orders accrue as the user checks out.
+  // Demo: pre-populate so the screens look alive during walkthroughs.
+  if (typeof window === 'undefined') return IS_DEMO ? seed() : []
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     if (!raw) {
-      const seeded = seed()
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded))
-      return seeded
+      const initial = IS_DEMO ? seed() : []
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initial))
+      return initial
     }
     return JSON.parse(raw) as Order[]
   } catch {
-    return seed()
+    return IS_DEMO ? seed() : []
   }
 }
 

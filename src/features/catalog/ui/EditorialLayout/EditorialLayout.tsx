@@ -95,15 +95,24 @@ export function EditorialLayout({
     return [...map.entries()].slice(0, 3)
   })()
 
-  /** Pool to draw 5 cards per brand strip from — duplicates the input
-   *  list when there aren't enough unique products to fill the strip. */
+  /** Pool to draw up to 5 cards per brand strip from. The brand's own
+   *  items come first, then other products fill the rest — but each id
+   *  appears at most once (a previous version triple-concatenated
+   *  `products`, producing duplicate ids → React key collisions when a
+   *  brand had fewer than 5 reachable items). */
   function pickStripItems(seedBrand: string): MarketplaceProduct[] {
     const pool = products.filter((p) => {
       const b = p.attributes.find((a) => a.key === 'brand')
       return typeof b?.value === 'string' && b.value === seedBrand
     })
     const tail = products.filter((p) => !pool.includes(p))
-    const combined = [...pool, ...tail, ...products]
+    const seen = new Set<string>()
+    const combined: MarketplaceProduct[] = []
+    for (const p of [...pool, ...tail]) {
+      if (seen.has(p.id)) continue
+      seen.add(p.id)
+      combined.push(p)
+    }
     return combined.slice(0, 5)
   }
 

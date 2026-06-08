@@ -27,7 +27,10 @@ export function initAnalytics(): void {
     capture_pageleave: true,
     autocapture: true,
     session_recording: {
-      maskAllInputs: false,
+      // Privacy-first: mask EVERY input in session replays so phone,
+      // email, address, and card-like fields are never captured. Opt
+      // specific safe fields back in with [data-ph-no-mask] if needed.
+      maskAllInputs: true,
       maskTextSelector: '[data-private]',
     },
     loaded: (ph) => {

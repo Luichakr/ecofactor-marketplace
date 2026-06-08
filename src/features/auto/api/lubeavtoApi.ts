@@ -8,6 +8,8 @@
  * the internal-testing stage.
  */
 
+import { fetchWithTimeout } from '../../../shared/api/fetchWithTimeout'
+
 const BASE = (import.meta.env.VITE_LUBEAVTO_API_BASE as string | undefined)
   ?? 'https://api-lubeavto-partner.azurewebsites.net'
 
@@ -263,7 +265,7 @@ async function fetchAllPages({ path, pageSize = 500, maxPages = 20 }: FetchOpts)
   const url = (page: number) => `${BASE}${path}?pageNumber=${page}&pageSize=${pageSize}`
 
   const headers = authHeaders()
-  const first = await fetch(url(1), { cache: 'no-store', headers })
+  const first = await fetchWithTimeout(url(1), { cache: 'no-store', headers })
   if (!first.ok) {
     throw new Error(`Lubeavto ${path} HTTP ${first.status}`)
   }
@@ -277,7 +279,7 @@ async function fetchAllPages({ path, pageSize = 500, maxPages = 20 }: FetchOpts)
 
   const requests: Promise<ApiListResponse>[] = []
   for (let p = 2; p <= totalPages; p += 1) {
-    requests.push(fetch(url(p), { cache: 'no-store', headers }).then((r) => r.json() as Promise<ApiListResponse>))
+    requests.push(fetchWithTimeout(url(p), { cache: 'no-store', headers }).then((r) => r.json() as Promise<ApiListResponse>))
   }
   const pages = await Promise.all(requests)
   for (const page of pages) {
@@ -293,7 +295,7 @@ async function fetchAllPages({ path, pageSize = 500, maxPages = 20 }: FetchOpts)
 export async function fetchAutoCarById(id: string): Promise<AutoCard | null> {
   const safeId = encodeURIComponent(id)
   for (const path of [`/api/v0/cars/${safeId}`, `/api/v0/cars/in-route/${safeId}`]) {
-    const r = await fetch(`${BASE}${path}`, { cache: 'no-store', headers: authHeaders() })
+    const r = await fetchWithTimeout(`${BASE}${path}`, { cache: 'no-store', headers: authHeaders() })
     if (r.ok) {
       const raw = (await r.json()) as ApiLubeavtoCar
       const norm = normalizeCar(raw)

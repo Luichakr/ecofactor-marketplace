@@ -192,7 +192,13 @@ function ProgressStepper({ order }: { order: Order }) {
       </div>
     )
   }
-  const currentIdx = ORDER_PROGRESS_STEPS.indexOf(order.status as never)
+  // `placed` (cash-on-delivery initial state) isn't in the progress array,
+  // which would leave the whole stepper blank. Treat it as the first step
+  // reached so a COD order still shows visible progress.
+  const currentIdx =
+    order.status === 'placed'
+      ? 0
+      : ORDER_PROGRESS_STEPS.indexOf(order.status as never)
   return (
     <ol className="order-detail__stepper">
       {ORDER_PROGRESS_STEPS.map((s, i) => {

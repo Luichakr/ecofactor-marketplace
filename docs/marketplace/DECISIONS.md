@@ -20,3 +20,4 @@
 | 2026-05-15 | `ScreenContainer` gets `withTopInset` prop (default true); pages with Header pass false | Header already handles safe-area-top — ScreenContainer must not add it again | Accepted |
 | 2026-05-15 | Vitest added for catalog/filter logic; no UI/component tests at this stage | Pure logic tests are fast and low-friction; React component tests need jsdom and add setup cost | Accepted |
 | 2026-05-15 | Vite/esbuild moderate audit vulnerability deferred; no force-upgrade to Vite 8 | Vite 8 is a breaking major — upgrade requires controlled migration, not a hotfix | Accepted |
+| 2026-05-28 | `IS_DEMO` runtime flag (`VITE_DEMO_MODE`) gates seeded fixtures + support auto-reply | Production builds start with empty orders/addresses/cards stores and the chat stays quiet until a real operator backend replies. Internal demos opt-in via `VITE_DEMO_MODE=1`. | Accepted |

@@ -105,7 +105,7 @@ export function ProductImageSlider({ images, alt, categoryId, onTap }: Props) {
           const MAX_DOTS = 7
           const total = images.length
           const half = Math.floor(MAX_DOTS / 2)
-          let start = total <= MAX_DOTS ? 0 : Math.max(0, Math.min(activeIdx - half, total - MAX_DOTS))
+          const start = total <= MAX_DOTS ? 0 : Math.max(0, Math.min(activeIdx - half, total - MAX_DOTS))
           const end = Math.min(start + MAX_DOTS, total)
           const visible: number[] = []
           for (let i = start; i < end; i++) visible.push(i)

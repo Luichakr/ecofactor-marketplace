@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Header } from '../../shared/ui/Header/Header'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { Button } from '../../shared/ui/Button/Button'
@@ -11,7 +11,7 @@ import { NovaPoshtaPicker } from '../../shared/ui/NovaPoshtaPicker/NovaPoshtaPic
 import { ProductImage } from '../../features/product/ui/ProductImage/ProductImage'
 import { DeliveryMethodCard } from '../../features/checkout/ui/DeliveryMethodCard/DeliveryMethodCard'
 import { PaymentMethodGrid, type PaymentMethod } from '../../features/checkout/ui/PaymentMethodGrid/PaymentMethodGrid'
-import { cart, useCart, useCartTotals } from '../../features/cart/model/cartStore'
+import { cart, useCart } from '../../features/cart/model/cartStore'
 import { orders, type Order } from '../../features/orders/model/ordersStore'
 import { useAddresses, useCards } from '../../features/profile/model/profileStore'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
@@ -49,8 +49,27 @@ function makeReference(): string {
 
 export function CheckoutPage() {
   const navigate = useNavigate()
-  const items = useCart()
-  const { count, subtotal, currency } = useCartTotals()
+  const location = useLocation()
+  const allCartItems = useCart()
+
+  // Honor the selection the user made in the cart. If we arrived without
+  // explicit keys (deep-link, refresh) fall back to the whole cart.
+  const selectedKeys = (location.state as { selectedKeys?: string[] } | null)?.selectedKeys ?? null
+  const items = useMemo(() => {
+    if (!selectedKeys) return allCartItems
+    const wanted = new Set(selectedKeys)
+    const filtered = allCartItems.filter((it) =>
+      wanted.has(`${it.productId}__${it.variant ?? ''}`),
+    )
+    return filtered.length > 0 ? filtered : allCartItems
+  }, [allCartItems, selectedKeys])
+
+  const count = items.reduce((s, i) => s + i.qty, 0)
+  const subtotal = items.reduce(
+    (s, i) => (i.price !== undefined ? s + i.price * i.qty : s),
+    0,
+  )
+  const currency = items.find((i) => i.currency)?.currency ?? 'UAH'
 
   // Saved address/card store — preselect defaults so the form arrives
   // already partially filled for returning users. The user can still edit
@@ -65,6 +84,8 @@ export function CheckoutPage() {
   // Persisted on confirm so the success screen can deep-link into the
   // freshly-created order detail page.
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null)
+  // In-flight guard so the confirm button can't fire twice.
+  const [placing, setPlacing] = useState(false)
 
   const [deliveryType, setDeliveryType] = useState<DeliveryType>(null)
   const [npSelection, setNpSelection] = useState<NovaPoshtaSelection | undefined>()
@@ -471,7 +492,12 @@ export function CheckoutPage() {
                   variant="primary"
                   size="lg"
                   className="checkout-page__bar-cta"
+                  disabled={placing}
                   onClick={() => {
+                    // Guard against double-tap (common in WebView) creating
+                    // two orders before the success re-render lands.
+                    if (placing) return
+                    setPlacing(true)
                     // Persist the order before clearing the cart so the
                     // user can immediately see it under /orders and we
                     // never lose items if cart.clear() ran while orders.add()
@@ -490,7 +516,7 @@ export function CheckoutPage() {
                           ? 'Одеса'
                           : homeCity
                     const order: Order = {
-                      id: `o-${Date.now()}`,
+                      id: `o-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
                       number: reference.replace('-', ''),
                       createdAt: now,
                       status: payment === 'cod' ? 'placed' : 'paid',
@@ -514,11 +540,13 @@ export function CheckoutPage() {
                     }
                     orders.add(order)
                     setCreatedOrderId(order.id)
-                    cart.clear()
+                    // Remove only the items we actually ordered. Anything the
+                    // user left unchecked in the cart stays for later.
+                    for (const it of items) cart.remove(it.productId, it.variant)
                     setStep('success')
                   }}
                 >
-                  ПІДТВЕРДИТИ · {paymentLabel}
+                  {placing ? 'ОФОРМЛЯЄМО…' : `ПІДТВЕРДИТИ · ${paymentLabel}`}
                 </Button>
                 <div className="checkout-page__bar-side">
                   <span className="checkout-page__bar-side-value">{formatMoney(total, currency)}</span>

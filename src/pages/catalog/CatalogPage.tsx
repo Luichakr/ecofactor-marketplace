@@ -30,13 +30,23 @@ export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const [view, setView] = useState<ViewMode>(() => {
-    const saved = Number(localStorage.getItem(VIEW_KEY))
-    return saved === 1 || saved === 3 ? saved : 2
+    // Guarded — localStorage throws in private-mode WebView / when storage
+    // is disabled, which would otherwise crash the catalog on mount.
+    try {
+      const saved = Number(localStorage.getItem(VIEW_KEY))
+      return saved === 1 || saved === 3 ? saved : 2
+    } catch {
+      return 2
+    }
   })
   const [filtersOpen, setFiltersOpen] = useState(false)
 
   useEffect(() => {
-    localStorage.setItem(VIEW_KEY, String(view))
+    try {
+      localStorage.setItem(VIEW_KEY, String(view))
+    } catch {
+      /* storage disabled — view preference just won't persist */
+    }
   }, [view])
 
   const category = categoryId

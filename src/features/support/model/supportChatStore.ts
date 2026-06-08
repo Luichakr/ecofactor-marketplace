@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { IS_DEMO } from '../../../shared/config/runtime'
 
 const KEY = 'mp:supportChat'
 
@@ -55,17 +56,21 @@ export const supportChat = {
     }
     state = [...state, userMsg]
     persist()
-    // Auto-reply after small delay for demo realism.
-    setTimeout(() => {
-      const reply: ChatMessage = {
-        id: `m-${Date.now()}-r`,
-        from: 'support',
-        text: 'Ваше повідомлення прийнято. Менеджер відповість протягом 15 хвилин.',
-        at: new Date().toISOString(),
-      }
-      state = [...state, reply]
-      persist()
-    }, 600)
+    // Demo only — fake "auto-reply" so the chat looks two-sided during
+    // internal walkthroughs. Production silence is intentional: real
+    // replies will come from the operator backend once it's wired.
+    if (IS_DEMO) {
+      setTimeout(() => {
+        const reply: ChatMessage = {
+          id: `m-${Date.now()}-r`,
+          from: 'support',
+          text: 'Ваше повідомлення прийнято. Менеджер відповість протягом 15 хвилин.',
+          at: new Date().toISOString(),
+        }
+        state = [...state, reply]
+        persist()
+      }, 600)
+    }
   },
 }
 

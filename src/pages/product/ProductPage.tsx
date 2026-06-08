@@ -167,6 +167,13 @@ export function ProductPage() {
     mockProducts.find((p) => p.id === productId) ??
     mockTires.find((p) => p.id === productId)
 
+  // Cars come from the Lubeavto list endpoint with just 1 photo each.
+  // Lazy-fetch the detail endpoint to backfill the full gallery.
+  // MUST run before any early return so hook order stays stable across
+  // renders (rules-of-hooks). Guarded by `enabled` so non-car / missing
+  // products skip the network call entirely.
+  const carPhotos = useAutoCarPhotos(product?.id, product?.categoryId === 'cars')
+
   if (live.loading && !product) {
     return (
       <>
@@ -248,11 +255,6 @@ export function ProductPage() {
     })
     navigate(ROUTES.CHECKOUT)
   }
-
-  // Cars come from the Lubeavto list endpoint with just 1 photo each.
-  // Lazy-fetch the detail endpoint to backfill the full gallery — when it
-  // resolves, swap into galleryImages below.
-  const carPhotos = useAutoCarPhotos(product.id, product.categoryId === 'cars')
 
   const galleryImages = (() => {
     const fromProduct = [product.image, ...(product.gallery ?? [])].filter(Boolean) as string[]

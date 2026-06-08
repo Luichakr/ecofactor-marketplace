@@ -204,7 +204,15 @@ export function CartPage() {
               variant="primary"
               size="lg"
               className="cart-page__bar-cta"
-              onClick={() => navigate(ROUTES.CHECKOUT)}
+              onClick={() => {
+                // Carry the exact set of selected line keys to checkout so a
+                // user who unchecked an item is neither charged for it nor
+                // loses it from the cart. Keys are productId__variant.
+                const selectedKeys = selectedItems.map(
+                  (it) => `${it.productId}__${it.variant ?? ''}`,
+                )
+                navigate(ROUTES.CHECKOUT, { state: { selectedKeys } })
+              }}
               disabled={selectedCount === 0}
             >
               ДАЛІ ({selectedCount})

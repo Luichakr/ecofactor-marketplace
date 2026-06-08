@@ -1,4 +1,5 @@
 import type { EfpfListResponse, EfpfProduct } from './types'
+import { fetchWithTimeout } from '../fetchWithTimeout'
 
 const BASE = (import.meta.env.VITE_EFPF_API_BASE as string | undefined)
   ?? 'https://ecofactortech.com/wp-json/efpf/v1'
@@ -42,14 +43,14 @@ export async function fetchProducts(params: ListParams = {}): Promise<EfpfListRe
     since: params.since,
     include_variations: params.include_variations,
   })
-  const r = await fetch(u, { headers: { Accept: 'application/json' } })
+  const r = await fetchWithTimeout(u, { headers: { Accept: 'application/json' } })
   if (!r.ok) throw new Error(`EFPF /products failed: ${r.status}`)
   return r.json()
 }
 
 export async function fetchProduct(id: number | string, lang = 'ua'): Promise<EfpfProduct> {
   const u = buildUrl(`/products/${id}`, { lang })
-  const r = await fetch(u, { headers: { Accept: 'application/json' } })
+  const r = await fetchWithTimeout(u, { headers: { Accept: 'application/json' } })
   if (!r.ok) throw new Error(`EFPF /products/${id} failed: ${r.status}`)
   return r.json()
 }

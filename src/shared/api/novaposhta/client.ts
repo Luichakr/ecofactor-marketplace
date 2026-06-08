@@ -1,4 +1,5 @@
 import type { NpApiResponse, NpSettlement, NpWarehouse } from './types'
+import { fetchWithTimeout } from '../fetchWithTimeout'
 
 /**
  * Nova Poshta API client.
@@ -11,7 +12,8 @@ import type { NpApiResponse, NpSettlement, NpWarehouse } from './types'
  * and the UI falls back to mock data — see NovaPoshtaDelivery component.
  */
 
-const API_URL = 'https://api.novaposhta.ua/v2.0/json/'
+const API_URL = (import.meta.env.VITE_NOVA_POSHTA_API_URL as string | undefined)
+  ?? 'https://api.novaposhta.ua/v2.0/json/'
 const API_KEY = (import.meta.env.VITE_NOVA_POSHTA_API_KEY as string | undefined) ?? ''
 
 async function npRequest<T>(
@@ -22,7 +24,7 @@ async function npRequest<T>(
   if (!API_KEY) {
     throw new Error('NP_NO_API_KEY')
   }
-  const r = await fetch(API_URL, {
+  const r = await fetchWithTimeout(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ apiKey: API_KEY, modelName, calledMethod, methodProperties }),

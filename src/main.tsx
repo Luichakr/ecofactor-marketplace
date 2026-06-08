@@ -11,11 +11,14 @@ setSuperProps({
   surface: isInsideWebView() ? 'webview' : 'web',
 })
 
-// When ECOFACTOR native app sends user identity over the bridge, attach it
-// to all subsequent PostHog events so a real human = a real profile.
+// When ECOFACTOR native app sends user identity over the bridge, attach the
+// stable userId to subsequent PostHog events. We intentionally do NOT send
+// raw email/phone as person properties — shipping PII to a US analytics
+// vendor without an explicit consent flow is a GDPR risk for public testing.
+// Re-add identifiable props behind a consent gate when that's built.
 onNativeAuth((payload) => {
   if (payload.userId) {
-    identify(payload.userId, { email: payload.email, phone: payload.phone })
+    identify(payload.userId)
   }
 })
 

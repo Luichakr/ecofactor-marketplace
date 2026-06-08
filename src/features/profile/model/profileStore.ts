@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { IS_DEMO } from '../../../shared/config/runtime'
 
 export type AddressType = 'home' | 'work' | 'other'
 
@@ -63,12 +64,20 @@ const listenersAddr = new Set<() => void>()
 const listenersCards = new Set<() => void>()
 const listenersSettings = new Set<() => void>()
 
-let addressesState: SavedAddress[] = readJson<SavedAddress[]>(KEY_ADDR, seedAddresses())
-let cardsState: SavedCard[] = readJson<SavedCard[]>(KEY_CARDS, seedCards())
+// Demo seeds the address book + one default card so the profile screens
+// look populated during walkthroughs. Production starts empty.
+const initialAddresses = IS_DEMO ? seedAddresses() : []
+const initialCards = IS_DEMO ? seedCards() : []
+
+let addressesState: SavedAddress[] = readJson<SavedAddress[]>(KEY_ADDR, initialAddresses)
+let cardsState: SavedCard[] = readJson<SavedCard[]>(KEY_CARDS, initialCards)
 let settingsState: ProfileSettings = readJson<ProfileSettings>(KEY_SETTINGS, DEFAULT_SETTINGS)
 
-if (!readJson<SavedAddress[]>(KEY_ADDR, []).length) writeJson(KEY_ADDR, addressesState)
-if (!readJson<SavedCard[]>(KEY_CARDS, []).length) writeJson(KEY_CARDS, cardsState)
+// Only write a seed to localStorage if we actually produced one (demo);
+// in production the first read returns [] and we leave the key untouched
+// so the user starts on a clean slate.
+if (IS_DEMO && !readJson<SavedAddress[]>(KEY_ADDR, []).length) writeJson(KEY_ADDR, addressesState)
+if (IS_DEMO && !readJson<SavedCard[]>(KEY_CARDS, []).length) writeJson(KEY_CARDS, cardsState)
 
 function seedAddresses(): SavedAddress[] {
   return [
