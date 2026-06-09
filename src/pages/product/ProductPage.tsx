@@ -27,6 +27,7 @@ import { SellerBadge } from '../../features/seller/ui/SellerBadge/SellerBadge'
 import { RecsTabs } from '../../features/product/ui/RecsTabs/RecsTabs'
 import { CarReservationSheet } from '../../features/car-reservation/ui/CarReservationSheet/CarReservationSheet'
 import { useAutoCarPhotos } from '../../features/auto/hooks/useAutoCarPhotos'
+import { SALES_PHONE_TEL } from '../../shared/config/contacts'
 import { getRatingFor } from '../../data/mockReviews'
 import { Skeleton } from '../../shared/ui/Skeleton/Skeleton'
 import { REQUEST_PATHS, ROUTES } from '../../shared/config/routes'
@@ -212,7 +213,10 @@ export function ProductPage() {
     )
   }
 
-  const hasPrice = product.price?.value !== undefined
+  // A real, buyable price is a positive number. A 0/undefined value (e.g.
+  // "Ціна за запитом" services) routes to the quote flow instead of letting
+  // the user check out a 0 ₴ order.
+  const hasPrice = typeof product.price?.value === 'number' && product.price.value > 0
   void delivery // captured in state; will be submitted at checkout
 
   // Attributes split: card-visible "short" specs vs the long detail set.
@@ -372,10 +376,11 @@ export function ProductPage() {
           )}
         </div>
 
-        {/* 6-tile photo placeholder strip (reference look). Hidden for
-            cars — those have real photos via the Lubeavto gallery, so
-            stacking blank "1248 × 1664" tiles underneath would look weird. */}
-        {product.categoryId !== 'cars' && (
+        {/* Placeholder photo strip — only when the product has NO real
+            imagery at all. With real photos (live EFPF / Lubeavto) the
+            gallery above already shows them, so blank "PHOTO TBD" tiles
+            would just look unfinished. */}
+        {galleryImages.length === 0 && (
           <section className="product-page__photos" aria-label="Фотографії">
             {PHOTO_PLACEHOLDERS.map((p, i) => (
               <PlaceholderImage
@@ -491,7 +496,7 @@ export function ProductPage() {
                 >
                   КОНСУЛЬТАЦІЯ
                 </Button>
-                <a className="btn btn--outline btn--md btn--full" href="tel:+380501234567">
+                <a className="btn btn--outline btn--md btn--full" href={SALES_PHONE_TEL}>
                   ПОДЗВОНИТИ
                 </a>
               </div>

@@ -23,6 +23,33 @@ export function SettingsPage() {
     }
   }, [settings.theme, setTheme])
 
+  // Wipe browsing-history keys, then reload so the in-memory stores reset.
+  function clearHistory() {
+    if (!window.confirm('Видалити історію переглядів і нещодавні пошуки?')) return
+    try {
+      localStorage.removeItem('mp:viewedProducts')
+      localStorage.removeItem('mp:recentSearches')
+    } catch { /* storage disabled */ }
+    window.location.reload()
+  }
+
+  // "Delete my data" — clears every marketplace-owned key (orders, cart,
+  // favorites, addresses, cards, leads, chat, avatar, etc). No server-side
+  // account exists yet, so this is a full local reset.
+  function clearAllData() {
+    if (!window.confirm('Видалити всі ваші локальні дані? Замовлення, кошик, закладки та збережені дані буде стерто. Цю дію не можна скасувати.')) return
+    try {
+      const keys: string[] = []
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i)
+        if (k && (k.startsWith('mp:') || k.startsWith('ecofactor-'))) keys.push(k)
+      }
+      keys.forEach((k) => localStorage.removeItem(k))
+    } catch { /* storage disabled */ }
+    window.location.href = ROUTES.MARKETPLACE
+    window.location.reload()
+  }
+
   return (
     <>
       <Header title="НАЛАШТУВАННЯ" showBack onBack={() => navigate(ROUTES.PROFILE)} />
@@ -73,8 +100,12 @@ export function SettingsPage() {
           </Group>
 
           <Group title="ПРИВАТНІСТЬ">
-            <button type="button" className="settings-page__link">Видалити історію переглядів</button>
-            <button type="button" className="settings-page__link">Видалити обліковий запис</button>
+            <button type="button" className="settings-page__link" onClick={clearHistory}>
+              Видалити історію переглядів
+            </button>
+            <button type="button" className="settings-page__link" onClick={clearAllData}>
+              Видалити мої дані
+            </button>
           </Group>
 
           <p className="settings-page__version">ECOFACTOR Marketplace · v0.4</p>

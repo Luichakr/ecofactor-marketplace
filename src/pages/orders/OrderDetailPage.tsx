@@ -13,6 +13,7 @@ import {
   type Order,
 } from '../../features/orders/model/ordersStore'
 import { cart } from '../../features/cart/model/cartStore'
+import { ProductImage } from '../../features/product/ui/ProductImage/ProductImage'
 import { ROUTES, productPath, returnOpenPath } from '../../shared/config/routes'
 import './OrderDetailPage.css'
 
@@ -82,7 +83,9 @@ export function OrderDetailPage() {
                   to={productPath(it.productId)}
                   className="order-detail__item"
                 >
-                  <div className="order-detail__item-img" />
+                  <div className="order-detail__item-img">
+                    <ProductImage src={it.image} alt={it.title} />
+                  </div>
                   <div className="order-detail__item-meta">
                     <p className="order-detail__item-title">{it.title}</p>
                     {it.variant && <p className="order-detail__item-variant">{it.variant}</p>}
@@ -113,10 +116,13 @@ export function OrderDetailPage() {
             <KV k="Разом" v={formatMoney(order.total, order.currency)} highlight />
           </Section>
 
-          <Section title="ДОКУМЕНТИ">
-            <DocRow label="Електронний чек (PDF)" href={order.invoiceUrl} />
-            <DocRow label="Накладна Нової Пошти" href={'#'} />
-          </Section>
+          {/* Documents — only shown when a real downloadable document exists.
+              New orders have none yet, so we don't render dead links. */}
+          {order.invoiceUrl && order.invoiceUrl !== '#' && (
+            <Section title="ДОКУМЕНТИ">
+              <DocRow label="Електронний чек (PDF)" href={order.invoiceUrl} />
+            </Section>
+          )}
 
           <div className="order-detail__actions">
             {order.status === 'shipped' && order.trackingNumber && (

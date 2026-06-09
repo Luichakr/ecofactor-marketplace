@@ -66,7 +66,7 @@ const SECTIONS: Record<string, Section> = {
         title: 'ЗАРЯДНІ СТАНЦІЇ',
         items: [
           { label: 'Усі станції', href: evCat, bold: true },
-          { label: 'Стаціонарні', href: `${evCat}?sub=stationary` },
+          { label: 'Стаціонарні', tag: 'SOON' },
           { label: 'Мобільні зарядки', href: `${evCat}?sub=mobile-charging-stations` },
         ],
       },
@@ -75,7 +75,7 @@ const SECTIONS: Record<string, Section> = {
         title: 'КАБЕЛІ',
         items: [
           { label: 'Усі кабелі', href: `${evCat}?sub=cables`, bold: true },
-          { label: 'Type 2', href: `${evCat}?sub=cables&type=type2` },
+          { label: 'Type 2', tag: 'SOON' },
           { label: 'CCS / CHAdeMO', tag: 'SOON' },
         ],
       },
@@ -84,8 +84,8 @@ const SECTIONS: Record<string, Section> = {
         title: 'АКСЕСУАРИ',
         items: [
           { label: 'Усі аксесуари', href: `${evCat}?sub=accessories`, bold: true },
-          { label: 'Адаптери', href: `${evCat}?sub=accessories&type=adapters` },
-          { label: 'Кріплення', href: `${evCat}?sub=accessories&type=mounts` },
+          { label: 'Адаптери', tag: 'SOON' },
+          { label: 'Кріплення', tag: 'SOON' },
         ],
       },
     ],
@@ -104,7 +104,7 @@ const SECTIONS: Record<string, Section> = {
         title: 'СОНЯЧНІ ПАНЕЛІ',
         items: [
           { label: 'Усі панелі', href: `${solarCat}?sub=solar-panels`, bold: true },
-          { label: 'Монокристалічні', href: `${solarCat}?sub=solar-panels&type=mono` },
+          { label: 'Монокристалічні', tag: 'SOON' },
           { label: 'Полікристалічні', tag: 'SOON' },
         ],
       },
@@ -122,7 +122,7 @@ const SECTIONS: Record<string, Section> = {
         title: 'АКУМУЛЯТОРИ',
         items: [
           { label: 'Усі АКБ', href: `${solarCat}?sub=accumulator-batteries`, bold: true },
-          { label: 'LiFePO4', href: `${solarCat}?sub=accumulator-batteries&type=lifepo4` },
+          { label: 'LiFePO4', tag: 'SOON' },
         ],
       },
       {
@@ -130,8 +130,8 @@ const SECTIONS: Record<string, Section> = {
         title: 'КОМПЛЕКТУЮЧІ',
         items: [
           { label: 'Усі', href: `${solarCat}?sub=komplektuiuchi`, bold: true },
-          { label: 'Кабелі та конектори', href: `${solarCat}?sub=komplektuiuchi&type=cables` },
-          { label: 'Кріплення', href: `${solarCat}?sub=komplektuiuchi&type=mounts` },
+          { label: 'Кабелі та конектори', tag: 'SOON' },
+          { label: 'Кріплення', tag: 'SOON' },
         ],
       },
     ],
@@ -140,8 +140,8 @@ const SECTIONS: Record<string, Section> = {
   auto: {
     visual: [
       { id: 'auto-stock', caption: 'У НАЯВНОСТІ', size: '720 × 960', href: catalogCategoryPath('cars') },
-      { id: 'auto-ev', caption: 'ЕЛЕКТРОМОБІЛІ', size: '720 × 960', href: `${catalogCategoryPath('cars')}?subcategory=cars-electric` },
-      { id: 'auto-hybrid', caption: 'ГІБРИДИ', size: '720 × 960', href: `${catalogCategoryPath('cars')}?subcategory=cars-hybrid` },
+      { id: 'auto-ev', caption: 'ЕЛЕКТРОМОБІЛІ', size: '720 × 960', href: `${catalogCategoryPath('cars')}?sub=cars-electric` },
+      { id: 'auto-hybrid', caption: 'ГІБРИДИ', size: '720 × 960', href: `${catalogCategoryPath('cars')}?sub=cars-hybrid` },
       { id: 'auto-order', caption: 'ПІД ЗАМОВЛЕННЯ', size: '720 × 960' },
     ],
     groups: [
@@ -150,8 +150,8 @@ const SECTIONS: Record<string, Section> = {
         title: 'АВТО',
         items: [
           { label: 'Усі авто в наявності', href: catalogCategoryPath('cars'), bold: true },
-          { label: 'Електромобілі', href: `${catalogCategoryPath('cars')}?subcategory=cars-electric` },
-          { label: 'Гібриди', href: `${catalogCategoryPath('cars')}?subcategory=cars-hybrid` },
+          { label: 'Електромобілі', href: `${catalogCategoryPath('cars')}?sub=cars-electric` },
+          { label: 'Гібриди', href: `${catalogCategoryPath('cars')}?sub=cars-hybrid` },
           { label: 'Під замовлення', tag: 'SOON' },
         ],
       },

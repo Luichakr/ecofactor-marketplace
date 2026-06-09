@@ -12,7 +12,21 @@ import {
 import { useAddresses, useCards } from '../../features/profile/model/profileStore'
 import { useFavorites } from '../../features/favorites/model/favoritesStore'
 import { openSupport } from '../../features/support/ui/SupportLauncher/SupportLauncher'
+import { getLaunchParams } from '../../shared/lib/webview/launchParams'
 import './ProfilePage.css'
+
+// Identity from the host app (window.ECOFACTOR_MARKET / URL). Falls back to
+// the mock user when running standalone on the web.
+const launch = getLaunchParams()
+const displayName = launch.name || mockUser.name
+const displayPhone = launch.phone || mockUser.phone
+const displayEmail = launch.email || mockUser.email
+const displayInitials = (launch.name || mockUser.name)
+  .split(' ')
+  .map((w) => w[0])
+  .slice(0, 2)
+  .join('')
+  .toUpperCase()
 
 function dateUA(iso: string): string {
   const d = new Date(iso)
@@ -151,7 +165,7 @@ export function ProfilePage() {
             {avatar ? (
               <img src={avatar} alt="" className="profile-page__avatar-img" />
             ) : (
-              <span className="profile-page__avatar-initials">{mockUser.avatarInitials}</span>
+              <span className="profile-page__avatar-initials">{displayInitials}</span>
             )}
           </button>
           <input
@@ -162,9 +176,9 @@ export function ProfilePage() {
             style={{ display: 'none' }}
           />
           <div className="profile-page__user-info">
-            <p className="profile-page__name">{mockUser.name}</p>
-            <p className="profile-page__phone">{mockUser.phone}</p>
-            {mockUser.email && <p className="profile-page__email">{mockUser.email}</p>}
+            <p className="profile-page__name">{displayName}</p>
+            <p className="profile-page__phone">{displayPhone}</p>
+            {displayEmail && <p className="profile-page__email">{displayEmail}</p>}
             {avatar && (
               <button type="button" className="profile-page__avatar-remove" onClick={removeAvatar}>
                 Прибрати фото

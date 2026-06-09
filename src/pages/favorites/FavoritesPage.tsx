@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
-import { Button } from '../../shared/ui/Button/Button'
 import { ROUTES, productPath } from '../../shared/config/routes'
+import { getLaunchParams } from '../../shared/lib/webview/launchParams'
 import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import { useFavorites, favorites } from '../../features/favorites/model/favoritesStore'
 import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
@@ -30,7 +30,10 @@ type BookmarkItem = {
   rawProduct?: Parameters<typeof cart.add>[0]
 }
 
-const USER_NAME = 'SERGEY'
+// Heading for the bookmarks list. Uses the host-app name when provided,
+// otherwise a neutral Ukrainian label (no hardcoded developer name).
+const launch = getLaunchParams()
+const LIST_TITLE = launch.name ? `СПИСОК · ${launch.name.toUpperCase()}` : 'МОЇ ЗАКЛАДКИ'
 
 export function FavoritesPage() {
   const navigate = useNavigate()
@@ -103,7 +106,7 @@ export function FavoritesPage() {
         />
       ) : (
         <>
-          <h1 className="bookmarks-page__list-name">{USER_NAME}'S LIST</h1>
+          <h1 className="bookmarks-page__list-name">{LIST_TITLE}</h1>
 
           <ul className="bookmarks-page__grid">
             {items.map((it) => (
@@ -149,11 +152,6 @@ export function FavoritesPage() {
               </li>
             ))}
           </ul>
-
-          <div className="bookmarks-page__footer">
-            <Button variant="outline" fullWidth size="lg" disabled>СТВОРИТИ СПИСОК</Button>
-            <Button variant="outline" fullWidth size="lg" disabled>ВИБРАТИ</Button>
-          </div>
         </>
       )}
     </ScreenContainer>
