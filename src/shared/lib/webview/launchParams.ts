@@ -1,16 +1,37 @@
 /**
  * Launch parameters — the contract the ECOFACTOR native app uses to hand
- * context to the marketplace WebView via the opening URL query string.
+ * context to the marketplace WebView.
  *
- * Example:
- *   https://<host>/?user_id=42&phone=%2B380501234567&lang=uk&currency=UAH
+ * PRIMARY (preferred, more secure — not in URL/logs/history): the native
+ * shell injects a global object BEFORE the page bundle runs, e.g. via a
+ * WKUserScript at .atDocumentStart / Android evaluateJavascript on
+ * navigationStart:
  *
- * All params are OPTIONAL. The marketplace works fully without them (anon
- * session); they just personalise the experience.
+ *   window.ECOFACTOR_MARKET = {
+ *     userId: '42',
+ *     phone: '+380501234567',
+ *     email: 'user@mail.com',
+ *     name: 'Олексій',
+ *     lang: 'uk',
+ *     currency: 'UAH',
+ *     token: '…',
+ *   }
  *
- * Parsed once at boot and cached in sessionStorage so the values survive
- * client-side route changes (the SPA rewrites the URL on navigation).
+ * FALLBACK: the same fields may also arrive as URL query params
+ *   https://<host>/?user_id=42&phone=%2B380501234567&lang=uk
+ *
+ * Resolution order (highest wins): window global → URL → previously stored.
+ * All fields are OPTIONAL — the marketplace works anonymously without them.
+ * Cached in sessionStorage so values survive SPA route changes.
  */
+
+declare global {
+  interface Window {
+    /** Injected by the native host before the bundle loads. snake_case or
+     *  camelCase keys both accepted (see ALIASES). */
+    ECOFACTOR_MARKET?: Record<string, unknown>
+  }
+}
 
 export type LaunchParams = {
   /** Stable user id from the host app. Used as the analytics identity. */
@@ -58,11 +79,28 @@ function parseFromSearch(search: string): LaunchParams {
   return out
 }
 
+/** Read from the native-injected `window.ECOFACTOR_MARKET` global, mapping
+ *  alias keys and coercing everything to trimmed strings. */
+function parseFromGlobal(): LaunchParams {
+  if (typeof window === 'undefined' || !window.ECOFACTOR_MARKET) return {}
+  const src = window.ECOFACTOR_MARKET
+  const out: LaunchParams = {}
+  for (const [key, names] of Object.entries(ALIASES) as [keyof LaunchParams, string[]][]) {
+    for (const n of names) {
+      const v = src[n]
+      if (v != null && v !== '') {
+        out[key] = String(v).trim()
+        break
+      }
+    }
+  }
+  return out
+}
+
 let cached: LaunchParams | null = null
 
-/** Read launch params: first from the current URL, then merged with any
- *  previously-stored set (so a deep refresh that lost the query string
- *  still keeps identity). URL always wins over storage. */
+/** Resolve launch params. Priority (highest first):
+ *  window global → URL query → previously stored (sessionStorage). */
 export function getLaunchParams(): LaunchParams {
   if (cached) return cached
   let stored: LaunchParams = {}
@@ -73,7 +111,8 @@ export function getLaunchParams(): LaunchParams {
     /* sessionStorage disabled */
   }
   const fromUrl = typeof window !== 'undefined' ? parseFromSearch(window.location.search) : {}
-  const merged = { ...stored, ...fromUrl }
+  const fromGlobal = parseFromGlobal()
+  const merged = { ...stored, ...fromUrl, ...fromGlobal }
   try {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
   } catch {
