@@ -5,6 +5,7 @@ import {
   getDcConnectorImageUrl,
   getDcTerminalImageUrl,
 } from '../lib/dcImagePositioning';
+import { RecolorCanvas, recolorSourceKey } from './RecolorCanvas';
 import './ConfiguratorPreview.css';
 
 interface DcConfiguratorPreviewProps {
@@ -14,9 +15,15 @@ interface DcConfiguratorPreviewProps {
 export const DcConfiguratorPreview: React.FC<DcConfiguratorPreviewProps> = ({ config }) => {
   if (!config.stationType) return null;
 
+  const isCustom = config.color === 'custom';
   const bodyUrl = getDcBodyImageUrl(
     config.stationType,
     config.color,
+    config.features.cableManagement
+  );
+  const recolorSrc = getDcBodyImageUrl(
+    config.stationType,
+    recolorSourceKey(config.customColor),
     config.features.cableManagement
   );
   const terminalUrl = config.features.terminal
@@ -26,8 +33,12 @@ export const DcConfiguratorPreview: React.FC<DcConfiguratorPreviewProps> = ({ co
   return (
     <div className={`configurator-preview configurator-preview--dc configurator-preview--${config.stationType}`}>
       <div className="preview-container">
-        {bodyUrl && (
-          <img src={bodyUrl} alt="Station body" className="preview-body" />
+        {isCustom && recolorSrc ? (
+          <RecolorCanvas src={recolorSrc} hex={config.customColor} className="preview-body" />
+        ) : (
+          bodyUrl && (
+            <img src={bodyUrl} alt="Station body" className="preview-body" />
+          )
         )}
 
         {terminalUrl && (

@@ -13,6 +13,19 @@ import nvTrioBodyBlack from '../../../assets/configurator/nv-trio/body_black.png
 import nvTrioBodyGrey from '../../../assets/configurator/nv-trio/body_grey.png';
 import nvTrioBodyWhite from '../../../assets/configurator/nv-trio/body_white.png';
 
+// Corpus masks (production silhouettes, mix-blend-mode stripped) — define the
+// recolourable body region; cutouts let the black base layer (screen, LED
+// stripe, logo, top light) show through unchanged.
+import maskWall from '../../../assets/configurator/masks/mask-wall-1-1.svg';
+import maskTotemDuet from '../../../assets/configurator/masks/mask-totem-1-1.svg';
+import maskTotemTrio from '../../../assets/configurator/masks/mask-totem-trio-1.svg';
+
+const MASK_IMAGES: Record<StationType, string> = {
+  'aw': maskWall,
+  'nv-duet': maskTotemDuet,
+  'nv-trio': maskTotemTrio,
+};
+
 const CDN = 'https://ecofactortech.com/wp-content/uploads/2026/04';
 
 // Body images map (local)
@@ -153,4 +166,8 @@ export function getBodyImagePath(stationType: StationType, color: string): strin
 
 export function getStandImagePath(stationType: StationType): string {
   return stationType === 'aw' ? awStand : '';
+}
+
+export function getMaskImagePath(stationType: StationType): string {
+  return MASK_IMAGES[stationType] ?? '';
 }
