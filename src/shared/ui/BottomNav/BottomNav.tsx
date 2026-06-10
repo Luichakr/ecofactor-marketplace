@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { ROUTES } from '../../config/routes'
 import { useCartTotals } from '../../../features/cart/model/cartStore'
+import { closeMarketplace } from '../../lib/webview/webviewBridge'
 import './BottomNav.css'
 
 /**
@@ -23,17 +24,24 @@ export function BottomNav() {
   return (
     <nav className="bottom-nav">
       <div className="bottom-nav__pill">
-        <NavLink
-          to={ROUTES.MENU}
-          className={({ isActive }) => `bottom-nav__item ${isActive ? 'bottom-nav__item--active' : ''}`}
+        <button
+          type="button"
+          className="bottom-nav__item bottom-nav__item--button"
+          onClick={closeMarketplace}
+          aria-label="Повернутись до зарядки"
         >
           <span className="bottom-nav__icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M4 7H20M4 12H20M4 17H14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+              {/* EV charging station: body + screen + bolt + cable arm */}
+              <path d="M5 21V5a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v16" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round" />
+              <path d="M5 21h9" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+              <rect x="7.3" y="5.4" width="4.4" height="3.3" rx="0.6" stroke="currentColor" strokeWidth="1.1" />
+              <path d="M10.1 11l-2.2 3.9h2.1l-.6 2.9 2.9-4.1h-2l1-2.6z" fill="currentColor" />
+              <path d="M14 9h1.7c.7 0 1.3.6 1.3 1.3V16a1.5 1.5 0 0 0 3 0v-4.6l-1.3-1.4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
-          <span className="bottom-nav__label">Меню</span>
-        </NavLink>
+          <span className="bottom-nav__label">Зарядка</span>
+        </button>
 
         <NavLink
           to={ROUTES.MARKETPLACE}

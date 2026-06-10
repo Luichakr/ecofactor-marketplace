@@ -55,6 +55,17 @@
   transition: color var(--transition-fast);
 }
 
+/* The "Зарядка" return-to-app item is a <button>, not a link — reset native
+   button styling and match the flex-column layout of the nav links. */
+button.bottom-nav__item--button {
+  flex: 1;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
 .bottom-nav__item--active {
   color: #10B452;
 }
