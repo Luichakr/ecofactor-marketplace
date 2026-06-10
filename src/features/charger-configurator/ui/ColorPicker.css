@@ -1,0 +1,125 @@
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+/* ── Saturation / value square ─────────────────────────── */
+.color-picker__sv {
+  position: relative;
+  width: 100%;
+  height: 150px;
+  border-radius: var(--radius-sm);
+  cursor: crosshair;
+  touch-action: none;
+  overflow: hidden;
+}
+
+.color-picker__sv-white,
+.color-picker__sv-black {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.color-picker__sv-white {
+  background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
+}
+
+.color-picker__sv-black {
+  background: linear-gradient(to top, #000, rgba(0, 0, 0, 0));
+}
+
+.color-picker__sv-handle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* ── Hue slider ────────────────────────────────────────── */
+.color-picker__hue {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  touch-action: none;
+  background: linear-gradient(
+    to right,
+    #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%
+  );
+}
+
+.color-picker__hue-handle {
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* ── Footer: swatch + hex + eyedropper ─────────────────── */
+.color-picker__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.color-picker__swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.color-picker__hex {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  color: var(--color-text);
+  background: var(--color-bg);
+  letter-spacing: 0.5px;
+}
+
+.color-picker__hex:focus {
+  outline: none;
+  border-color: var(--color-success);
+}
+
+.color-picker__eyedropper {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  cursor: pointer;
+  font-size: 18px;
+  min-height: 0;
+  transition: border-color var(--transition-fast);
+}
+
+.color-picker__eyedropper:active { opacity: 0.7; }

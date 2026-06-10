@@ -1,0 +1,94 @@
+/*
+ * Charger configurator — mobile WebView layout. Stacked vertically:
+ *   horizontal step indicator → station preview → step panel.
+ * Inherits the project's tokens for spacing, radius, colors so it sits
+ * inside ScreenContainer like every other wizard (autoservice,
+ * custom-station, checkout).
+ */
+
+.charger-configurator {
+  display: flex;
+  flex-direction: column;
+  /* Fill ScreenContainer exactly — prevents ScreenContainer from scrolling.
+     Only .cc-panel scrolls internally. */
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+/* ──── Horizontal step indicator ───────────────────────────────── */
+.cc-steps {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.cc-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-family);
+  min-height: 0;
+  flex-shrink: 0;
+}
+
+.cc-step[disabled] { cursor: default; }
+
+.cc-step-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--color-text-disabled);
+  background-color: var(--color-bg);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+}
+
+.cc-step--active .cc-step-circle,
+.cc-step--done .cc-step-circle {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: #fff;
+}
+
+.cc-step-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-text-disabled);
+  margin: 14px 2px 0;
+}
+
+.cc-step-line--done {
+  background-color: var(--color-success);
+}
+
+/* ──── Station preview block ───────────────────────────────────── */
+.cc-preview {
+  padding: var(--space-2) var(--space-4) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ──── Step panel — passes height to child step; step itself scrolls ── */
+.cc-panel {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;       /* step component handles its own scroll */
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--space-4);
+}

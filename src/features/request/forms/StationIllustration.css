@@ -1,0 +1,29 @@
+/*
+ * Layered station illustration — base body + connector overlays stacked
+ * inside a fixed-aspect container. Mirrors the ecofactortech.com live
+ * configurator (each picked connector adds another absolute-positioned
+ * PNG above the previous, all sharing the same canvas).
+ */
+
+.station-illust {
+  position: relative;
+  width: 100%;
+  /* The source PNGs are roughly 3:5 portrait — keep the container in the
+     same ratio so layers register exactly. */
+  aspect-ratio: 3 / 5;
+  max-height: 50vh;
+  /* Centered + capped width: looks proportional next to the wizard panel
+     without dominating the screen on tall mobile viewports. */
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.station-illust__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}

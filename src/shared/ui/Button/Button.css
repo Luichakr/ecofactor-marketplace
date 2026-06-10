@@ -47,11 +47,12 @@
   font-size: 13px;
 }
 
-/* Variants — Zara: solid black/white or outlined */
+/* Variants — primary uses the brand green (Figma design system), the rest
+   stay in the project's monochrome surface palette. */
 .btn--primary {
-  background-color: var(--color-text);
-  color: var(--color-bg);
-  border: 1px solid var(--color-text);
+  background-color: var(--color-success);
+  color: #ffffff;
+  border: 1px solid var(--color-success);
 }
 
 .btn--secondary {

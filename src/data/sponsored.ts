@@ -1,4 +1,4 @@
-import { REQUEST_PATHS } from '../shared/config/routes'
+import { REQUEST_PATHS, ROUTES } from '../shared/config/routes'
 
 export type SponsoredCard = {
   id: string
@@ -25,7 +25,7 @@ export const SPONSORED_CARDS: SponsoredCard[] = [
     id: 'sp-custom-station',
     title: 'НЕ ЗНАЙШЛИ ПОТРІБНУ СТАНЦІЮ?',
     subtitle: 'Зберемо під вас за 5 хвилин — наш конфігуратор підбере конектори, потужність і опції.',
-    href: REQUEST_PATHS.CUSTOM_STATION,
+    href: ROUTES.CHARGER_CONFIGURATOR,
     partner: 'ecofactor.ua',
   },
   {

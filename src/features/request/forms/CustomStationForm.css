@@ -261,3 +261,95 @@
   margin: 0;
   max-width: 320px;
 }
+
+/* Live power-budget counter on step 3 — reads "Used X of Y kW" with the
+   remaining capacity on the right. Mirrors the ecofactortech.com live
+   AC/DC configurator. */
+.custom-station__budget {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-body2);
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+/* ──── Horizontal step indicator (overrides the legacy vertical list) ─
+   Used by the configurator wizard so six steps fit across the screen
+   width instead of stacking down the page. Same visual pattern as the
+   autoservice wizard so the two configurators read as one family. */
+.custom-station__steps--row {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 4px;
+  padding-bottom: var(--space-4);
+}
+
+.custom-station__steps--row .custom-station__step {
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.custom-station__steps--row .custom-station__step-label {
+  display: none;
+}
+
+.custom-station__step-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-text-disabled);
+  margin: 12px 2px 0;
+}
+
+.custom-station__step-line--done {
+  background-color: var(--color-text);
+}
+
+/* ──── Connector row cleanup ────────────────────────────────────────
+   Tighten the +/− stepper into a single pill at the right edge and
+   pull the qty value into the middle of that pill so the row reads
+   "label … [− 0 +]". Removes the awkward full-row stretch. */
+.custom-station__option > span[style*="display: inline-flex"] {
+  margin-left: auto;
+  border-radius: 999px;
+  background-color: var(--color-surface-elevated);
+  padding: 2px;
+  gap: 0 !important;
+}
+
+.custom-station__option > span[style*="display: inline-flex"] > button {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  background-color: transparent !important;
+  color: var(--color-text) !important;
+}
+
+.custom-station__option > span[style*="display: inline-flex"] > button:not([disabled]):hover {
+  background-color: var(--color-bg) !important;
+}
+
+.custom-station__option > span[style*="display: inline-flex"] > span {
+  min-width: 32px !important;
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+/* When the row has qty > 0, the row gets the --active modifier; turn
+   the "+" into the brand pill instead of the awkward solid black box. */
+.custom-station__option--active > span[style*="display: inline-flex"] {
+  background-color: var(--color-bg);
+}
+
+.custom-station__option--active > span[style*="display: inline-flex"] > button:last-child {
+  background-color: var(--color-success) !important;
+  color: #fff !important;
+}

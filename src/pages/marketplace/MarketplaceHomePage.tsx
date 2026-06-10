@@ -81,7 +81,7 @@ export function MarketplaceHomePage() {
     },
     {
       label: 'Конфігуратор',
-      href: REQUEST_PATHS.CUSTOM_STATION,
+      href: ROUTES.CHARGER_CONFIGURATOR,
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <rect x="4" y="4" width="7" height="7" stroke="currentColor" strokeWidth="1.5" />

@@ -13,7 +13,6 @@ import { CallbackForm } from '../features/request/forms/CallbackForm'
 import { InstallationForm } from '../features/request/forms/InstallationForm'
 import { LocationForm } from '../features/request/forms/LocationForm'
 import { WarrantyForm } from '../features/request/forms/WarrantyForm'
-import { CustomStationForm } from '../features/request/forms/CustomStationForm'
 import { AutoserviceForm } from '../features/request/forms/AutoserviceForm'
 import { CartPage } from '../pages/cart/CartPage'
 import { CheckoutPage } from '../pages/checkout/CheckoutPage'
@@ -30,6 +29,8 @@ import { CardsPage } from '../pages/profile/CardsPage'
 import { SettingsPage } from '../pages/profile/SettingsPage'
 import { ReturnFormPage } from '../pages/orders/ReturnFormPage'
 import { WishlistSharedPage } from '../pages/favorites/WishlistSharedPage'
+import { ChargerConfiguratorPage } from '../pages/charger-configurator/ChargerConfiguratorPage'
+import { DcConfiguratorPage } from '../pages/charger-configurator/DcConfiguratorPage'
 
 function PageViewTracker() {
   const { pathname, search } = useLocation()
@@ -49,6 +50,8 @@ export function AppRouter() {
 
       {/* Layout with bottom nav */}
       <Route element={<AppLayout />}>
+        <Route path={ROUTES.CHARGER_CONFIGURATOR} element={<ChargerConfiguratorPage />} />
+        <Route path={ROUTES.CHARGER_CONFIGURATOR_DC} element={<DcConfiguratorPage />} />
         <Route path={ROUTES.MARKETPLACE} element={<MarketplaceHomePage />} />
         <Route path={ROUTES.CATALOG} element={<CatalogPage />} />
         <Route path={ROUTES.CATALOG_CATEGORY} element={<CatalogPage />} />
@@ -61,7 +64,13 @@ export function AppRouter() {
         <Route path={`${ROUTES.REQUEST}/warranty`} element={<WarrantyForm />} />
         <Route path={`${ROUTES.REQUEST}/quote`} element={<QuoteRequestPage />} />
         <Route path={`${ROUTES.REQUEST}/quote/:productId`} element={<QuoteRequestPage />} />
-        <Route path={`${ROUTES.REQUEST}/custom-station`} element={<CustomStationForm />} />
+        {/* Legacy custom-station URL — superseded by the new
+            /charger-configurator. Redirect so any old deep links still
+            land on the canonical configurator. */}
+        <Route
+          path={`${ROUTES.REQUEST}/custom-station`}
+          element={<Navigate to={ROUTES.CHARGER_CONFIGURATOR} replace />}
+        />
         <Route path={`${ROUTES.REQUEST}/autoservice`} element={<AutoserviceForm />} />
         <Route path={ROUTES.SEARCH} element={<SearchPage />} />
         <Route path={ROUTES.FILTERS} element={<FiltersPage />} />

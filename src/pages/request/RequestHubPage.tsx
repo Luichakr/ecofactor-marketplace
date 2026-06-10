@@ -31,7 +31,7 @@ const REQUEST_TYPES: RequestType[] = [
     num: '06',
     title: 'Кастомна станція',
     description: '5 кроків — конфігуруйте станцію під свій обʼєкт',
-    to: '/request/custom-station',
+    to: '/charger-configurator',
   },
   {
     id: 'autoservice',

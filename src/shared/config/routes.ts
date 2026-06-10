@@ -13,6 +13,8 @@ export const ROUTES = {
   CART: '/cart',
   CHECKOUT: '/checkout',
   ARKANOID: '/arkanoid',
+  CHARGER_CONFIGURATOR: '/charger-configurator',
+  CHARGER_CONFIGURATOR_DC: '/charger-configurator/dc',
   AUTO: '/auto',
   AUTO_CAR: '/auto/:carId',
   ORDERS: '/orders',
