@@ -1,7 +1,6 @@
 import { useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { mockUser } from '../../data/mockUser'
-import { Header } from '../../shared/ui/Header/Header'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { ROUTES, orderDetailPath } from '../../shared/config/routes'
 import {
@@ -13,6 +12,7 @@ import { useAddresses, useCards } from '../../features/profile/model/profileStor
 import { useFavorites } from '../../features/favorites/model/favoritesStore'
 import { openSupport } from '../../features/support/ui/SupportLauncher/SupportLauncher'
 import { getLaunchParams } from '../../shared/lib/webview/launchParams'
+import { Icon } from '../../shared/ui/Icon/Icon'
 import './ProfilePage.css'
 
 // Identity from the host app (window.ECOFACTOR_MARKET / URL). Falls back to
@@ -41,55 +41,23 @@ function formatMoney(value: number, currency: string): string {
 function StatusDot({ status }: { status: Order['status'] }) {
   const color =
     status === 'delivered'
-      ? '#1f9d55'
+      ? 'var(--color-success)'
       : status === 'cancelled' || status === 'returned'
-        ? '#b00020'
+        ? 'var(--color-error)'
         : status === 'shipped'
-          ? '#1f7ac9'
-          : '#7a7a7a'
+          ? 'var(--color-info)'
+          : 'var(--color-text-muted)'
   return <span className="profile-page__dot" style={{ background: color }} aria-hidden="true" />
 }
 
 const ICONS = {
-  orders: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d="M3 8L12 3L21 8V17L12 22L3 17V8Z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
-      <path d="M3 8L12 13L21 8M12 13V22" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
-    </svg>
-  ),
-  favorites: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d="M6 6h12v12L12 14.5L6 18Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-    </svg>
-  ),
-  address: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d="M12 22S5 14 5 9C5 5.7 8 3 12 3S19 5.7 19 9C19 14 12 22 12 22Z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
-      <circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="1" />
-    </svg>
-  ),
-  card: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <rect x="3" y="6" width="18" height="12" stroke="currentColor" strokeWidth="1" />
-      <path d="M3 10H21M7 15H10" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
-    </svg>
-  ),
-  settings: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1" />
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
-    </svg>
-  ),
-  support: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d="M4 5H20V17H13L8 21V17H4V5Z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
-    </svg>
-  ),
-  chevron: (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-      <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ),
+  orders: <Icon name="package_2" size={22} />,
+  favorites: <Icon name="favorite" size={22} />,
+  address: <Icon name="location_on" size={22} />,
+  card: <Icon name="credit_card" size={22} />,
+  settings: <Icon name="settings" size={22} />,
+  support: <Icon name="support_agent" size={22} />,
+  chevron: <Icon name="chevron_right" size={20} />,
 }
 
 const AVATAR_KEY = 'mp:avatar'
@@ -152,7 +120,6 @@ export function ProfilePage() {
 
   return (
     <>
-      <Header title="АККАУНТ" />
       <ScreenContainer withTopInset={false}>
         {/* User card */}
         <div className="profile-page__user">
@@ -193,9 +160,7 @@ export function ProfilePage() {
             onClick={openSupport}
             aria-label="Відкрити чат з підтримкою"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M4 5H20V17H13L8 21V17H4V5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
-            </svg>
+            <Icon name="chat_bubble" size={22} />
           </button>
         </div>
 
@@ -203,14 +168,14 @@ export function ProfilePage() {
             Each tile navigates into the matching list (orders with status
             filter, favorites grid). */}
         <div className="profile-page__stats">
-          <Stat label="ЗАМОВЛЕНЬ" value={orders.length} onClick={() => navigate(ROUTES.ORDERS)} />
-          <Stat label="АКТИВНІ" value={activeOrders.length} highlight onClick={() => navigate(`${ROUTES.ORDERS}?status=active`)} />
-          <Stat label="ЗАКЛАДКИ" value={favorites.length} onClick={() => navigate(ROUTES.FAVORITES)} />
+          <Stat label="Замовлень" value={orders.length} onClick={() => navigate(ROUTES.ORDERS)} />
+          <Stat label="Активні" value={activeOrders.length} onClick={() => navigate(`${ROUTES.ORDERS}?status=active`)} />
+          <Stat label="Закладки" value={favorites.length} onClick={() => navigate(ROUTES.FAVORITES)} />
         </div>
 
         {/* Active deliveries call-out */}
         {activeOrders.length > 0 && (
-          <ProfileSection title="В ДОРОЗІ" linkTo={ROUTES.ORDERS}>
+          <ProfileSection title="В дорозі" linkTo={ROUTES.ORDERS}>
             {activeOrders.slice(0, 2).map((o) => (
               <OrderPreview key={o.id} order={o} />
             ))}
@@ -219,7 +184,7 @@ export function ProfilePage() {
 
         {/* Recent orders */}
         {recent.length > 0 && (
-          <ProfileSection title="ОСТАННІ ЗАМОВЛЕННЯ" linkLabel="ВСІ" linkTo={ROUTES.ORDERS}>
+          <ProfileSection title="Останні замовлення" linkLabel="Всі" linkTo={ROUTES.ORDERS}>
             {recent.map((o) => (
               <OrderRow key={o.id} order={o} />
             ))}
@@ -228,23 +193,33 @@ export function ProfilePage() {
 
         {/* Menu — grouped into labeled sections (Yandex-style) so a long
             list of rows reads as 3 small scannable groups. */}
-        <div className="profile-page__menu-group-label">ПОКУПКИ</div>
+        <div className="profile-page__menu-group-label">Покупки</div>
         <div className="profile-page__menu">
-          <MenuRow to={ROUTES.ORDERS} icon={ICONS.orders} label="МОЇ ЗАМОВЛЕННЯ" badge={String(orders.length)} />
-          <MenuRow to={ROUTES.FAVORITES} icon={ICONS.favorites} label="ЗАКЛАДКИ" badge={String(favorites.length)} />
+          <MenuRow to={ROUTES.ORDERS} icon={ICONS.orders} label="Мої замовлення" badge={String(orders.length)} />
+          <MenuRow to={ROUTES.FAVORITES} icon={ICONS.favorites} label="Закладки" badge={String(favorites.length)} />
         </div>
 
-        <div className="profile-page__menu-group-label">АККАУНТ</div>
+        <div className="profile-page__menu-group-label">Аккаунт</div>
         <div className="profile-page__menu">
-          <MenuRow to={ROUTES.ADDRESSES} icon={ICONS.address} label="АДРЕСИ ДОСТАВКИ" sub={addresses[0] ? `${addresses[0].city} · ${addresses[0].branch ?? ''}` : 'Не задано'} />
-          <MenuRow to={ROUTES.PAYMENT_METHODS} icon={ICONS.card} label="ПЛАТІЖНІ КАРТКИ" sub={cards[0] ? `•••• ${cards[0].last4}` : 'Не додано'} />
-          <MenuRow to={ROUTES.SETTINGS} icon={ICONS.settings} label="НАЛАШТУВАННЯ" />
+          <MenuRow to={ROUTES.ADDRESSES} icon={ICONS.address} label="Адреси доставки" sub={addresses[0] ? `${addresses[0].city} · ${addresses[0].branch ?? ''}` : 'Не задано'} />
+          <MenuRow to={ROUTES.PAYMENT_METHODS} icon={ICONS.card} label="Платіжні картки" sub={cards[0] ? `•••• ${cards[0].last4}` : 'Не додано'} />
+          <MenuRow to={ROUTES.SETTINGS} icon={ICONS.settings} label="Налаштування" />
         </div>
 
-        <div className="profile-page__menu-group-label">ПІДТРИМКА</div>
+        <div className="profile-page__menu-group-label">Підтримка</div>
         <div className="profile-page__menu">
-          <MenuRow to={`${ROUTES.REQUEST}/callback`} icon={ICONS.support} label="ПІДТРИМКА" />
+          <MenuRow to={`${ROUTES.REQUEST}/callback`} icon={ICONS.support} label="Підтримка" />
         </div>
+
+        {/* Legal footer — moved here from the (unused) home footer. */}
+        <footer className="profile-page__legal">
+          <p className="profile-page__legal-links">
+            <a href="#privacy" onClick={(e) => e.preventDefault()}>Політика конфіденційності</a>
+            <span aria-hidden="true">·</span>
+            <a href="#terms" onClick={(e) => e.preventDefault()}>Умови використання</a>
+          </p>
+          <p className="profile-page__legal-small">Управління конфіденційністю</p>
+        </footer>
       </ScreenContainer>
     </>
   )
@@ -281,7 +256,7 @@ function Stat({
 function ProfileSection({
   title,
   linkTo,
-  linkLabel = 'ВСІ',
+  linkLabel = 'Всі',
   children,
 }: {
   title: string
