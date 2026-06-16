@@ -13,11 +13,43 @@
   right: var(--space-3);
   bottom: calc(var(--safe-area-bottom) + var(--space-3));
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
+  gap: var(--space-3);
   z-index: 100;
   pointer-events: none; /* let the page below catch taps in the empty gap */
 }
+
+/* Зарядка — its own frosted segment beside the pill (same icon+label
+   format as the tabs, brand-green to mark the charging hand-off — like
+   Monobank's separated "Маркет" tab, not a solid button). */
+.bottom-nav__charge {
+  pointer-events: auto;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 62px;
+  min-height: 56px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+[data-theme="dark"] .bottom-nav__charge {
+  background-color: rgba(28, 28, 30, 0.62);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.bottom-nav__charge:active { opacity: 0.6; }
 
 .bottom-nav__pill {
   pointer-events: auto;
@@ -26,7 +58,8 @@
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.45);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -55,19 +88,8 @@
   transition: color var(--transition-fast);
 }
 
-/* The "Зарядка" return-to-app item is a <button>, not a link — reset native
-   button styling and match the flex-column layout of the nav links. */
-button.bottom-nav__item--button {
-  flex: 1;
-  flex-direction: column;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: var(--font-family);
-}
-
 .bottom-nav__item--active {
-  color: #10B452;
+  color: var(--color-accent);
 }
 
 .bottom-nav__item:active {
@@ -89,7 +111,6 @@ button.bottom-nav__item--button {
   font-weight: var(--font-weight-medium);
   letter-spacing: 0.2px;
   text-align: center;
-  /* App DS — no uppercase on tab labels. */
   text-transform: none;
 }
 
@@ -105,7 +126,7 @@ button.bottom-nav__item--button {
   min-width: 16px;
   height: 16px;
   border-radius: 8px;
-  background-color: #10B452;
+  background-color: var(--color-accent);
   color: #fff;
   font-size: 10px;
   font-weight: var(--font-weight-bold);
