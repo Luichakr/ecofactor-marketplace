@@ -17,7 +17,7 @@
   font-size: 28px;
   line-height: 32px;
   letter-spacing: 0.03em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   margin: 0;
 }
@@ -26,7 +26,7 @@
   margin: 0;
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   font-weight: var(--font-weight-medium);
 }
@@ -84,6 +84,7 @@
   aspect-ratio: 3 / 4;
   background-color: var(--color-surface-elevated);
   overflow: hidden;
+  border-radius: var(--radius-md);
 }
 
 .season-showcase__image img {
@@ -104,7 +105,7 @@
   margin: 0;
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   font-weight: var(--font-weight-medium);
 }
@@ -130,4 +131,5 @@
   height: 12px;
   background-color: var(--color-surface-elevated);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
 }

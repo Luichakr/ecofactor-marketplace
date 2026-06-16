@@ -7,6 +7,7 @@
   padding: var(--space-4);
   background: var(--color-bg);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   cursor: pointer;
   text-align: left;
   font-family: var(--font-family);
@@ -18,7 +19,7 @@
 
 .delivery-card--selected {
   border-width: 2px;
-  border-color: var(--color-text);
+  border-color: var(--color-accent);
   padding: calc(var(--space-4) - 1px);
 }
 
@@ -32,7 +33,7 @@
 .delivery-card__title {
   font-size: var(--font-size-body1);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
 }
@@ -41,7 +42,7 @@
   font-size: var(--font-size-body2);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   white-space: nowrap;
 }

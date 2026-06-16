@@ -87,7 +87,7 @@
   line-height: 44px;
   font-weight: var(--font-weight-regular);
   letter-spacing: 0.03em;
-  text-transform: uppercase;
+  text-transform: none;
   color: #ffffff;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
   margin: 0;

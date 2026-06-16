@@ -69,7 +69,7 @@
 }
 
 .sponsored-carousel__dot--active {
-  background-color: var(--color-text);
+  background-color: var(--color-accent);
   width: 16px;
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
 }

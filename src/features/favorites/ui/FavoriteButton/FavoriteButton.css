@@ -4,7 +4,10 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  background-color: rgba(255, 255, 255, 0.88);
+  /* Theme-aware translucent surface so the circle inverts in dark mode
+     (light → frosted white, dark → frosted Gray-20) instead of staying a
+     fixed white chip with a white-on-white invisible heart. */
+  background-color: var(--color-overlay);
   border: 1px solid var(--color-border);
   color: var(--color-text);
   cursor: pointer;

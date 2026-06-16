@@ -43,7 +43,7 @@
   margin: 14px 2px 0;
 }
 
-.autoservice__step-line--done { background-color: var(--color-text); }
+.autoservice__step-line--done { background-color: var(--color-accent); }
 
 .autoservice__step-circle {
   display: inline-flex;
@@ -61,8 +61,8 @@
 
 .autoservice__step--active .autoservice__step-circle,
 .autoservice__step--done .autoservice__step-circle {
-  background-color: var(--color-text);
-  border-color: var(--color-text);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
   color: var(--color-bg);
 }
 
@@ -142,6 +142,7 @@
   flex-direction: column;
   background-color: var(--color-surface-elevated);
   border: 1px solid transparent;
+  border-radius: var(--radius-md);
   padding: 0;
   cursor: pointer;
   min-height: 0;
@@ -151,7 +152,7 @@
   color: var(--color-text);
 }
 
-.autoservice__direction--open { border-color: var(--color-text); }
+.autoservice__direction--open { border-color: var(--color-accent); }
 
 .autoservice__direction-head {
   display: flex;
@@ -216,13 +217,14 @@
   height: 18px;
   flex-shrink: 0;
   border: 1px solid var(--color-text-muted);
+  border-radius: var(--radius-xs);
   background-color: var(--color-bg);
   color: var(--color-bg);
 }
 
 .autoservice__service--active .autoservice__service-checkbox {
-  background-color: var(--color-text);
-  border-color: var(--color-text);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
   color: var(--color-bg);
 }
 
@@ -249,6 +251,7 @@
   padding: var(--space-3) 4px;
   background-color: var(--color-surface-elevated);
   border: 1px solid transparent;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-family: var(--font-family);
   color: var(--color-text);
@@ -256,8 +259,8 @@
 }
 
 .autoservice__date--active {
-  background-color: var(--color-text);
-  border-color: var(--color-text);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
   color: var(--color-bg);
 }
 
@@ -265,7 +268,7 @@
 .autoservice__date-weekday {
   font-size: 10px;
   letter-spacing: 0.4px;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }
 .autoservice__date--active .autoservice__date-weekday { color: var(--color-bg); }
@@ -286,6 +289,7 @@
   padding: var(--space-3) 0;
   background-color: var(--color-surface-elevated);
   border: 1px solid transparent;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-size: var(--font-size-body2);
   font-weight: var(--font-weight-medium);
@@ -295,8 +299,8 @@
 }
 
 .autoservice__slot--active {
-  background-color: var(--color-text);
-  border-color: var(--color-text);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
   color: var(--color-bg);
 }
 
@@ -314,6 +318,7 @@
   gap: var(--space-2);
   padding: var(--space-4);
   background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-md);
 }
 
 .autoservice__summary-row {
@@ -324,7 +329,7 @@
 
 .autoservice__summary-label {
   color: var(--color-text-muted);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.4px;
   font-size: 11px;
   flex-shrink: 0;
@@ -343,6 +348,7 @@
   gap: 4px;
   padding: var(--space-3) var(--space-4);
   background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-md);
 }
 
 .autoservice__services-item {
@@ -381,9 +387,10 @@
   justify-content: center;
   width: 52px;
   height: 52px;
-  background-color: var(--color-bg);
+  background-color: var(--color-surface);
   color: var(--color-text);
-  border: 1px solid var(--color-text);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
   cursor: pointer;
   flex-shrink: 0;
   min-height: 0;
@@ -427,6 +434,7 @@
   gap: var(--space-3);
   padding: var(--space-3);
   background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-md);
 }
 
 .autoservice__cal-head {
@@ -467,7 +475,7 @@
 .autoservice__cal-weekday {
   font-size: 10px;
   letter-spacing: 0.4px;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
   text-align: center;
   padding: 4px 0;
@@ -488,6 +496,7 @@
   aspect-ratio: 1;
   background: none;
   border: 1px solid transparent;
+  border-radius: var(--radius-xs);
   cursor: pointer;
   font-size: var(--font-size-body2);
   font-family: var(--font-family);
@@ -504,8 +513,8 @@
 }
 
 .autoservice__cal-cell--active {
-  background-color: var(--color-text);
-  border-color: var(--color-text);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
   color: var(--color-bg);
   font-weight: var(--font-weight-medium);
 }

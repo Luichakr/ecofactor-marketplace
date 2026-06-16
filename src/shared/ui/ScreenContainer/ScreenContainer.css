@@ -12,3 +12,11 @@
 .screen-container--with-nav {
   padding-bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
 }
+
+/* Breathing room below the green header's rounded lip (the lip itself is
+   drawn by .header::after). No positioning here so absolutely-positioned
+   sticky CTAs keep anchoring to the app shell, not this scroll container. */
+.header + .screen-container {
+  padding-top: var(--space-2);
+  background-color: var(--color-bg);
+}

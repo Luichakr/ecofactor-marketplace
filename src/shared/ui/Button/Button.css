@@ -4,28 +4,25 @@
   justify-content: center;
   gap: var(--space-2);
   font-family: var(--font-family);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-button);
   line-height: var(--line-height-button);
   letter-spacing: var(--letter-spacing-button);
-  text-transform: uppercase;
-  /* Pill — matches the partner app reference. 999px clips to half-height
-     for every size (sm/md/lg) so all buttons read as the same shape family. */
-  border-radius: 999px;
-  border: none;
+  /* App DS buttons are sentence/Title case — no uppercase transform. */
+  text-transform: none;
+  /* Pill — every size clips to half-height so all buttons share one shape. */
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
   cursor: pointer;
-  transition: opacity var(--transition-fast), background-color var(--transition-fast);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast), opacity var(--transition-fast);
   white-space: nowrap;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-.btn:active {
-  opacity: 0.7;
-}
-
 .btn:disabled {
-  opacity: 0.3;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
@@ -33,7 +30,7 @@
 .btn--sm {
   padding: var(--space-2) var(--space-4);
   min-height: 36px;
-  font-size: 11px;
+  font-size: var(--font-size-button);
 }
 
 .btn--md {
@@ -44,32 +41,61 @@
 .btn--lg {
   padding: var(--space-4) var(--space-6);
   min-height: 52px;
-  font-size: 13px;
+  font-size: var(--font-size-subtitle1);
 }
 
-/* Variants — primary uses the brand green (Figma design system), the rest
-   stay in the project's monochrome surface palette. */
+/* ── Variants — ECOFACTOR app DS ─────────────────────────────
+   primary   : solid green fill, white label (container-action)
+   secondary : white surface, dark-green outline + label
+   outline   : transparent, green outline + label
+   ghost     : transparent, green label only                   */
 .btn--primary {
-  background-color: var(--color-success);
-  color: #ffffff;
-  border: 1px solid var(--color-success);
+  background-color: var(--color-accent);
+  color: var(--text-reversed);
+  border-color: var(--color-accent);
+}
+
+.btn--primary:not(:disabled):active {
+  background-color: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
+}
+
+/* DS disabled-button fill (light #87D9A8 / dark #4DBF7B) — full opacity. */
+.btn--primary:disabled {
+  background-color: var(--color-accent-disabled);
+  border-color: var(--color-accent-disabled);
+  color: var(--text-reversed);
+  opacity: 1;
 }
 
 .btn--secondary {
-  background-color: var(--color-surface-elevated);
-  color: var(--color-text);
-  border: 1px solid var(--color-surface-elevated);
+  background-color: var(--color-surface);
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
 }
 
-.btn--ghost {
-  background-color: transparent;
-  color: var(--color-text);
+.btn--secondary:not(:disabled):active {
+  background-color: var(--color-accent-soft);
 }
 
 .btn--outline {
   background-color: transparent;
-  color: var(--color-text);
-  border: 1px solid var(--color-text);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.btn--outline:not(:disabled):active {
+  background-color: var(--color-accent-soft);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-accent);
+  border-color: transparent;
+}
+
+.btn--ghost:not(:disabled):active {
+  background-color: var(--color-accent-soft);
 }
 
 /* Full width */

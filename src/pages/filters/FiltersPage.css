@@ -1,96 +1,81 @@
 .filters-page {
-  /* keep horizontal flush so section dividers reach the shell edges;
-     ScreenContainer.with-nav already adds bottom padding so the CTA
-     isn't hidden under the floating bottom nav. */
   padding-left: 0;
   padding-right: 0;
 }
 
-/* ── Numbered section row ─────────────────────────────────────
-   Two-column split: left column holds |NN| + title (uppercase,
-   small caps), right column stacks the options vertically. */
+/* ── Section — bold heading + wrapping chip options (app DS style) ── */
 .filter-section {
-  display: grid;
-  grid-template-columns: minmax(110px, 30%) 1fr;
-  column-gap: var(--space-3);
-  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-4);
   border-bottom: 1px solid var(--color-border);
 }
 
-.filter-section__head {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-self: start;
-}
-
-.filter-section__num {
-  font-size: var(--font-size-caption);
-  letter-spacing: 0.3px;
-  color: var(--color-text);
-}
-
 .filter-section__title {
-  font-size: var(--font-size-caption);
-  letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  margin: 0;
+  font-size: var(--font-size-subtitle1);
+  line-height: var(--line-height-subtitle1);
+  font-weight: var(--font-weight-bold);
   color: var(--color-text);
-  font-weight: var(--font-weight-regular);
 }
 
 .filter-section__body {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  /* Grid items default to min-width: auto; without this override the
-     range inputs (number type, intrinsic width) push the column wider
-     than its 1fr track and overflow the shell. */
+  flex-wrap: wrap;
+  gap: var(--space-2);
   min-width: 0;
 }
 
-/* ── Option row — plain text, bold when active ─────────────── */
+/* ── Option chip — pill; green fill when active ──────────────── */
 .filter-option {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  min-height: 0;
   display: inline-flex;
   align-items: center;
-  text-align: left;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  min-height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
   font-family: var(--font-family);
   font-size: var(--font-size-body2);
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
-  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text-muted);
   cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
   -webkit-tap-highlight-color: transparent;
 }
 
-.filter-option:active { opacity: 0.5; }
+.filter-option:active { opacity: 0.7; }
 
 .filter-option--active {
-  font-weight: var(--font-weight-bold);
+  background-color: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  color: var(--color-accent-strong);
 }
 
 .filter-option--more {
-  font-size: var(--font-size-caption);
-  letter-spacing: var(--letter-spacing-label);
-  color: var(--color-text-muted);
-  margin-top: var(--space-1);
+  border-style: dashed;
+  border-color: var(--color-accent);
+  background-color: transparent;
+  color: var(--color-accent-strong);
 }
 
-/* ── Range block (numbers + min..max hint) ─────────────────── */
+/* ── Range block ─────────────────────────────────────────────── */
 .filter-range {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  width: 100%;
 }
 
 .filter-range__inputs {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   min-width: 0;
 }
 
@@ -98,17 +83,16 @@
   flex: 1 1 0;
   width: 0;
   min-width: 0;
-  height: 40px;
-  padding: 0 var(--space-2);
-  border: 1px solid var(--color-border);
-  background: var(--color-bg);
-  font-size: var(--font-size-body2);
+  height: 48px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  font-size: var(--font-size-body1);
   color: var(--color-text);
   font-family: var(--font-family);
 }
 
-/* Strip native number-input spinners — they pad the right side and
-   make the field look unbalanced inside the tight grid track. */
 .filter-range__num::-webkit-inner-spin-button,
 .filter-range__num::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -117,8 +101,9 @@
 .filter-range__num { appearance: textfield; -moz-appearance: textfield; }
 
 .filter-range__num:focus {
-  outline: 1px solid var(--color-text);
-  outline-offset: -1px;
+  outline: none;
+  border-color: var(--color-accent);
+  border-width: 2px;
 }
 
 .filter-range__dash { color: var(--color-text-muted); }
@@ -129,24 +114,21 @@
   letter-spacing: 0.3px;
 }
 
-/* ── Sticky-ish CTA at the bottom ──────────────────────────── */
+/* ── Apply CTA ───────────────────────────────────────────────── */
 .filters-page__cta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
   padding: var(--space-5) var(--space-4) var(--space-8);
 }
 
+/* "Скинути всі" — sits in the green header right slot, so it inherits white. */
 .filters-page__reset {
   background: none;
   border: none;
   padding: 0;
+  min-height: 0;
   font-family: var(--font-family);
-  font-size: var(--font-size-caption);
-  letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-  color: var(--color-text);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  color: inherit;
   cursor: pointer;
 }
 

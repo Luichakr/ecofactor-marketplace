@@ -8,6 +8,7 @@
   );
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-xs);
 }
 
 .skeleton--rounded { border-radius: 50%; }

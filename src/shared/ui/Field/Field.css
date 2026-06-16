@@ -1,71 +1,113 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
-.field__label {
+/* Outlined box — the border lives here so the label can notch into it. */
+.field__box {
+  position: relative;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-2);
-  font-size: var(--font-size-caption);
-  letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-  color: var(--color-text);
+  align-items: stretch;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.field__required {
-  font-weight: var(--font-weight-bold);
-}
-
-.field__aside {
-  font-size: 10px;
-  letter-spacing: var(--letter-spacing-caption);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-}
-
-.field__input,
-.field__textarea {
+.field__control {
+  flex: 1;
   width: 100%;
+  min-width: 0;
   font-family: var(--font-family);
   font-size: var(--font-size-body1);
+  line-height: var(--line-height-body1);
+  letter-spacing: 0.5px;
   color: var(--color-text);
   background: none;
   border: none;
-  border-bottom: 1px solid var(--color-text);
-  padding: var(--space-2) 0;
   outline: none;
-  border-radius: 0;
+  padding: var(--space-3) var(--space-4);
+  min-height: 48px;
 }
 
 .field__textarea {
   resize: vertical;
-  min-height: 72px;
-  line-height: var(--line-height-body1);
+  min-height: 88px;
 }
 
-.field__input::placeholder,
-.field__textarea::placeholder {
+.field__control::placeholder {
   color: var(--color-text-disabled);
 }
 
-.field--error .field__input,
-.field--error .field__textarea {
-  border-bottom-color: var(--color-error);
+/* Floating notch label — sits on the top border line, its surface-coloured
+   background "cuts" the outline (Material-3 outlined field). */
+.field__label {
+  position: absolute;
+  top: 0;
+  left: var(--space-3);
+  transform: translateY(-50%);
+  padding: 0 var(--space-1);
+  background-color: var(--color-surface);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+}
+
+.field__aside {
+  position: absolute;
+  top: 0;
+  right: var(--space-3);
+  transform: translateY(-50%);
+  padding: 0 var(--space-1);
+  background-color: var(--color-surface);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-text-muted);
+}
+
+.field__required {
+  color: var(--color-error);
+}
+
+/* Focus — 2px green outline (rendered as border + inset shadow so there is
+   no layout shift and no outer glow), green label. */
+.field__box:focus-within {
+  border-color: var(--color-accent);
+  border-width: 2px;
+}
+
+.field__box:focus-within .field__label {
+  color: var(--color-accent);
+}
+
+/* Error — red outline + red label. */
+.field--error .field__box {
+  border-color: var(--color-error);
+}
+
+.field--error .field__box:focus-within {
+  border-width: 2px;
+}
+
+.field--error .field__label {
+  color: var(--color-error);
+}
+
+.field__error,
+.field__helper {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-caption);
+  margin: 0 0 0 var(--space-4);
 }
 
 .field__error {
-  font-size: 11px;
-  letter-spacing: var(--letter-spacing-caption);
   color: var(--color-error);
-  margin: 0;
 }
 
 .field__helper {
-  font-size: 11px;
-  letter-spacing: var(--letter-spacing-caption);
   color: var(--color-text-muted);
-  margin: 0;
 }

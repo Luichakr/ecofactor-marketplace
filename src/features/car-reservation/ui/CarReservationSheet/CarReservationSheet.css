@@ -18,7 +18,7 @@
   font-size: var(--font-size-subtitle1);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .car-reservation__car-price {
@@ -41,7 +41,7 @@
 .car-reservation__deposit-label {
   font-size: 10px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }
 

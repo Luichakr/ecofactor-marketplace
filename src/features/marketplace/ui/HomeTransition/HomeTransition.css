@@ -30,7 +30,7 @@
 .home-transition__hint {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   margin: 0;
 }

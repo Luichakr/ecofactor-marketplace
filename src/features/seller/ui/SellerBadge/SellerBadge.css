@@ -49,7 +49,7 @@
 }
 
 .seller-badge__check {
-  color: #1f9d55;
+  color: var(--color-success);
   margin-left: 4px;
 }
 
@@ -82,7 +82,7 @@
   font-size: var(--font-size-body1);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .seller-badge__desc {
@@ -98,6 +98,8 @@
   gap: 1px;
   background: var(--color-border);
   padding: 1px 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .seller-badge__stats > div {
@@ -117,6 +119,6 @@
 .seller-badge__stat-label {
   font-size: 10px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }

@@ -3,6 +3,7 @@
   width: 100%;
   aspect-ratio: 3 / 4;
   overflow: hidden;
+  border-radius: var(--radius-md);
   background-color: var(--color-surface-elevated);
 }
 

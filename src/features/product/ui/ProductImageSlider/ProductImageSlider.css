@@ -29,7 +29,7 @@
 }
 
 .product-slider__slide .product-image {
-  border-radius: 0; /* don't double-clip — parent decides */
+  border-radius: var(--radius-md);
 }
 
 /* Pagination dots — small, low-contrast on the photo so they don't
@@ -47,10 +47,12 @@
 }
 
 .product-slider__dot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.55);
+  /* Product photos are usually on a light/white background, so white dots
+     vanished. Use a contrast-safe dark dot; active dot is brand green. */
+  background-color: rgba(57, 57, 57, 0.28);
   transition:
     background-color var(--transition-fast),
     width var(--transition-fast),
@@ -59,9 +61,9 @@
 }
 
 .product-slider__dot--active {
-  background-color: #ffffff;
-  width: 14px;
-  border-radius: 3px;
+  background-color: var(--color-accent);
+  width: 16px;
+  border-radius: var(--radius-full);
 }
 
 /* Edge dot — visible at the window boundary while more photos still

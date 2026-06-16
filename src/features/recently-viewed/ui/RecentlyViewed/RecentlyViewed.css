@@ -1,6 +1,16 @@
 .recently-viewed {
+  position: relative;
   padding: var(--space-5) 0;
-  border-top: 1px solid var(--color-border);
+}
+
+.recently-viewed::before {
+  content: '';
+  position: absolute;
+  left: var(--space-4);
+  right: var(--space-4);
+  top: 0;
+  height: 1px;
+  background: var(--color-border);
 }
 
 .recently-viewed__title {
@@ -8,7 +18,7 @@
   font-size: var(--font-size-body2);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .recently-viewed__strip {
@@ -37,13 +47,14 @@
   outline: 1px dashed rgba(0, 0, 0, 0.18);
   outline-offset: -1px;
   margin-bottom: var(--space-2);
+  border-radius: var(--radius-md);
 }
 
 .recently-viewed__name {
   margin: 0 0 2px;
   font-size: 11px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: var(--font-weight-medium);
   white-space: nowrap;
   overflow: hidden;

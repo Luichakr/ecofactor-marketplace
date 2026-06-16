@@ -4,6 +4,7 @@
   background-color: var(--color-surface-elevated);
   outline: 1px dashed rgba(0, 0, 0, 0.18);
   outline-offset: -1px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,7 +24,7 @@
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 
@@ -38,7 +39,7 @@
 .placeholder-image__hint {
   font-size: 9px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
   margin-top: 2px;
 }

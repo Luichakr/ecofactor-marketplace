@@ -21,7 +21,7 @@
 .newsletter-sheet__topics-label {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 
@@ -43,7 +43,7 @@
 
 .newsletter-sheet__consent input {
   margin-top: 2px;
-  accent-color: var(--color-text);
+  accent-color: var(--color-accent);
 }
 
 .newsletter-sheet__consent a {

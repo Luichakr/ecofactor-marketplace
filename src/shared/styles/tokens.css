@@ -1,75 +1,101 @@
 /*
-  Marketplace Design Tokens — Zara-inspired minimal aesthetic
-  Pure black/white palette, sharp corners, generous whitespace,
-  serif display + clean sans body.
+  Marketplace Design Tokens — mapped 1:1 to the ECOFACTOR Mobile App
+  design-system variables (Figma `xEhIXwh4LQ9LjajDWOMwXy`):
+    • Color Global  — raw palette (Accent / Neutral / Status)
+    • Color Semantic — light/dark roles (surface, icon, outline, text…)
 
-  Light theme is the default. Dark theme inverts to pure black/white.
+  Raw palette (for reference):
+    Green-60 #3AF185 (Brand)  Green-40 #10B452 (BTN)  Green-20 #008033 (Dark)
+    Blue-60 #3577D8  Orange-60 #FF9A3D  Red-60 #F2473A  Teal #10AAB4
+    White #FFFFFF  Gray-95 #F6F6F6  Gray-95(2) #EEEEEE  Gray-90 #E3E3E3
+    Gray-70 #B0B2B5  Gray-60 #999999  Gray-40 #61646B  Gray-30 #494B50
+    Gray-20 #393939  Gray-10 #1E1E1E
+
+  Light is the default scheme.
 */
 
 :root {
-  /* Colors — light theme (default) */
-  --color-bg: #ffffff;
-  --color-surface: #ffffff;
-  --color-surface-elevated: #f5f5f5;
-  --color-surface-hover: #ededed;
+  /* ── Surfaces ── (Semantic: surface / surf-cont-*) */
+  --color-bg: #ffffff;                    /* surface = White */
+  --color-surface: #ffffff;               /* surf-cont-primary = White */
+  --color-surface-elevated: #f6f6f6;      /* surf-cont-secondary = Gray-95 */
+  --color-surface-hover: #eeeeee;         /* Gray-95(2) */
   --color-overlay: rgba(255, 255, 255, 0.92);
 
-  --color-text: #000000;
-  --color-text-muted: #8a8a8a;
-  --color-text-disabled: #c4c4c4;
-  --color-border: #e8e8e8;
-  --color-border-strong: #000000;
+  --surface: #ffffff;
+  --surf-cont-primary: #ffffff;
+  --surf-cont-secondary: #f6f6f6;
+  --surf-cont-tertiary: #eeeeee;
 
-  /* "Accent" in Zara world = pure black. Kept for legacy usage. */
-  --color-accent: #000000;
-  --color-accent-soft: rgba(0, 0, 0, 0.05);
-  --color-accent-dim: rgba(0, 0, 0, 0.03);
-  --color-border-accent: #000000;
+  /* ── Text / icon ── (Semantic: text-* / icon-*) */
+  --color-text: #393939;                  /* text-primary = Gray-20 */
+  --color-text-muted: #61646b;            /* text-secondary = Gray-40 */
+  --color-text-disabled: #b0b2b5;         /* text-tertiary = Gray-70 */
+  --color-border: #e3e3e3;                /* outline-tertiary = Gray-90 */
+  --color-border-strong: #61646b;         /* outline-primary = Gray-40 */
 
-  /* Status colors — minimal, brand green */
-  --color-success: #10B452;
-  --color-warning: #b3722e;
-  --color-error: #c0392b;
-  --color-info: #2a6cb0;
+  --text-primary: #393939;
+  --text-secondary: #61646b;
+  --text-tertiary: #b0b2b5;
+  --text-reversed: #ffffff;               /* label on accent fills */
+  --text-action: #10b452;                 /* text-action = Green-40 */
 
-  /* Typography — matches the partner Flutter app which uses .SF Pro Text
-     everywhere (no serif). On iOS / macOS the `-apple-system` stack already
-     resolves to San Francisco. On Android / Windows the same stack falls
-     through to Roboto / Segoe UI which keeps the geometric sans feel.
-     The "serif" token is kept for backward compatibility but now points
-     to the same sans family so headings render in one consistent voice. */
-  --font-family-serif: -apple-system, BlinkMacSystemFont, system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-family: -apple-system, BlinkMacSystemFont, system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* ── Accent — ECOFACTOR green ── */
+  --color-accent: #10b452;                /* Green-40 — container/icon/outline-action */
+  --color-accent-strong: #008033;         /* Green-20 — link / secondary button */
+  --color-accent-brand: #3af185;          /* Green-60 — Brand Green (bright) */
+  --color-accent-disabled: #87d9a8;       /* Button/disabled (light) */
+  --color-accent-soft: rgba(16, 180, 82, 0.10);
+  --color-accent-dim: rgba(16, 180, 82, 0.05);
+  --color-border-accent: #10b452;
 
+  --container-action: #10b452;
+  --outline-action: #10b452;
+  --outline-primary: #61646b;
+  --outline-tertiary: #e3e3e3;
+
+  /* ── Status (Color Global) ── */
+  --color-success: #10b452;               /* Green-40 */
+  --color-warning: #ff9a3d;               /* Orange-60 */
+  --color-error: #f2473a;                 /* Red-60 */
+  --color-info: #3577d8;                  /* Blue-60 */
+  --color-teal: #10aab4;                  /* Teal */
+
+  /* ── Typography — Roboto (Typography sheet) ── */
+  --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Helvetica Neue', Arial, sans-serif;
+  --font-family-serif: var(--font-family);
+
+  /* H1 24/32 Medium · Subtitle1 16/24 Medium · Subtitle2 14/20 Medium 0.1
+     Body1 16/24 Regular 0.5 · Body2 14/20 Regular 0.25
+     Caption 12/16 Regular 0.4 · Button 14/20 SemiBold 0.4 */
   --font-size-display: 28px;
-  --font-size-h1: 18px;
-  --font-size-subtitle1: 14px;
-  --font-size-subtitle2: 13px;
-  --font-size-body1: 14px;
-  --font-size-body2: 13px;
-  --font-size-caption: 11px;
-  --font-size-button: 12px;
+  --font-size-h1: 24px;
+  --font-size-subtitle1: 16px;
+  --font-size-subtitle2: 14px;
+  --font-size-body1: 16px;
+  --font-size-body2: 14px;
+  --font-size-caption: 12px;
+  --font-size-button: 14px;
 
-  --line-height-display: 34px;
-  --line-height-h1: 24px;
-  --line-height-subtitle1: 20px;
-  --line-height-subtitle2: 18px;
-  --line-height-body1: 20px;
-  --line-height-body2: 18px;
-  --line-height-caption: 14px;
-  --line-height-button: 16px;
+  --line-height-display: 36px;
+  --line-height-h1: 32px;
+  --line-height-subtitle1: 24px;
+  --line-height-subtitle2: 20px;
+  --line-height-body1: 24px;
+  --line-height-body2: 20px;
+  --line-height-caption: 16px;
+  --line-height-button: 20px;
 
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  --letter-spacing-caption: 0.3px;
-  --letter-spacing-button: 1.2px;
-  --letter-spacing-label: 1px;
+  --letter-spacing-caption: 0.4px;
+  --letter-spacing-button: 0.4px;
+  --letter-spacing-label: 0.1px;
 
-  /* Radius — Material 3-style hierarchy. Buttons get --radius-full (pill),
-     surfaces get --radius-md/lg, nested thumbs get --radius-xs/sm. */
+  /* ── Radius — Material 3 ── */
   --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -77,13 +103,13 @@
   --radius-xl: 24px;
   --radius-full: 9999px;
 
-  /* Shadows — Zara is flat */
-  --shadow-soft: none;
-  --shadow-card: none;
-  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.08);
-  --shadow-accent: none;
+  /* ── Shadows — Material 3 elevation ── */
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 1px 3px 1px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-accent: 0 4px 16px rgba(16, 180, 82, 0.28);
 
-  /* Spacing (4px grid) */
+  /* ── Spacing (4px grid) ── */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -95,43 +121,67 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* Layout */
+  /* ── Layout ── */
   --mobile-max-width: 430px;
   --bottom-nav-height: 64px;
-  --header-height: 48px;
+  --header-height: 72px;
   --safe-area-top: env(safe-area-inset-top, 0px);
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
 
-  /* Transitions */
+  /* ── Transitions ── */
   --transition-fast: 120ms ease;
   --transition-normal: 200ms ease;
   --transition-slow: 350ms ease;
 }
 
 [data-theme="dark"] {
-  /* Brand-specified dark palette: #393939 base with calibrated elevated
-     surfaces that step up by ~5% each so cards/sheets read as lifted. */
-  --color-bg: #393939;
-  --color-surface: #393939;
-  --color-surface-elevated: #444444;
-  --color-surface-hover: #4f4f4f;
+  /* Color Semantic — dark column. Base surface is Gray-20 #393939
+     (brand-specified), elevated steps to Gray-30 #494B50. */
+  --color-bg: #393939;                    /* surface = Gray-20 */
+  --color-surface: #393939;               /* surf-cont-primary = Gray-20 */
+  --color-surface-elevated: #494b50;      /* surf-cont-secondary = Gray-30 */
+  --color-surface-hover: #565961;
   --color-overlay: rgba(57, 57, 57, 0.92);
 
-  --color-text: #f5f5f7;
-  --color-text-muted: #a8a8ad;
-  --color-text-disabled: #6b6b6f;
-  --color-border: #4a4a4a;
-  --color-border-strong: #f5f5f7;
+  --surface: #393939;
+  --surf-cont-primary: #393939;
+  --surf-cont-secondary: #494b50;
+  --surf-cont-tertiary: #565961;
 
-  --color-accent: #f5f5f7;
-  --color-accent-soft: rgba(255, 255, 255, 0.06);
-  --color-accent-dim: rgba(255, 255, 255, 0.03);
-  --color-border-accent: #f5f5f7;
+  --color-text: #ffffff;                  /* MainText = White */
+  --color-text-muted: #b0b2b5;            /* icon-secondary = Gray-70 */
+  --color-text-disabled: #61646b;         /* Gray-40 */
+  --color-border: rgba(255, 255, 255, 0.14);
+  --color-border-strong: #999999;         /* outline-primary = Gray-60 */
 
-  --color-success: #10B452;
-  --color-warning: #e3b556;
-  --color-error: #ff6b6b;
-  --color-info: #7ab8ff;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b2b5;
+  --text-tertiary: #61646b;
+  --text-reversed: #ffffff;               /* label on green fills stays white */
+  --text-action: #3af185;                 /* LinkPrimary dark = Brand Green */
 
-  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --color-accent: #10b452;                /* container/outline-action = Green-40 */
+  --color-accent-strong: #3af185;         /* Brand Green */
+  --color-accent-brand: #3af185;
+  --color-accent-disabled: #4dbf7b;       /* Button/disabled (dark) */
+  --color-accent-soft: rgba(16, 180, 82, 0.18);
+  --color-accent-dim: rgba(16, 180, 82, 0.10);
+  --color-border-accent: #10b452;
+
+  --container-action: #10b452;
+  --outline-action: #10b452;
+  --outline-primary: #999999;
+  --outline-tertiary: rgba(255, 255, 255, 0.14);
+
+  /* Status colours are shared across themes in the DS. */
+  --color-success: #10b452;
+  --color-warning: #ff9a3d;
+  --color-error: #f2473a;
+  --color-info: #3577d8;
+  --color-teal: #10aab4;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 1px 3px 1px rgba(0, 0, 0, 0.45);
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-accent: 0 4px 16px rgba(16, 180, 82, 0.4);
 }

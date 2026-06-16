@@ -43,7 +43,7 @@
   height: 3px;
   margin: var(--space-3) auto var(--space-2);
   background-color: var(--color-text-disabled);
-  border-radius: 2px;
+  border-radius: var(--radius-full);
   flex-shrink: 0;
 }
 
@@ -60,7 +60,7 @@
   font-size: var(--font-size-body2);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   margin: 0;
 }
@@ -68,7 +68,7 @@
 .bottom-sheet__aside {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 

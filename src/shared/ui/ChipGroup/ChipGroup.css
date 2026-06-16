@@ -5,9 +5,10 @@
 }
 
 .chip-group__label {
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 
@@ -40,28 +41,30 @@
   justify-content: center;
   padding: var(--space-2) var(--space-4);
   border: 1px solid var(--color-border);
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
   font-family: var(--font-family);
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   cursor: pointer;
-  border-radius: 0;
+  border-radius: var(--radius-full);
   white-space: nowrap;
   flex-shrink: 0;
   min-height: 38px;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .chip:hover {
-  border-color: var(--color-text);
+  border-color: var(--color-accent);
 }
 
 .chip--active {
-  background-color: var(--color-text);
-  color: var(--color-bg);
-  border-color: var(--color-text);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent);
 }
 
 .chip:active {

@@ -12,6 +12,7 @@
   align-items: stretch;
   gap: var(--space-2);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .simple-list__main {
@@ -35,14 +36,14 @@
   font-size: 10px;
   letter-spacing: var(--letter-spacing-label);
   color: var(--color-text-muted);
-  text-transform: uppercase;
+  text-transform: none;
   margin-bottom: 2px;
 }
 
 .simple-list__title {
   font-size: var(--font-size-body2);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: var(--font-weight-medium);
 }
 
@@ -99,6 +100,7 @@
 }
 
 .simple-form__field {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -119,48 +121,78 @@
   flex: 1;
   background: none;
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
   padding: var(--space-2);
   font-family: var(--font-family);
   font-size: 11px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   cursor: pointer;
   min-height: 0;
 }
 
 .simple-form__chip--active {
-  background: var(--color-text);
-  color: var(--color-bg);
-  border-color: var(--color-text);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent);
 }
 
+/* Floating notch label — matches the Field outlined-text-field DS. */
 .simple-form__label {
-  font-size: 10px;
-  letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  position: absolute;
+  top: 0;
+  left: var(--space-3);
+  transform: translateY(-50%);
+  z-index: 1;
+  padding: 0 var(--space-1);
+  background-color: var(--color-surface);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  letter-spacing: var(--letter-spacing-caption);
   color: var(--color-text-muted);
+  transition: color var(--transition-fast);
 }
 
+.simple-form__field:focus-within .simple-form__label {
+  color: var(--color-accent);
+}
+
+/* Material-3 outlined field — 16px box, outline-primary border, 2px green
+   focus (inset, no glow). */
 .simple-form__input {
-  border: none;
-  border-bottom: 1px solid var(--color-text);
-  padding: var(--space-2) 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  min-height: 48px;
   font-family: var(--font-family);
-  font-size: var(--font-size-body2);
-  background: none;
+  font-size: var(--font-size-body1);
+  background: var(--color-surface);
   color: var(--color-text);
   outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.simple-form__input:focus { border-bottom-color: var(--color-text); }
+.simple-form__input::placeholder {
+  color: var(--color-text-disabled);
+}
+
+.simple-form__input:focus {
+  border-color: var(--color-accent);
+  border-width: 2px;
+}
 
 .simple-form__toggle {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-body2);
   color: var(--color-text);
   letter-spacing: 0.2px;
 }
 
-.simple-form__toggle input { width: 18px; height: 18px; }
+.simple-form__toggle input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}

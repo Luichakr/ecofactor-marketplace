@@ -1,35 +1,41 @@
 .status-badge {
   display: inline-flex;
   align-items: center;
-  padding: 5px 10px;
-  border-radius: 0;
-  font-size: 10px;
-  line-height: 12px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   white-space: nowrap;
+  border: 1px solid transparent;
 }
 
+/* In stock / available — solid green */
 .status-badge--available,
 .status-badge--inStock {
-  background-color: var(--color-text);
-  color: var(--color-bg);
+  background-color: var(--color-accent);
+  color: var(--text-reversed);
 }
 
+/* In transit — info blue, soft (Blue-60 #3577D8) */
 .status-badge--inTransit {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  border: 1px solid var(--color-text);
+  background-color: rgba(53, 119, 216, 0.12);
+  color: var(--color-info);
+  border-color: rgba(53, 119, 216, 0.32);
 }
 
+/* Pre-order — warning amber, soft */
 .status-badge--preorder {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  border: 1px solid var(--color-text);
+  background-color: rgba(255, 154, 61, 0.14);
+  color: var(--color-warning);
+  border-color: rgba(255, 154, 61, 0.38);
 }
 
+/* Service — green outline */
 .status-badge--service {
-  background-color: var(--color-text);
-  color: var(--color-bg);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent);
 }

@@ -10,7 +10,7 @@
   font-size: var(--font-size-body2);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .return-form__section-body {
@@ -36,7 +36,7 @@
 .return-form__radio input {
   width: 18px;
   height: 18px;
-  accent-color: var(--color-text);
+  accent-color: var(--color-accent);
 }
 
 .return-form__row-text {
@@ -60,14 +60,19 @@
   resize: vertical;
   font-family: var(--font-family);
   font-size: var(--font-size-body2);
-  padding: var(--space-2);
-  border: 1px solid var(--color-border);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
   background: none;
   color: var(--color-text);
   outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.return-form__textarea:focus { border-color: var(--color-text); }
+.return-form__textarea:focus {
+  border-color: var(--color-accent);
+  border-width: 2px;
+}
 
 .return-form__note {
   margin: var(--space-2) 0 0;

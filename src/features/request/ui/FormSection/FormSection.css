@@ -20,7 +20,7 @@
 .form-section__title {
   font-size: var(--font-size-subtitle2);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   font-weight: var(--font-weight-bold);
 }

@@ -14,32 +14,12 @@
   position: sticky;
   top: 0;
   z-index: 30;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
   padding: calc(var(--safe-area-top) + var(--space-3)) var(--space-4) var(--space-3);
   background-color: var(--color-bg);
 }
 
-.market-home__close {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--color-surface-elevated);
-  color: var(--color-text);
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  min-height: 0;
-}
-
-.market-home__close:active { opacity: 0.6; }
-
 .market-home__search {
-  flex: 1;
+  width: 100%;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -87,11 +67,11 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background-color: var(--color-surface-elevated);
+  background-color: var(--color-accent-soft);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text);
+  color: var(--color-accent);
 }
 
 .market-home__shortcut-label {
@@ -126,9 +106,11 @@
 .market-home__section-title {
   margin: 0;
   font-family: var(--font-family);
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-subtitle1);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-subtitle1);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 
@@ -137,10 +119,11 @@
   border: none;
   padding: 0;
   font-family: var(--font-family);
-  font-size: 11px;
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+  text-transform: none;
+  color: var(--color-accent);
   cursor: pointer;
   min-height: 0;
 }
@@ -159,8 +142,8 @@
 .market-home__loading {
   padding: var(--space-6) var(--space-4);
   text-align: center;
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-body2);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }

@@ -35,7 +35,7 @@
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }

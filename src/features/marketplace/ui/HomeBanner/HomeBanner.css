@@ -58,6 +58,7 @@
   display: block;
   overflow: hidden;
   background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-md);
 }
 
 .home-banner--fullBleed .home-banner__image {
@@ -100,7 +101,7 @@
   font-size: 32px;
   line-height: 38px;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  text-transform: none;
   margin: 0;
   pointer-events: none;
 }

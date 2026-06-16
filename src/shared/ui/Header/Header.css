@@ -1,19 +1,43 @@
+/* Green app bar — matches the ECOFACTOR app ("Активні зарядки" 977:11315):
+   solid brand-green top, white circular back button with a green glyph,
+   white bold title left-aligned, white right-slot icons/links. */
 .header {
   position: sticky;
   top: 0;
   z-index: 10;
-  background-color: var(--color-bg);
+  background-color: var(--color-accent);
   padding-top: var(--safe-area-top);
+  /* Green breathing room below the title + room for the white lip, so the
+     title sits with the same space below as above (not crammed on the lip). */
+  padding-bottom: calc(var(--radius-lg) + var(--space-3));
 }
 
 .header--transparent {
   background-color: transparent;
 }
 
+/* White rounded lip at the bottom of the green bar → the app's
+   green-header → white-sheet transition. */
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--radius-lg);
+  background-color: var(--color-bg);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+}
+
+.header--transparent::after {
+  display: none;
+}
+
 .header__inner {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   padding: 0 var(--space-4);
   height: var(--header-height);
 }
@@ -22,43 +46,42 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  min-height: 36px;
-  color: var(--color-text);
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  color: var(--color-accent);
   flex-shrink: 0;
-  margin-left: -8px;
   transition: opacity var(--transition-fast);
 }
 
 .header__back:active {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .header__text {
   flex: 1;
   min-width: 0;
-  text-align: center;
+  text-align: left;
 }
 
 .header__title {
-  font-size: var(--font-size-subtitle2);
-  line-height: var(--line-height-subtitle2);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--font-weight-bold);
+  color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-label);
+  letter-spacing: 0;
 }
 
 .header__subtitle {
-  font-size: 10px;
-  line-height: 12px;
-  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: rgba(255, 255, 255, 0.85);
   margin-top: 2px;
-  text-transform: uppercase;
   letter-spacing: var(--letter-spacing-caption);
 }
 
@@ -67,4 +90,5 @@
   align-items: center;
   gap: var(--space-4);
   flex-shrink: 0;
+  color: #ffffff;
 }

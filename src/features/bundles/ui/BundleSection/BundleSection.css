@@ -10,7 +10,7 @@
   font-size: var(--font-size-body2);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .bundle-section__list {
@@ -34,7 +34,7 @@
 .bundle-section__check input {
   width: 18px;
   height: 18px;
-  accent-color: var(--color-text);
+  accent-color: var(--color-accent);
 }
 
 .bundle-section__thumb {
@@ -43,6 +43,7 @@
   background: var(--color-surface-elevated);
   outline: 1px dashed rgba(0, 0, 0, 0.18);
   outline-offset: -1px;
+  border-radius: var(--radius-md);
 }
 
 .bundle-section__meta {
@@ -56,7 +57,7 @@
   margin: 0;
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: var(--font-weight-medium);
 }
 
@@ -88,7 +89,7 @@
 .bundle-section__total-label {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .bundle-section__total-value {
@@ -100,20 +101,20 @@
 .bundle-section__discount {
   font-size: 10px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 
 .bundle-section__cta {
   width: 100%;
-  background: var(--color-text);
-  color: var(--color-bg);
-  border: none;
+  background-color: var(--color-accent);
+  color: var(--text-reversed);
+  border: 2px solid var(--color-accent);
   padding: var(--space-3);
   font-family: var(--font-family);
   font-size: 13px;
   letter-spacing: var(--letter-spacing-button);
-  text-transform: uppercase;
+  text-transform: none;
   cursor: pointer;
   min-height: 44px;
   border-radius: 999px;

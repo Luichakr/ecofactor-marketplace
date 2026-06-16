@@ -84,12 +84,13 @@ button.bottom-nav__item--button {
 }
 
 .bottom-nav__label {
-  font-size: 9px;
-  line-height: 11px;
+  font-size: 10px;
+  line-height: 12px;
   font-weight: var(--font-weight-medium);
-  letter-spacing: 0.4px;
+  letter-spacing: 0.2px;
   text-align: center;
-  text-transform: uppercase;
+  /* App DS — no uppercase on tab labels. */
+  text-transform: none;
 }
 
 .bottom-nav__item--active .bottom-nav__label {

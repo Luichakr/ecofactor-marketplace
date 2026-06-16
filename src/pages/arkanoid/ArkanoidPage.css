@@ -27,7 +27,7 @@
 .arkanoid__hud-label {
   font-size: 9px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }
 
@@ -55,7 +55,7 @@
   font-size: 10px;
   letter-spacing: 0.6px;
   font-weight: var(--font-weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   border-radius: 999px;
 }
 
@@ -111,7 +111,7 @@
   font-size: 28px;
   line-height: 32px;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   margin: 0;
   text-align: center;
@@ -120,7 +120,7 @@
 .arkanoid__sub {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
   text-align: center;
   margin: 0 0 var(--space-2);
@@ -177,7 +177,7 @@
   color: var(--color-text);
   font-size: var(--font-size-caption);
   letter-spacing: 0.6px;
-  text-transform: uppercase;
+  text-transform: none;
   text-align: center;
   pointer-events: none;
   animation: arkanoid-hint-pulse 1.8s ease-in-out infinite;

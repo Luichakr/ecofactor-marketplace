@@ -46,7 +46,7 @@
 .delivery-estimate__change {
   font-size: 10px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
   text-decoration: underline;
 }

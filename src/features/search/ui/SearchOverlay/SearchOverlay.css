@@ -14,12 +14,22 @@
 }
 
 .search-overlay__bar {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--color-border);
   padding-top: calc(var(--space-3) + env(safe-area-inset-top));
+}
+
+.search-overlay__bar::after {
+  content: '';
+  position: absolute;
+  left: var(--space-4);
+  right: var(--space-4);
+  bottom: 0;
+  height: 1px;
+  background: var(--color-border);
 }
 
 .search-overlay__icon {
@@ -60,8 +70,18 @@
 }
 
 .search-overlay__section {
+  position: relative;
   padding: var(--space-4);
-  border-bottom: 1px solid var(--color-border);
+}
+
+.search-overlay__section::after {
+  content: '';
+  position: absolute;
+  left: var(--space-4);
+  right: var(--space-4);
+  bottom: 0;
+  height: 1px;
+  background: var(--color-border);
 }
 
 .search-overlay__section-head {
@@ -75,7 +95,7 @@
   margin: 0;
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: var(--font-weight-bold);
 }
 
@@ -85,7 +105,7 @@
   font-family: var(--font-family);
   font-size: 11px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
   cursor: pointer;
   text-decoration: underline;
@@ -140,15 +160,19 @@
 }
 
 .search-overlay__pill {
-  background: none;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  padding: 6px var(--space-3);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-4);
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-family);
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
   letter-spacing: 0.2px;
-  color: var(--color-text);
+  color: var(--color-text-muted);
   cursor: pointer;
-  min-height: 0;
 }
 
 .search-overlay__pill:active { opacity: 0.6; }
@@ -187,6 +211,7 @@
   background: var(--color-surface-elevated);
   outline: 1px dashed rgba(0, 0, 0, 0.18);
   outline-offset: -1px;
+  border-radius: var(--radius-md);
 }
 
 .search-overlay__result-meta {
@@ -200,7 +225,7 @@
   margin: 0;
   font-size: var(--font-size-caption);
   letter-spacing: 0.2px;
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: var(--font-weight-medium);
   white-space: nowrap;
   overflow: hidden;

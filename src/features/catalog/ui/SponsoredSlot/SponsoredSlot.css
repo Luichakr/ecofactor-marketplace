@@ -31,7 +31,7 @@
   right: 32px;
   font-size: 9px;
   letter-spacing: 0.6px;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
   background-color: var(--color-bg);
   padding: 2px 6px;
@@ -73,11 +73,11 @@
 
 .sponsored-slot__title {
   margin: 0;
-  font-size: var(--font-size-subtitle2);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-subtitle1);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-  line-height: 1.2;
+  text-transform: none;
+  line-height: var(--line-height-subtitle1);
   /* Clamp to 2 lines so a long headline never crashes the layout. */
   display: -webkit-box;
   -webkit-line-clamp: 2;

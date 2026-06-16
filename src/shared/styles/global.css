@@ -24,9 +24,6 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Brand-green accent for native checkboxes/radio inputs across the
-     app — matches the Figma design system. */
-  accent-color: var(--color-success);
 }
 
 #root {
@@ -51,6 +48,15 @@ button {
   color: inherit;
 }
 
+/* Interactive controls must never show a text-selection highlight — a tap or
+   accidental drag on a chip / slot / tab used to leave an ugly grey selection
+   box behind its label. Real text (paragraphs, inputs) stays selectable. */
+button,
+[role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 input, textarea, select {
   font-family: var(--font-family);
 }
@@ -70,10 +76,31 @@ ul, ol {
   height: 0;
 }
 
-/* Focus visible */
+/* Focus visible — brand green ring, ONLY on real interactive controls.
+   Never on containers/scroll areas (avoids a green outline flashing around
+   the whole screen when a page mounts and a wrapper grabs focus). */
 :focus-visible {
-  outline: 1px solid var(--color-text);
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* Text controls indicate focus via their own 2px green border (the DS
+   outlined field), so the extra outline ring would read as a double/pill
+   outline around them. Keep them outline-free. */
+input:focus,
+input:focus-visible,
+select:focus,
+select:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none;
 }
 
 /* Utility: serif display family */
@@ -89,7 +116,7 @@ ul, ol {
   gap: var(--space-2);
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 

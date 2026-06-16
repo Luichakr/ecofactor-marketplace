@@ -12,13 +12,15 @@
 }
 
 .subcategory-tabs__item {
+  position: relative;
   font-family: var(--font-family);
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-subtitle2);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
   color: var(--color-text-muted);
   background: none;
   border: none;
-  padding: var(--space-2) 0;
+  padding: var(--space-2) 0 var(--space-3);
   min-height: 36px;
   white-space: nowrap;
   cursor: pointer;
@@ -27,8 +29,19 @@
 }
 
 .subcategory-tabs__item--active {
-  color: var(--color-text);
-  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.subcategory-tabs__item--active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: var(--radius-full);
 }
 
 .subcategory-tabs__item:active {

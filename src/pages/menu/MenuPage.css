@@ -66,7 +66,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background-color: var(--color-text);
+  background-color: var(--color-accent);
 }
 
 /* ──── Visual cards row ───────────────────────────────────────── */
@@ -119,6 +119,7 @@
   aspect-ratio: 3 / 4;
   background-color: var(--color-surface-elevated);
   overflow: hidden;
+  border-radius: var(--radius-md);
 }
 
 .menu-page__visual-card-image img {
@@ -131,7 +132,7 @@
 .menu-page__visual-card-label {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: var(--font-weight-regular);
   color: var(--color-text);
 }
@@ -161,14 +162,14 @@
 .menu-page__group-num-text {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-caption);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 
 .menu-page__group-title {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }
 
@@ -192,7 +193,7 @@
   font-size: var(--font-size-subtitle2);
   line-height: var(--line-height-subtitle2);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   cursor: pointer;
   text-align: left;
@@ -234,7 +235,7 @@
   padding: var(--space-8) var(--space-4) var(--space-12);
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 
@@ -246,7 +247,7 @@
   font-family: var(--font-family);
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   background: none;
   border: none;

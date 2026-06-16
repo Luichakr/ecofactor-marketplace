@@ -13,6 +13,7 @@
   padding: var(--space-5) var(--space-3);
   background: var(--color-bg);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   cursor: pointer;
   text-align: center;
   font-family: var(--font-family);
@@ -24,7 +25,7 @@
 
 .payment-grid__card--selected {
   border-width: 2px;
-  border-color: var(--color-text);
+  border-color: var(--color-accent);
   padding: calc(var(--space-5) - 1px) calc(var(--space-3) - 1px);
 }
 
@@ -44,7 +45,7 @@
 .payment-grid__label {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
   line-height: 14px;
@@ -54,5 +55,5 @@
   font-size: 10px;
   letter-spacing: var(--letter-spacing-caption);
   color: var(--color-text-muted);
-  text-transform: uppercase;
+  text-transform: none;
 }

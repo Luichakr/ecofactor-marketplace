@@ -2,39 +2,61 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
+/* Floating notch label — matches the Field outlined-text-field DS. */
 .phone-input__label {
+  position: absolute;
+  top: 0;
+  left: var(--space-3);
+  transform: translateY(-50%);
+  z-index: 1;
+  padding: 0 var(--space-1);
+  background-color: var(--color-surface);
   font-size: var(--font-size-caption);
-  letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-  color: var(--color-text);
+  line-height: var(--line-height-caption);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.phone-input:focus-within .phone-input__label {
+  color: var(--color-accent);
 }
 
 .phone-input__required {
-  color: var(--color-text);
-  font-weight: var(--font-weight-bold);
+  color: var(--color-error);
 }
 
+/* Material-3 outlined field — 16px rounded box, 2px green focus (inset, no glow). */
 .phone-input__row {
   display: flex;
   align-items: stretch;
   gap: 0;
-  border-bottom: 1px solid var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  min-height: 48px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.phone-input__row:focus-within {
+  border-color: var(--color-accent);
+  border-width: 2px;
 }
 
 .phone-input__country {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  padding: 0 var(--space-3);
   background: none;
   border: none;
   border-right: 1px solid var(--color-border);
   margin-right: var(--space-3);
   font-family: var(--font-family);
-  font-size: var(--font-size-body2);
+  font-size: var(--font-size-body1);
   color: var(--color-text);
   cursor: pointer;
   min-height: 0;
@@ -57,7 +79,7 @@
   font-family: var(--font-family);
   font-size: var(--font-size-body1);
   color: var(--color-text);
-  padding: var(--space-2) 0;
+  padding: 0 var(--space-4) 0 0;
   outline: none;
   letter-spacing: 0.4px;
   min-width: 0;
@@ -74,8 +96,9 @@
   left: 0;
   right: 0;
   margin-top: var(--space-2);
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   list-style: none;
   padding: 0;
   max-height: 280px;

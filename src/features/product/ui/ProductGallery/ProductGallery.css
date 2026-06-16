@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
@@ -64,7 +65,7 @@
   background-color: rgba(0, 0, 0, 0.85);
   border-color: rgba(255, 255, 255, 0.85);
   width: 16px;
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
 }
 
 /* Edge dot in the sliding window — visible at the boundary while more

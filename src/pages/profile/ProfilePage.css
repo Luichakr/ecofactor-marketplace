@@ -1,9 +1,12 @@
+/* Green "шапка" — app-style profile header (9829:20943): name + contact
+   in white on a brand-green band that runs under the status bar. */
 .profile-page__user {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4);
-  border-bottom: 1px solid var(--color-border);
+  padding: calc(var(--safe-area-top) + var(--space-5)) var(--space-4) var(--space-5);
+  background-color: var(--color-accent);
+  color: #ffffff;
 }
 
 .profile-page__avatar {
@@ -11,15 +14,15 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background-color: var(--color-text);
-  color: var(--color-bg);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.5px;
-  border: none;
+  border: 2px solid rgba(255, 255, 255, 0.65);
   padding: 0;
   cursor: pointer;
   flex-shrink: 0;
@@ -50,8 +53,8 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background-color: #10B452;
-  color: #fff;
+  background-color: var(--color-accent);
+  color: var(--text-reversed);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -64,8 +67,8 @@
   padding: 4px 0 0;
   font-size: 11px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
   min-height: 0;
   text-align: left;
@@ -82,35 +85,44 @@
 
 .profile-page__name {
   margin: 0;
-  font-size: var(--font-size-body1);
-  font-weight: var(--font-weight-medium);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-label);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--font-weight-bold);
+  color: #ffffff;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .profile-page__phone,
 .profile-page__email {
   margin: 0;
-  font-size: var(--font-size-caption);
-  color: var(--color-text-muted);
+  font-size: var(--font-size-body2);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .profile-page__stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1px;
-  background-color: var(--color-border);
-  padding: 1px 0;
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4) 0;
   margin-bottom: var(--space-5);
+  /* White sheet tucks under the green header with a rounded top. */
+  position: relative;
+  z-index: 1;
+  margin-top: calc(-1 * var(--space-4));
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+  background-color: var(--color-bg);
 }
 
 .profile-page__stat {
-  background-color: var(--color-bg);
-  padding: var(--space-3) var(--space-2);
+  flex: 1;
+  background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-2);
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-1);
   /* Override global button defaults so the stat tile renders identical
      whether rendered as a <div> or a <button>. */
   border: none;
@@ -119,6 +131,10 @@
   color: var(--color-text);
   min-height: 0;
   width: 100%;
+}
+
+.profile-page__stat--highlight .profile-page__stat-value {
+  color: var(--color-accent);
 }
 
 .profile-page__stat:active { opacity: 0.7; }
@@ -132,7 +148,7 @@
 .profile-page__stat-label {
   font-size: 10px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }
 
@@ -153,15 +169,15 @@
   font-size: var(--font-size-body2);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .profile-page__section-link {
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-  color: var(--color-text);
-  text-decoration: underline;
+  text-transform: none;
+  color: var(--color-accent);
 }
 
 .profile-page__section-body {
@@ -172,8 +188,11 @@
 
 .profile-page__active-card {
   display: block;
-  border: 1px solid var(--color-border);
-  padding: var(--space-3);
+  background-color: var(--color-surface-elevated);
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  padding: var(--space-4);
   text-decoration: none;
   color: inherit;
 }
@@ -190,7 +209,7 @@
 .profile-page__active-status {
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: var(--font-weight-medium);
   flex: 1;
 }
@@ -255,7 +274,7 @@
 .profile-page__order-status {
   font-size: var(--font-size-caption);
   letter-spacing: 0.2px;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -284,24 +303,24 @@
 
 .profile-page__menu {
   padding: 0 var(--space-4);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
   display: flex;
   flex-direction: column;
+  gap: var(--space-2);
 }
 
+/* Each menu row is its own grey rounded card (app-style list). */
 .profile-page__menu-item {
   display: grid;
   grid-template-columns: 28px 1fr auto auto;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-4);
+  background-color: var(--color-surface-elevated);
+  border: none;
+  border-radius: var(--radius-md);
   text-decoration: none;
   color: inherit;
-  background: none;
-  border-left: none;
-  border-right: none;
-  border-top: none;
   width: 100%;
   cursor: pointer;
   font-family: var(--font-family);
@@ -310,13 +329,12 @@
 }
 
 .profile-page__menu-item:active { opacity: 0.6; }
-.profile-page__menu-item:last-child { border-bottom: none; }
 
 .profile-page__menu-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #10B452; /* brand green — matches BottomNav active state */
+  color: var(--color-accent); /* brand green — matches BottomNav active state */
 }
 
 .profile-page__menu-text {
@@ -329,7 +347,7 @@
 .profile-page__menu-label {
   font-size: var(--font-size-body2);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
   font-weight: var(--font-weight-medium);
 }
@@ -337,6 +355,38 @@
 .profile-page__menu-sub {
   font-size: var(--font-size-caption);
   color: var(--color-text-muted);
+}
+
+/* Legal footer at the bottom of the account page. */
+.profile-page__legal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4) var(--space-8);
+  text-align: center;
+}
+
+.profile-page__legal-links {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-text-muted);
+}
+
+.profile-page__legal-links a {
+  color: var(--color-text-muted);
+}
+
+.profile-page__legal-links a:active { opacity: 0.6; }
+
+.profile-page__legal-small {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-disabled);
 }
 
 .profile-page__menu-badge {
@@ -350,17 +400,18 @@
 /* Group label between menu sections — small uppercase pill of muted text
    on a subtle elevated band. Mirrors Yandex Market profile structure. */
 .profile-page__menu-group-label {
-  padding: var(--space-3) var(--space-4) var(--space-2);
-  background-color: var(--color-surface-elevated);
-  font-size: 11px;
-  letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  margin-top: var(--space-3);
+  padding: 0 var(--space-4) var(--space-3);
+  background: none;
+  font-size: var(--font-size-subtitle1);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-text);
+  margin-top: var(--space-5);
 }
 
 .profile-page__menu-group-label:first-of-type {
-  margin-top: 0;
+  margin-top: var(--space-2);
 }
 
 /* Chat shortcut in profile header — small circular button right of the
@@ -369,8 +420,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: var(--color-surface-elevated);
-  color: var(--color-text);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
   border: none;
   display: inline-flex;
   align-items: center;
@@ -382,7 +433,3 @@
 }
 
 .profile-page__chat:active { opacity: 0.6; }
-
-.profile-page__user {
-  gap: var(--space-3);
-}

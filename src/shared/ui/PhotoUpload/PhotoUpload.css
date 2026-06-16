@@ -10,7 +10,7 @@
   justify-content: space-between;
   font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text);
 }
 
@@ -34,6 +34,7 @@
   aspect-ratio: 1 / 1;
   background-color: var(--color-surface-elevated);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,7 +48,7 @@
 }
 
 .photo-upload__slot--filled {
-  border-color: var(--color-text);
+  border-color: var(--color-border);
   cursor: default;
 }
 

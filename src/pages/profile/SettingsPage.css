@@ -10,7 +10,7 @@
   font-size: var(--font-size-body2);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .settings-page__group-body {
@@ -24,6 +24,8 @@
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .settings-page__seg {
@@ -33,7 +35,7 @@
   font-family: var(--font-family);
   font-size: 11px;
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
+  text-transform: none;
   cursor: pointer;
   min-height: 0;
   border-right: 1px solid var(--color-border);
@@ -42,7 +44,7 @@
 .settings-page__seg:last-child { border-right: none; }
 
 .settings-page__seg--active {
-  background: var(--color-text);
+  background: var(--color-accent);
   color: var(--color-bg);
 }
 
@@ -88,7 +90,7 @@
 }
 
 .settings-page__toggle-cb:checked {
-  background: var(--color-success);
+  background: var(--color-accent);
 }
 
 .settings-page__toggle-cb:checked::after {
@@ -109,7 +111,7 @@
   min-height: 0;
 }
 
-.settings-page__link:last-child { border-bottom: none; color: #b00020; }
+.settings-page__link:last-child { border-bottom: none; color: var(--color-error); }
 
 .settings-page__version {
   margin: var(--space-5) 0 0;
