@@ -42,11 +42,13 @@ export function useRecentSearches() {
   return useSyncExternalStore(recentSearches.subscribe, recentSearches.getAll, recentSearches.getAll)
 }
 
+// Popular search chips — only terms that match what's actually surfaced in the
+// marketplace (EV charging). Tires/brands removed since wheels are hidden.
 export const POPULAR_SEARCHES = [
-  'Michelin',
-  'Літні шини',
-  'Зарядка 11 кВт',
+  'Мобільна зарядка',
   'Type 2',
-  'Bridgestone',
-  'Зимові 17',
+  'Зарядка 11 кВт',
+  'Кабель',
+  'GB/T',
+  'Тримач',
 ]

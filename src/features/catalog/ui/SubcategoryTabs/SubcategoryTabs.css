@@ -53,3 +53,61 @@
   margin-left: 4px;
   font-weight: var(--font-weight-regular);
 }
+
+/* ─── Tiles variant — square icon tiles like the home category showcase ─── */
+.subcategory-tabs--tiles {
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4) var(--space-3);
+  align-items: flex-start;
+}
+
+.subcategory-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 76px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-height: 0;
+  flex-shrink: 0;
+  font-family: var(--font-family);
+  color: var(--color-text-muted);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.subcategory-tile__icon {
+  width: 76px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-elevated);
+  border: 2px solid transparent;
+  color: var(--color-text-muted);
+  transition: border-color var(--transition-fast), color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.subcategory-tile--active .subcategory-tile__icon {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.subcategory-tile:active { opacity: 0.7; }
+
+.subcategory-tile__label {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.subcategory-tile--active .subcategory-tile__label {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}

@@ -1,26 +1,36 @@
 import { useMemo, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useInactivityAutoScroll } from '../../shared/lib/hooks/useInactivityAutoScroll'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
+import { Header } from '../../shared/ui/Header/Header'
 import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import { NewsletterSheet } from '../../features/newsletter/ui/NewsletterSheet/NewsletterSheet'
 import { SearchIconButton } from '../../features/search/ui/SearchTrigger/SearchTrigger'
+import { ROUTES } from '../../shared/config/routes'
 import { SECTION_TABS, SECTIONS } from './menuData'
 import './MenuPage.css'
 
 export function MenuPage() {
   const navigate = useNavigate()
+  const { section: sectionParam } = useParams<{ section?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()
-  // Tab selection persists in the URL (?tab=wheels) so the menu remembers
+
+  // Single-section mode: reached as /menu/:section (e.g. from a home tile).
+  // Shows just that section with a back button instead of the tab switcher;
+  // back returns to wherever the user came from (breadcrumb-like).
+  const singleSection = !!(sectionParam && SECTIONS[sectionParam])
+
+  // Tab selection persists in the URL (?tab=...) so the menu remembers
   // where the user was when they come back from a catalog page or refresh.
   const tabFromUrl = searchParams.get('tab') ?? 'charging'
   const initialTab = SECTION_TABS.some((t) => t.id === tabFromUrl) ? tabFromUrl : 'charging'
-  const [activeTab, setActiveTabState] = useState<string>(initialTab)
+  const [tabState, setTabState] = useState<string>(initialTab)
+  const activeTab = singleSection ? (sectionParam as string) : tabState
   const [visualRow, setVisualRow] = useState<HTMLElement | null>(null)
   const [newsletterOpen, setNewsletterOpen] = useState(false)
 
   function setActiveTab(id: string) {
-    setActiveTabState(id)
+    setTabState(id)
     setSearchParams(
       (prev) => {
         const next = new URLSearchParams(prev)
@@ -32,6 +42,7 @@ export function MenuPage() {
   }
 
   const section = useMemo(() => SECTIONS[activeTab] ?? SECTIONS.charging, [activeTab])
+  const sectionLabel = SECTION_TABS.find((t) => t.id === activeTab)?.label ?? 'МЕНЮ'
 
   useInactivityAutoScroll({
     scroller: visualRow,
@@ -47,21 +58,27 @@ export function MenuPage() {
   }
 
   return (
-    <ScreenContainer withTopInset className="menu-page">
-      <header className="menu-page__tabs">
-        <div className="menu-page__tabs-scroll">
-          {SECTION_TABS.map((t) => (
-            <button
-              key={t.id}
-              className={`menu-page__tab ${activeTab === t.id ? 'menu-page__tab--active' : ''}`}
-              onClick={() => setActiveTab(t.id)}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-        <SearchIconButton className="menu-page__search" />
-      </header>
+    <>
+      {singleSection && (
+        <Header title={sectionLabel} showBack backFallback={ROUTES.MARKETPLACE} rightSlot={<SearchIconButton />} />
+      )}
+      <ScreenContainer withTopInset={!singleSection} className="menu-page">
+        {!singleSection && (
+          <header className="menu-page__tabs">
+            <div className="menu-page__tabs-scroll">
+              {SECTION_TABS.map((t) => (
+                <button
+                  key={t.id}
+                  className={`menu-page__tab ${activeTab === t.id ? 'menu-page__tab--active' : ''}`}
+                  onClick={() => setActiveTab(t.id)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+            <SearchIconButton className="menu-page__search" />
+          </header>
+        )}
 
       <section key={activeTab} className="menu-page__visual-row" ref={setVisualRow}>
         {section.visual.map((c) => (
@@ -121,7 +138,8 @@ export function MenuPage() {
         </p>
       </footer>
 
-      <NewsletterSheet open={newsletterOpen} onClose={() => setNewsletterOpen(false)} />
-    </ScreenContainer>
+        <NewsletterSheet open={newsletterOpen} onClose={() => setNewsletterOpen(false)} />
+      </ScreenContainer>
+    </>
   )
 }

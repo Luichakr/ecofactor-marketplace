@@ -54,8 +54,9 @@ export function AppRouter() {
         <Route path={ROUTES.CHARGER_CONFIGURATOR_DC} element={<DcConfiguratorPage />} />
         <Route path={ROUTES.MARKETPLACE} element={<MarketplaceHomePage />} />
         <Route path={ROUTES.CATALOG} element={<CatalogPage />} />
-        {/* Cars temporarily disabled — bounce the category to home. */}
+        {/* Cars & wheels temporarily hidden — bounce those categories home. */}
         <Route path="/catalog/cars" element={<Navigate to={ROUTES.MARKETPLACE} replace />} />
+        <Route path="/catalog/wheels" element={<Navigate to={ROUTES.MARKETPLACE} replace />} />
         <Route path={ROUTES.CATALOG_CATEGORY} element={<CatalogPage />} />
         <Route path={ROUTES.PRODUCT} element={<ProductPage />} />
         <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
@@ -85,6 +86,8 @@ export function AppRouter() {
         <Route path={ROUTES.RETURN_OPEN} element={<ReturnFormPage />} />
         <Route path={ROUTES.WISHLIST_SHARED} element={<WishlistSharedPage />} />
         <Route path={ROUTES.MENU} element={<MenuPage />} />
+        {/* Single category section opened from a home tile — back button, no tabs. */}
+        <Route path={`${ROUTES.MENU}/:section`} element={<MenuPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
         <Route path={ROUTES.ARKANOID} element={<ArkanoidPage />} />

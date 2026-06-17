@@ -1,7 +1,9 @@
 import type { RangeFilterValue, SelectedFilters, SortOption } from '../model/catalog.types'
 
 const SORT_OPTIONS: SortOption[] = ['recommended', 'priceAsc', 'priceDesc', 'newest', 'titleAsc']
-const RESERVED_KEYS = new Set(['q', 'sort', 'category', 'sub'])
+// 'view' is a UI preference (Вид 1/2/3), not a product filter — keep it out
+// of the parsed filters / active-filter count.
+const RESERVED_KEYS = new Set(['q', 'sort', 'category', 'sub', 'view'])
 
 export type CatalogSearchParams = {
   search: string

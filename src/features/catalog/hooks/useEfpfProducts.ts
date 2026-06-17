@@ -19,13 +19,21 @@ let inflight: Promise<MarketplaceProduct[]> | null = null
 // Колеса rubric stays visible even on a live EFPF run.
 const LOCAL_EXTRAS: MarketplaceProduct[] = mockTires
 
-// Cars are temporarily switched off (we don't sell cars yet) — drop the
-// Lubeavto feed and filter any car products out of the whole pool. Flip this
-// back on (re-add the Lubeavto fetch + remove the filter) when cars return.
+// Cars and wheels are temporarily hidden (not sold yet) — filter their
+// products out of the whole pool (catalog, Популярне, search). Flip the flags
+// back on to restore them.
 const CARS_ENABLED = false
+const WHEELS_ENABLED = false
+
+const DISABLED_CATEGORIES = [
+  ...(CARS_ENABLED ? [] : ['cars']),
+  ...(WHEELS_ENABLED ? [] : ['wheels']),
+]
 
 const withoutDisabled = (list: MarketplaceProduct[]): MarketplaceProduct[] =>
-  CARS_ENABLED ? list : list.filter((p) => p.categoryId !== 'cars')
+  DISABLED_CATEGORIES.length === 0
+    ? list
+    : list.filter((p) => !DISABLED_CATEGORIES.includes(p.categoryId))
 
 async function loadOnce(): Promise<MarketplaceProduct[]> {
   if (cache) return cache

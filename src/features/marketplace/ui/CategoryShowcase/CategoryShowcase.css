@@ -11,3 +11,21 @@
 .category-showcase__row {
   margin-bottom: 0;
 }
+
+/* Tiles: square and ~35% smaller than the menu-page defaults
+   (45% → 29% width, 140px → 91px min). */
+.category-showcase .menu-page__visual-row {
+  grid-auto-columns: minmax(91px, 29%);
+}
+
+.category-showcase .menu-page__visual-card-image {
+  aspect-ratio: 1 / 1;
+}
+
+/* Icon tile (Закладки) — centred glyph instead of a photo. */
+.category-showcase__icon-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+}

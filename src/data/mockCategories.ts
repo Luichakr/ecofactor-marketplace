@@ -33,17 +33,5 @@ export const mockCategories: MarketplaceCategory[] = [
       { id: 'komplektuiuchi', title: 'Комплектуючі' },
     ],
   },
-  {
-    id: 'wheels',
-    title: 'Колеса',
-    subtitle: 'Шини, диски, кріплення',
-    icon: 'wheel',
-    description: 'Літні, зимові та всесезонні шини, литі та ковані диски, кріплення',
-    subcategories: [
-      { id: 'tires', title: 'Шини' },
-      { id: 'disks', title: 'Диски' },
-      { id: 'mounts', title: 'Кріплення' },
-    ],
-  },
-  // 'cars' (Авто) temporarily removed — we don't sell cars yet.
+  // 'wheels' (Колеса) and 'cars' (Авто) temporarily hidden — not sold yet.
 ]

@@ -29,6 +29,10 @@ export function CatalogPage() {
   const { categoryId } = useParams<{ categoryId?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()
   const [view, setView] = useState<ViewMode>(() => {
+    // An explicit ?view= in the URL wins (e.g. the home EV-зарядка tile forces
+    // Вид 2). Otherwise fall back to the saved preference, then to grid (2).
+    const fromUrl = Number(searchParams.get('view'))
+    if (fromUrl === 1 || fromUrl === 2 || fromUrl === 3) return fromUrl as ViewMode
     // Guarded — localStorage throws in private-mode WebView / when storage
     // is disabled, which would otherwise crash the catalog on mount.
     try {
@@ -202,6 +206,7 @@ export function CatalogPage() {
             active={activeSubcategory}
             onChange={setSubcategory}
             counts={subcategoryCounts}
+            variant="tiles"
           />
         )}
 
