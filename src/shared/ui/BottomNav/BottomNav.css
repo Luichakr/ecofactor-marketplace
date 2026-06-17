@@ -1,10 +1,10 @@
 /*
- * Floating frosted-glass bottom nav.
+ * Single unified floating frosted-glass bar.
  *
- * Layout: pill (4 nav items) + circular Cart FAB sit side-by-side, both
- * lifted off the screen edges with a margin. Background is a translucent
- * surface + backdrop-filter blur so the page content shows through as
- * matte glass.
+ * One pill holds Зарядка + the four route tabs. An animated highlight slides
+ * under the active tab. On scroll-down the whole bar shrinks — narrower (via
+ * animated side insets) and shorter (height + hidden labels) — and restores on
+ * scroll-up.
  */
 
 .bottom-nav {
@@ -13,45 +13,14 @@
   right: var(--space-3);
   bottom: calc(var(--safe-area-bottom) + var(--space-3));
   display: flex;
-  align-items: stretch;
   justify-content: center;
-  gap: var(--space-3);
   z-index: 100;
   pointer-events: none; /* let the page below catch taps in the empty gap */
+  transition: left var(--transition-normal), right var(--transition-normal);
 }
-
-/* Зарядка — its own frosted segment beside the pill (same icon+label
-   format as the tabs, brand-green to mark the charging hand-off — like
-   Monobank's separated "Маркет" tab, not a solid button). */
-.bottom-nav__charge {
-  pointer-events: auto;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  width: 62px;
-  min-height: 56px;
-  padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  color: var(--color-text-muted);
-  cursor: pointer;
-}
-
-[data-theme="dark"] .bottom-nav__charge {
-  background-color: rgba(28, 28, 30, 0.62);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.bottom-nav__charge:active { opacity: 0.6; }
 
 .bottom-nav__pill {
+  position: relative;
   pointer-events: auto;
   background-color: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(18px) saturate(160%);
@@ -66,6 +35,7 @@
   padding: 6px;
   border-radius: 999px;
   min-height: 56px;
+  transition: min-height var(--transition-normal);
 }
 
 [data-theme="dark"] .bottom-nav__pill {
@@ -73,8 +43,30 @@
   border-color: rgba(255, 255, 255, 0.08);
 }
 
+/* Sliding highlight under the active tab. Position/width set inline from the
+   measured active item; this just animates between them. */
+.bottom-nav__indicator {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  border-radius: 999px;
+  background-color: var(--color-accent-soft);
+  pointer-events: none;
+  z-index: 0;
+  /* `left`/`width` are percentage calcs of the pill, so they follow the bar's
+     width animation in lockstep with NO transition firing (the specified value
+     is unchanged on resize). The transition only kicks in on a tab switch when
+     the slot index — and thus the specified value — actually changes. */
+  transition: left var(--transition-normal), width var(--transition-normal),
+    opacity var(--transition-fast), top var(--transition-normal),
+    bottom var(--transition-normal);
+}
+
 .bottom-nav__item {
+  position: relative;
+  z-index: 1;
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,6 +78,14 @@
   text-decoration: none;
   border-radius: 999px;
   transition: color var(--transition-fast);
+}
+
+/* Зарядка is a <button> — reset native button styling to match the links. */
+.bottom-nav__item--charge {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
 }
 
 .bottom-nav__item--active {
@@ -112,13 +112,42 @@
   letter-spacing: 0.2px;
   text-align: center;
   text-transform: none;
+  max-height: 14px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height var(--transition-normal), opacity var(--transition-fast),
+    margin var(--transition-normal);
 }
 
 .bottom-nav__item--active .bottom-nav__label {
   font-weight: var(--font-weight-semibold);
 }
 
-/* ─── Cart badge — sits on top of the icon, green dot with count ─ */
+/* ─── Compact (scrolled-down) — narrower + shorter, icons only ───── */
+.bottom-nav--compact {
+  /* Pull the sides in so the whole bar reads narrower and centred. */
+  left: 14%;
+  right: 14%;
+}
+
+.bottom-nav--compact .bottom-nav__pill {
+  min-height: 46px;
+  /* Keep horizontal padding at 6px (don't change it) so the indicator's calc
+     stays constant and never re-triggers a transition while the bar shrinks. */
+}
+
+.bottom-nav--compact .bottom-nav__label {
+  max-height: 0;
+  opacity: 0;
+  margin-top: -2px;
+}
+
+.bottom-nav--compact .bottom-nav__indicator {
+  top: 4px;
+  bottom: 4px;
+}
+
+/* ─── Cart badge — sits on top of the icon, green dot with count ─── */
 .bottom-nav__badge {
   position: absolute;
   top: -4px;
