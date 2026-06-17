@@ -18,7 +18,6 @@ type SectionTab = {
 const SECTION_TABS: SectionTab[] = [
   { id: 'charging', label: 'ЗАРЯДКИ' },
   { id: 'solar', label: 'СОНЦЕ' },
-  { id: 'auto', label: 'АВТО' },
   { id: 'wheels', label: 'КОЛЕСА' },
   { id: 'about', label: 'ПРО НАС' },
 ]
@@ -137,34 +136,7 @@ const SECTIONS: Record<string, Section> = {
     ],
   },
 
-  auto: {
-    visual: [
-      { id: 'auto-stock', caption: 'У НАЯВНОСТІ', size: '720 × 960', href: catalogCategoryPath('cars') },
-      { id: 'auto-ev', caption: 'ЕЛЕКТРОМОБІЛІ', size: '720 × 960', href: `${catalogCategoryPath('cars')}?sub=cars-electric` },
-      { id: 'auto-hybrid', caption: 'ГІБРИДИ', size: '720 × 960', href: `${catalogCategoryPath('cars')}?sub=cars-hybrid` },
-      { id: 'auto-order', caption: 'ПІД ЗАМОВЛЕННЯ', size: '720 × 960' },
-    ],
-    groups: [
-      {
-        num: '01',
-        title: 'АВТО',
-        items: [
-          { label: 'Усі авто в наявності', href: catalogCategoryPath('cars'), bold: true },
-          { label: 'Електромобілі', href: `${catalogCategoryPath('cars')}?sub=cars-electric` },
-          { label: 'Гібриди', href: `${catalogCategoryPath('cars')}?sub=cars-hybrid` },
-          { label: 'Під замовлення', tag: 'SOON' },
-        ],
-      },
-      {
-        num: '02',
-        title: 'СЕРВІС',
-        items: [
-          { label: 'Запис на автосервіс', href: REQUEST_PATHS.AUTOSERVICE, bold: true },
-          { label: 'Замовити дзвінок', href: REQUEST_PATHS.CALLBACK },
-        ],
-      },
-    ],
-  },
+  // 'auto' (Авто) section temporarily removed — we don't sell cars yet.
 
   wheels: {
     visual: [

@@ -4,8 +4,6 @@ import { fetchAllProducts } from '../../../shared/api/efpf/client'
 import { adaptEfpfProducts } from '../../../shared/api/efpf/adapter'
 import { mockProducts } from '../../../data/mockProducts'
 import { mockTires } from '../../../data/mockTires'
-import { fetchAutoElectricInStock } from '../../auto/api/lubeavtoApi'
-import { autoCardToProduct } from '../../auto/lib/autoCardToProduct'
 
 type State = {
   data: MarketplaceProduct[] | null
@@ -21,21 +19,22 @@ let inflight: Promise<MarketplaceProduct[]> | null = null
 // Колеса rubric stays visible even on a live EFPF run.
 const LOCAL_EXTRAS: MarketplaceProduct[] = mockTires
 
+// Cars are temporarily switched off (we don't sell cars yet) — drop the
+// Lubeavto feed and filter any car products out of the whole pool. Flip this
+// back on (re-add the Lubeavto fetch + remove the filter) when cars return.
+const CARS_ENABLED = false
+
+const withoutDisabled = (list: MarketplaceProduct[]): MarketplaceProduct[] =>
+  CARS_ENABLED ? list : list.filter((p) => p.categoryId !== 'cars')
+
 async function loadOnce(): Promise<MarketplaceProduct[]> {
   if (cache) return cache
   if (inflight) return inflight
   inflight = (async () => {
-    // Run EFPF + Lubeavto in parallel. Each catches its own failure so one
-    // dead vertical doesn't strand the whole feed.
-    const [adapted, cars] = await Promise.all([
-      fetchAllProducts({ lang: 'ua', per_page: 200 })
-        .then(adaptEfpfProducts)
-        .catch(() => [] as MarketplaceProduct[]),
-      fetchAutoElectricInStock()
-        .then((list) => list.map(autoCardToProduct))
-        .catch(() => [] as MarketplaceProduct[]),
-    ])
-    const merged = [...adapted, ...cars, ...LOCAL_EXTRAS]
+    const adapted = await fetchAllProducts({ lang: 'ua', per_page: 200 })
+      .then(adaptEfpfProducts)
+      .catch(() => [] as MarketplaceProduct[])
+    const merged = withoutDisabled([...adapted, ...LOCAL_EXTRAS])
     cache = merged
     inflight = null
     return merged
@@ -64,7 +63,7 @@ export function useEfpfProducts(): State {
         // EFPF API unreachable (e.g. missing key on a public Pages build).
         // Fall back to bundled mock so the catalog page is at least browsable.
         if (import.meta.env.DEV) console.warn('EFPF failed, falling back to mocks:', err)
-        setState({ data: [...mockProducts, ...LOCAL_EXTRAS], loading: false, error: null })
+        setState({ data: withoutDisabled([...mockProducts, ...LOCAL_EXTRAS]), loading: false, error: null })
       })
     return () => {
       cancelled = true

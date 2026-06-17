@@ -54,6 +54,8 @@ export function AppRouter() {
         <Route path={ROUTES.CHARGER_CONFIGURATOR_DC} element={<DcConfiguratorPage />} />
         <Route path={ROUTES.MARKETPLACE} element={<MarketplaceHomePage />} />
         <Route path={ROUTES.CATALOG} element={<CatalogPage />} />
+        {/* Cars temporarily disabled — bounce the category to home. */}
+        <Route path="/catalog/cars" element={<Navigate to={ROUTES.MARKETPLACE} replace />} />
         <Route path={ROUTES.CATALOG_CATEGORY} element={<CatalogPage />} />
         <Route path={ROUTES.PRODUCT} element={<ProductPage />} />
         <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
@@ -89,7 +91,7 @@ export function AppRouter() {
         {/* Auto vertical migrated into the universal catalog. Old links
             (/auto, /auto/:carId) redirect into /catalog/cars and
             /product/:productId so previously-shared URLs still resolve. */}
-        <Route path={ROUTES.AUTO} element={<Navigate to="/catalog/cars" replace />} />
+        <Route path={ROUTES.AUTO} element={<Navigate to={ROUTES.MARKETPLACE} replace />} />
         <Route path={ROUTES.AUTO_CAR} element={<AutoCarRedirect />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
@@ -98,12 +100,7 @@ export function AppRouter() {
   )
 }
 
-import { useParams } from 'react-router-dom'
-import { productPath } from '../shared/config/routes'
-
-/** Old /auto/:carId URLs map 1:1 to /product/:productId since the lubeavto
- *  card id became the universal product id. */
 function AutoCarRedirect() {
-  const { carId } = useParams<{ carId: string }>()
-  return <Navigate to={carId ? productPath(carId) : '/catalog/cars'} replace />
+  // Cars are switched off — send any old /auto/:carId link to home.
+  return <Navigate to={ROUTES.MARKETPLACE} replace />
 }

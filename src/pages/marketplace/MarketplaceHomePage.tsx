@@ -49,17 +49,6 @@ export function MarketplaceHomePage() {
       ),
     },
     {
-      label: 'Авто',
-      href: catalogCategoryPath('cars'),
-      icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M5 17h14v-4l-2-5H7l-2 5v4z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-          <circle cx="8" cy="17" r="1.5" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="16" cy="17" r="1.5" stroke="currentColor" strokeWidth="1.5" />
-        </svg>
-      ),
-    },
-    {
       label: 'Конфігуратор',
       href: ROUTES.CHARGER_CONFIGURATOR,
       icon: (
