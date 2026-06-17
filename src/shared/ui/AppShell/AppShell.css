@@ -10,6 +10,24 @@
   overflow: hidden;
 }
 
+/* Bottom fade behind the floating nav + sticky CTA. Above scrolling content
+   (z-index), below the nav (z:100) and sticky CTA (z:50). Pointer-transparent
+   so taps fall through to whatever is below. */
+.app-shell__bottom-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--bottom-nav-height, 64px) + var(--safe-area-bottom) + var(--space-3) + 88px);
+  pointer-events: none;
+  z-index: 40;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, var(--color-bg) 60%);
+}
+
+[data-theme="dark"] .app-shell__bottom-fade {
+  background: linear-gradient(to bottom, rgba(57, 57, 57, 0) 0%, var(--color-bg) 60%);
+}
+
 /* Desktop preview: clip the shell to phone-like aspect ratio (≈19.5:9 iPhone) */
 @media (min-width: 600px) {
   .app-shell {

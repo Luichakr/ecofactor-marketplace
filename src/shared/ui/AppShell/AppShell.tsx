@@ -26,6 +26,11 @@ export function AppShell({ children }: Props) {
   return (
     <div ref={ref} className="app-shell">
       {children}
+      {/* Bottom fade — scrolling content dissolves into the page background
+          before it reaches the floating nav / sticky CTA, so text never shows
+          through behind them. Non-interactive; sits above content but below
+          the nav (z:100) and the sticky CTA (z:50). */}
+      <div className="app-shell__bottom-fade" aria-hidden="true" />
     </div>
   )
 }
