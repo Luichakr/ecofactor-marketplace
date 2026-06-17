@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { BottomSheet } from '../../../../shared/ui/BottomSheet/BottomSheet'
 import { supportChat, useSupportChat } from '../../model/supportChatStore'
 import './SupportLauncher.css'
-
-// Hide the floating button on these page roots — bottom-nav presence and
-// sticky CTAs make the FAB visually noisy in flows where it adds nothing.
-// /profile is included because the profile header now exposes a chat
-// icon next to the avatar, so the FAB would duplicate that affordance.
-const HIDE_ON = ['/checkout', '/cart', '/profile']
 
 /** Module-level signal — any component can call `openSupport()` to surface
  *  the chat sheet. SupportLauncher subscribes via a DOM event so we don't
@@ -18,7 +11,6 @@ export function openSupport() {
 }
 
 export function SupportLauncher() {
-  const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
   const messages = useSupportChat()
   const [text, setText] = useState('')
@@ -38,8 +30,6 @@ export function SupportLauncher() {
     }
   }, [open, messages.length])
 
-  const fabHidden = HIDE_ON.some((p) => pathname.startsWith(p))
-
   function send(e: React.FormEvent) {
     e.preventDefault()
     if (!text.trim()) return
@@ -49,20 +39,8 @@ export function SupportLauncher() {
 
   return (
     <>
-      {!fabHidden && (
-        <button
-          type="button"
-          className="support-launcher"
-          onClick={() => setOpen(true)}
-          aria-label="Підтримка"
-        >
-          <span className="support-launcher__dot" />
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M4 5H20V17H13L8 21V17H4V5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
-          </svg>
-        </button>
-      )}
-
+      {/* Floating chat FAB hidden by design — the chat sheet is still
+          reachable via openSupport() (e.g. the profile chat button). */}
       <BottomSheet open={open} onClose={() => setOpen(false)} title="ПІДТРИМКА" maxHeightPct={80}>
         <div className="support-chat">
           <div ref={scrollRef} className="support-chat__messages">

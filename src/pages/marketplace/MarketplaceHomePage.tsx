@@ -9,7 +9,7 @@ import { CatalogGrid } from '../../features/catalog/ui/CatalogGrid/CatalogGrid'
 import { SponsoredCarousel } from '../../features/catalog/ui/SponsoredCarousel/SponsoredCarousel'
 import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
 import { mockCategories } from '../../data/mockCategories'
-import { catalogCategoryPath, REQUEST_PATHS, ROUTES } from '../../shared/config/routes'
+import { catalogCategoryPath, ROUTES } from '../../shared/config/routes'
 import './MarketplaceHomePage.css'
 
 /**
@@ -57,25 +57,6 @@ export function MarketplaceHomePage() {
           <path d="M5 17h14v-4l-2-5H7l-2 5v4z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
           <circle cx="8" cy="17" r="1.5" stroke="currentColor" strokeWidth="1.5" />
           <circle cx="16" cy="17" r="1.5" stroke="currentColor" strokeWidth="1.5" />
-        </svg>
-      ),
-    },
-    {
-      label: 'Колеса',
-      href: catalogCategoryPath('wheels'),
-      icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
-        </svg>
-      ),
-    },
-    {
-      label: 'Сервіс',
-      href: REQUEST_PATHS.AUTOSERVICE,
-      icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M14 6l4 4-8 8H6v-4l8-8zm0 0L18 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
         </svg>
       ),
     },
