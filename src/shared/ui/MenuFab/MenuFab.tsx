@@ -3,17 +3,16 @@ import { ROUTES } from '../../config/routes'
 import './MenuFab.css'
 
 /**
- * Temporary floating "Меню" button.
- *
- * The bottom-nav slot that used to open the menu now returns the user to the
- * ECOFACTOR app ("Зарядка"). Until we decide where the menu entry should
- * permanently live, it rides as a round FAB stacked just above the support
- * chat button on the right edge.
+ * Temporary floating "Меню" button — a round FAB above the bottom nav on the
+ * right. Hidden on the menu itself and on pages that already own the
+ * bottom-right corner (product page has its scroll-to-top FAB; product/cart/
+ * checkout carry a sticky CTA the FAB would collide with).
  */
+const HIDE_ON = [ROUTES.MENU, '/products/', '/cart', '/checkout']
+
 export function MenuFab() {
   const { pathname } = useLocation()
-  // No point showing it while already on the menu.
-  if (pathname.startsWith(ROUTES.MENU)) return null
+  if (HIDE_ON.some((p) => pathname.startsWith(p))) return null
 
   return (
     <Link to={ROUTES.MENU} className="menu-fab" aria-label="Меню">

@@ -18,7 +18,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: calc(var(--bottom-nav-height, 64px) + var(--safe-area-bottom) + var(--space-3) + 56px);
+  /* Height = the nav zone only (matches the sticky CTA's bottom offset), so
+     the fade tops out exactly where a sticky CTA begins and never bleeds up
+     through its translucent buttons. */
+  height: calc(var(--bottom-nav-height, 64px) + var(--safe-area-bottom) + var(--space-3));
   pointer-events: none;
   z-index: 40;
   /* Frosted matte glass: blur the content behind, ramping in from nothing at
