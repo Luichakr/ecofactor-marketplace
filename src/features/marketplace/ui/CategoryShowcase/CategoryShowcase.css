@@ -1,0 +1,13 @@
+/* Home category showcase — tweaks on top of the reused .menu-page__* styles. */
+.category-showcase {
+  margin-bottom: var(--space-4);
+}
+
+/* The menu-page tabs are sticky/full-bleed there; on home keep them inline. */
+.category-showcase__tabs {
+  position: static;
+}
+
+.category-showcase__row {
+  margin-bottom: 0;
+}
