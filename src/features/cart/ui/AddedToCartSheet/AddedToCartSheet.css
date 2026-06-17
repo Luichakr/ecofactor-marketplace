@@ -80,6 +80,10 @@
 }
 
 .added-sheet__primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   background-color: var(--color-accent);
   color: var(--text-reversed);
   border: 2px solid var(--color-accent);
@@ -94,6 +98,10 @@
 }
 
 .added-sheet__secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   background-color: var(--color-surface);
   border: 2px solid var(--color-accent-strong);
   color: var(--color-accent-strong);

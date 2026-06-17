@@ -45,6 +45,7 @@
   flex: 1;
   display: flex;
   overflow-x: auto;
+  touch-action: pan-x;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;

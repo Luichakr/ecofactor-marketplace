@@ -22,6 +22,7 @@
   grid-auto-flow: column;
   grid-auto-columns: 38%;
   overflow-x: auto;
+  touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding: 0 var(--space-4);

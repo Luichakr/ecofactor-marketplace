@@ -5,6 +5,7 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  touch-action: pan-x; /* horizontal only — vertical drags scroll the page */
 }
 
 .subcategory-tabs::-webkit-scrollbar {

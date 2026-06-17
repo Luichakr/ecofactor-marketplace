@@ -32,7 +32,7 @@ export function AddedToCartSheet({ open, onClose, product, allProducts, qty = 1,
       cartCategories: new Set([product.categoryId]),
       cartSubcategories: new Set(subValue ? [subValue] : []),
       mode: 'similar',
-      limit: 18,
+      limit: 9,
     })
   }, [allProducts, product])
 
@@ -53,7 +53,7 @@ export function AddedToCartSheet({ open, onClose, product, allProducts, qty = 1,
           Переглянути
         </button>
       }
-      maxHeightPct={35}
+      maxHeightPct={85}
     >
       <div className="added-sheet">
         {/* Added item preview */}

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGoBack } from '../../shared/lib/useGoBack'
+import { Header } from '../../shared/ui/Header/Header'
+import { Icon } from '../../shared/ui/Icon/Icon'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import { ROUTES, productPath } from '../../shared/config/routes'
@@ -38,47 +39,42 @@ const LIST_TITLE = launch.name ? `СПИСОК · ${launch.name.toUpperCase()}` 
 
 export function FavoritesPage() {
   const navigate = useNavigate()
-  const goBack = useGoBack()
   const ids = useFavorites()
   const cartItems = useCart()
   const live = useEfpfProducts()
   const items = useMemo(() => buildItems(ids, live.data ?? mockProducts), [ids, live.data])
   const cartCount = cartItems.reduce((s, i) => s + i.qty, 0)
 
-  return (
-    <ScreenContainer className="bookmarks-page" withTopInset={false}>
-      {/* Top bar — X (close) on the left, ПОДІЛИТИСЯ on the right */}
-      <header className="bookmarks-page__topbar">
-        <button
-          type="button"
-          className="bookmarks-page__close"
-          aria-label="Закрити"
-          onClick={goBack}
-        >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M3 3L15 15M15 3L3 15" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          className="bookmarks-page__options"
-          disabled={ids.length === 0}
-          onClick={() => {
-            const hash = btoa(JSON.stringify(ids))
-            const url = `${window.location.origin}/wishlist/shared/${hash}`
-            const share = (navigator as Navigator & { share?: (data: { title?: string; url?: string }) => Promise<void> }).share
-            if (typeof share === 'function') {
-              share({ title: 'Мої закладки', url }).catch(() => {})
-            } else {
-              navigator.clipboard?.writeText(url)
-              alert('Посилання скопійовано')
-            }
-          }}
-        >
-          ПОДІЛИТИСЯ
-        </button>
-      </header>
+  function share() {
+    const hash = btoa(JSON.stringify(ids))
+    const url = `${window.location.origin}/wishlist/shared/${hash}`
+    const nav = navigator as Navigator & { share?: (data: { title?: string; url?: string }) => Promise<void> }
+    if (typeof nav.share === 'function') {
+      nav.share({ title: 'Мої закладки', url }).catch(() => {})
+    } else {
+      navigator.clipboard?.writeText(url)
+      alert('Посилання скопійовано')
+    }
+  }
 
+  return (
+    <>
+      <Header
+        title="ЗАКЛАДКИ"
+        showBack
+        backFallback={ROUTES.MARKETPLACE}
+        rightSlot={
+          <button
+            type="button"
+            className="bookmarks-page__options"
+            disabled={ids.length === 0}
+            onClick={share}
+          >
+            ПОДІЛИТИСЯ
+          </button>
+        }
+      />
+      <ScreenContainer className="bookmarks-page" withTopInset={false}>
       {/* Tab row: КОШИК | N |     ЗАКЛАДКИ ⚑ */}
       <div className="bookmarks-page__tabs">
         <button
@@ -93,9 +89,7 @@ export function FavoritesPage() {
           className="bookmarks-page__tab bookmarks-page__tab--active"
         >
           ЗАКЛАДКИ
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M6 6h12v12L12 14.5L6 18Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-          </svg>
+          <Icon name="favorite" filled size={14} />
         </button>
       </div>
 
@@ -132,9 +126,7 @@ export function FavoritesPage() {
                     onClick={() => favorites.toggle(it.id)}
                     aria-label="Видалити із закладок"
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M6 6h12v12L12 14.5L6 18Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-                    </svg>
+                    <Icon name="favorite" filled size={16} />
                   </button>
                 </div>
                 <PriceCell item={it} />
@@ -156,7 +148,8 @@ export function FavoritesPage() {
           </ul>
         </>
       )}
-    </ScreenContainer>
+      </ScreenContainer>
+    </>
   )
 }
 

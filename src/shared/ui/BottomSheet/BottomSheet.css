@@ -31,7 +31,21 @@
   border-top-left-radius: var(--radius-lg);
   border-top-right-radius: var(--radius-lg);
   overflow: hidden;
+  /* Snap back smoothly after a drag that didn't cross the close threshold. */
+  transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
+
+/* Drag zone (handle + header) — own the vertical gesture so the swipe-down
+   works instead of being read as a scroll. */
+.bottom-sheet__drag {
+  flex-shrink: 0;
+  touch-action: none;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.bottom-sheet__drag:active { cursor: grabbing; }
 
 @keyframes bs-slide-up {
   from { transform: translateY(100%); }

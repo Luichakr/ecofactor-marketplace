@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BottomSheet } from '../../../../shared/ui/BottomSheet/BottomSheet'
+import { Icon } from '../../../../shared/ui/Icon/Icon'
 import { ProductCard } from '../../../product/ui/ProductCard/ProductCard'
 import { ProductImage } from '../../../product/ui/ProductImage/ProductImage'
 import { quickAdd, useQuickAdd } from '../../model/quickAddStore'
@@ -127,22 +128,9 @@ function QuickAddBody({ state }: { state: { product: MarketplaceProduct; pool: M
           aria-pressed={isFav}
         >
           <span>{isFav ? 'У ЗАКЛАДКАХ' : 'ДОДАТИ В ЗАКЛАДКИ'}</span>
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            fill={isFav ? 'currentColor' : 'none'}
-            className={`quick-add__bookmark ${isFav ? 'quick-add__bookmark--active' : ''}`}
-          >
-            <path
-              d="M6 6h12v12L12 14.5L6 18Z"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-            />
-          </svg>
+          <span className={`quick-add__bookmark ${isFav ? 'quick-add__bookmark--active' : ''}`}>
+            <Icon name="favorite" filled={isFav} size={18} />
+          </span>
         </button>
       </div>
     )

@@ -1,5 +1,6 @@
 import { favorites, useIsFavorite } from '../../model/favoritesStore'
 import { showBookmarkToast } from '../BookmarkToast/bus'
+import { Icon } from '../../../../shared/ui/Icon/Icon'
 import './FavoriteButton.css'
 
 type Props = {
@@ -41,17 +42,8 @@ export function FavoriteButton({
       aria-label={active ? 'Видалити із закладок' : 'Додати в закладки'}
       aria-pressed={active}
     >
-      {/* Bookmark icon — outer envelope is a square (top/left/right edges
-       *  all equal), V-notch cuts inward from the bottom. */}
-      <svg width={size} height={size} viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'}>
-        <path
-          d="M6 6h12v12L12 14.5L6 18Z"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-        />
-      </svg>
+      {/* Heart icon — consistent with the bottom nav + catalog cards. */}
+      <Icon name="favorite" filled={active} size={size} />
     </button>
   )
 }

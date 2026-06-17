@@ -18,6 +18,8 @@ export type VisualCard = {
   id: string
   caption: string
   image?: string
+  /** Material Symbols glyph — rendered as an icon tile when there's no image. */
+  icon?: string
   size?: string
   href?: string
 }
@@ -130,10 +132,10 @@ export const SECTIONS: Record<string, Section> = {
 
   about: {
     visual: [
-      { id: 'about-company', caption: 'КОМПАНІЯ', size: '720 × 960' },
-      { id: 'about-warranty', caption: 'ГАРАНТІЯ', size: '720 × 960' },
-      { id: 'about-delivery', caption: 'ДОСТАВКА', size: '720 × 960' },
-      { id: 'about-contacts', caption: 'КОНТАКТИ', size: '720 × 960' },
+      { id: 'about-company', caption: 'КОМПАНІЯ', icon: 'apartment' },
+      { id: 'about-warranty', caption: 'ГАРАНТІЯ', icon: 'verified_user' },
+      { id: 'about-delivery', caption: 'ДОСТАВКА', icon: 'local_shipping' },
+      { id: 'about-contacts', caption: 'КОНТАКТИ', icon: 'call' },
     ],
     groups: [
       {

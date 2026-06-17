@@ -3,6 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useInactivityAutoScroll } from '../../shared/lib/hooks/useInactivityAutoScroll'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { Header } from '../../shared/ui/Header/Header'
+import { Icon } from '../../shared/ui/Icon/Icon'
 import { PlaceholderImage } from '../../shared/ui/PlaceholderImage/PlaceholderImage'
 import { NewsletterSheet } from '../../features/newsletter/ui/NewsletterSheet/NewsletterSheet'
 import { SearchIconButton } from '../../features/search/ui/SearchTrigger/SearchTrigger'
@@ -92,6 +93,10 @@ export function MenuPage() {
             {c.image ? (
               <span className="menu-page__visual-card-image">
                 <img src={c.image} alt={c.caption} />
+              </span>
+            ) : c.icon ? (
+              <span className="menu-page__visual-card-image menu-page__visual-card-icon">
+                <Icon name={c.icon} size={44} />
               </span>
             ) : (
               <PlaceholderImage caption={c.caption} size={c.size ?? '720 × 960'} aspectRatio="3 / 4" />

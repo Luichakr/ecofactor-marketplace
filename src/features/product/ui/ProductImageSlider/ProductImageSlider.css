@@ -14,9 +14,14 @@
   display: flex;
   width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  /* Only own horizontal panning — vertical drags fall through to the page so
+     the user can scroll even with a finger on the photo (iOS WebKit traps it
+     otherwise). */
+  touch-action: pan-x;
   /* Hide scrollbar in WebKit too. */
 }
 

@@ -19,7 +19,7 @@ type Tile = {
 // the fourth jumps straight to the favorites page.
 const TILES: Tile[] = [
   { id: 'charging', label: 'EV-зарядка', to: `${catalogCategoryPath('ev-charging')}?view=2`, image: SECTIONS.charging.visual[0]?.image },
-  { id: 'solar', label: 'Сонце', to: '/menu/solar', image: SECTIONS.solar.visual[0]?.image },
+  { id: 'solar', label: 'Сонце', to: `${catalogCategoryPath('solar')}?view=2`, image: SECTIONS.solar.visual[0]?.image },
   { id: 'about', label: 'Про нас', to: '/menu/about' },
   { id: 'favorites', label: 'Закладки', to: ROUTES.FAVORITES, icon: <Icon name="favorite" size={40} /> },
 ]
