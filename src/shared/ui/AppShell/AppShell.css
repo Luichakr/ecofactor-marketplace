@@ -21,11 +21,18 @@
   height: calc(var(--bottom-nav-height, 64px) + var(--safe-area-bottom) + var(--space-3) + 88px);
   pointer-events: none;
   z-index: 40;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, var(--color-bg) 60%);
+  /* Frosted matte glass: blur the content behind, ramping in from nothing at
+     the top to full toward the bottom via a mask, plus a soft translucent
+     tint so it reads as matte glass rather than a hard gradient. */
+  backdrop-filter: blur(14px) saturate(115%);
+  -webkit-backdrop-filter: blur(14px) saturate(115%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 70%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 45%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 45%);
 }
 
 [data-theme="dark"] .app-shell__bottom-fade {
-  background: linear-gradient(to bottom, rgba(57, 57, 57, 0) 0%, var(--color-bg) 60%);
+  background: linear-gradient(to bottom, rgba(57, 57, 57, 0) 0%, rgba(57, 57, 57, 0.6) 70%);
 }
 
 /* Desktop preview: clip the shell to phone-like aspect ratio (≈19.5:9 iPhone) */
