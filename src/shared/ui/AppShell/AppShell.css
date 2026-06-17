@@ -18,7 +18,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: calc(var(--bottom-nav-height, 64px) + var(--safe-area-bottom) + var(--space-3) + 88px);
+  height: calc(var(--bottom-nav-height, 64px) + var(--safe-area-bottom) + var(--space-3) + 56px);
   pointer-events: none;
   z-index: 40;
   /* Frosted matte glass: blur the content behind, ramping in from nothing at
