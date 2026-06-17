@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useGoBack } from '../../../shared/lib/useGoBack';
 import { useDcChargerConfig } from '../hooks/useDcChargerConfig';
 import { DcConfiguratorPreview } from './DcConfiguratorPreview';
 import { StepDcFormFactor } from './steps/StepDcFormFactor';
@@ -15,7 +15,7 @@ const TOTAL_STEPS = 5;
 const WIZARD_LABELS = ['Форм-фактор', 'Потужність', 'Конектори', 'Функції', 'Зведення'];
 
 export const DcChargerConfigurator: React.FC = () => {
-  const navigate = useNavigate();
+  const goBack = useGoBack();
 
   const {
     config,
@@ -37,7 +37,7 @@ export const DcChargerConfigurator: React.FC = () => {
 
   const handleBack = () => {
     if (config.step > 1) setStep(config.step - 1);
-    else navigate(-1);
+    else goBack();
   };
 
   const handleSubmit = () => {

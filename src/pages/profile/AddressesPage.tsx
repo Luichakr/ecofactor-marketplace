@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Header } from '../../shared/ui/Header/Header'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
@@ -17,7 +16,6 @@ import './SimpleProfileList.css'
 const TYPE_LABEL: Record<AddressType, string> = { home: 'ДІМ', work: 'РОБОТА', other: 'ІНШЕ' }
 
 export function AddressesPage() {
-  const navigate = useNavigate()
   const addresses = useAddresses()
   const [sheetOpen, setSheetOpen] = useState(false)
   const [editing, setEditing] = useState<SavedAddress | null>(null)
@@ -34,7 +32,7 @@ export function AddressesPage() {
 
   return (
     <>
-      <Header title="АДРЕСИ ДОСТАВКИ" showBack onBack={() => navigate(ROUTES.PROFILE)} />
+      <Header title="АДРЕСИ ДОСТАВКИ" showBack backFallback={ROUTES.PROFILE} />
       <ScreenContainer withTopInset={false}>
         {addresses.length === 0 ? (
           <EmptyState

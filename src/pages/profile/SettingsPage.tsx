@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Header } from '../../shared/ui/Header/Header'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { ROUTES } from '../../shared/config/routes'
@@ -9,7 +8,6 @@ import './SimpleProfileList.css'
 import './SettingsPage.css'
 
 export function SettingsPage() {
-  const navigate = useNavigate()
   const settings = useSettings()
   const { setTheme } = useTheme()
 
@@ -52,7 +50,7 @@ export function SettingsPage() {
 
   return (
     <>
-      <Header title="НАЛАШТУВАННЯ" showBack onBack={() => navigate(ROUTES.PROFILE)} />
+      <Header title="НАЛАШТУВАННЯ" showBack backFallback={ROUTES.PROFILE} />
       <ScreenContainer withTopInset={false}>
         <div className="settings-page">
           <Group title="ТЕМА">

@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useGoBack } from '../../shared/lib/useGoBack'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import { ROUTES, productPath } from '../../shared/config/routes'
@@ -37,6 +38,7 @@ const LIST_TITLE = launch.name ? `СПИСОК · ${launch.name.toUpperCase()}` 
 
 export function FavoritesPage() {
   const navigate = useNavigate()
+  const goBack = useGoBack()
   const ids = useFavorites()
   const cartItems = useCart()
   const live = useEfpfProducts()
@@ -51,7 +53,7 @@ export function FavoritesPage() {
           type="button"
           className="bookmarks-page__close"
           aria-label="Закрити"
-          onClick={() => navigate(-1)}
+          onClick={goBack}
         >
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
             <path d="M3 3L15 15M15 3L3 15" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />

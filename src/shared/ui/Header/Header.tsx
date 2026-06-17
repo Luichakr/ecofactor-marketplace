@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useGoBack } from '../../lib/useGoBack'
 import './Header.css'
 
 type Props = {
@@ -6,16 +6,20 @@ type Props = {
   subtitle?: string
   showBack?: boolean
   /** Custom back handler. When provided, the back button calls this instead
-   *  of `navigate(-1)`. Lets the host page route back to a logical parent
+   *  of the default. Lets the host page route back to a logical parent
    *  (e.g. wheels list) rather than the previous history entry which may
    *  belong to an unrelated category. */
   onBack?: () => void
+  /** Fallback route for the default back handler when there is no in-app
+   *  history to pop (deep link / fresh WebView entry). Ignored when `onBack`
+   *  is set. Defaults to the marketplace home. */
+  backFallback?: string
   rightSlot?: React.ReactNode
   transparent?: boolean
 }
 
-export function Header({ title, subtitle, showBack = false, onBack, rightSlot, transparent = false }: Props) {
-  const navigate = useNavigate()
+export function Header({ title, subtitle, showBack = false, onBack, backFallback, rightSlot, transparent = false }: Props) {
+  const goBack = useGoBack(backFallback)
 
   return (
     <header className={`header ${transparent ? 'header--transparent' : ''}`}>
@@ -23,7 +27,7 @@ export function Header({ title, subtitle, showBack = false, onBack, rightSlot, t
         {showBack && (
           <button
             className="header__back"
-            onClick={() => (onBack ? onBack() : navigate(-1))}
+            onClick={() => (onBack ? onBack() : goBack())}
             aria-label="Назад"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">

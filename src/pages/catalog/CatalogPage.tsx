@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useState, useEffect } from 'react'
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { ROUTES } from '../../shared/config/routes'
 import { mockCategories } from '../../data/mockCategories'
 import { filterProducts } from '../../features/catalog/lib/filterProducts'
@@ -28,7 +28,6 @@ const VIEW_KEY = 'ecofactor-catalog-view'
 export function CatalogPage() {
   const { categoryId } = useParams<{ categoryId?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()
-  const navigate = useNavigate()
   const [view, setView] = useState<ViewMode>(() => {
     // Guarded — localStorage throws in private-mode WebView / when storage
     // is disabled, which would otherwise crash the catalog on mount.
@@ -189,19 +188,9 @@ export function CatalogPage() {
         title={headerTitle}
         showBack={!!categoryId}
         rightSlot={<SearchIconButton />}
-        onBack={() => {
-          // Always return to the Menu page on the tab whose section owns
-          // this category, so the user lands on the same vertical strip
-          // they tapped a moment ago (breadcrumb-like behaviour).
-          const CATEGORY_TO_MENU_TAB: Record<string, string> = {
-            'ev-charging': 'charging',
-            solar: 'solar',
-            cars: 'auto',
-            wheels: 'wheels',
-          }
-          const tab = (categoryId && CATEGORY_TO_MENU_TAB[categoryId]) || ''
-          navigate(tab ? `${ROUTES.MENU}?tab=${tab}` : ROUTES.MENU)
-        }}
+        // Go to the real previous step; if opened deep (no in-app history)
+        // fall back to the marketplace home rather than jumping to /menu.
+        backFallback={ROUTES.MARKETPLACE}
       />
       <ScreenContainer withTopInset={false}>
         {category?.subcategories && !activeSubcategory && (

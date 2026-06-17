@@ -37,7 +37,7 @@ export function WishlistSharedPage() {
 
   return (
     <>
-      <Header title="СПИСОК БАЖАНЬ" showBack onBack={() => navigate(-1)} />
+      <Header title="СПИСОК БАЖАНЬ" showBack backFallback={ROUTES.FAVORITES} />
       <ScreenContainer withTopInset={false}>
         {products.length === 0 ? (
           <EmptyState variant="favorites" title="Список порожній" description="Можливо, посилання застаріло." />

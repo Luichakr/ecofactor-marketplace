@@ -40,7 +40,7 @@ export function OrderDetailPage() {
   if (!order) {
     return (
       <>
-        <Header title="ЗАМОВЛЕННЯ" showBack onBack={() => navigate(ROUTES.ORDERS)} />
+        <Header title="ЗАМОВЛЕННЯ" showBack backFallback={ROUTES.ORDERS} />
         <ScreenContainer withTopInset={false}>
           <EmptyState title="Замовлення не знайдено" description="Можливо, посилання застаріло." />
         </ScreenContainer>
@@ -70,7 +70,7 @@ export function OrderDetailPage() {
 
   return (
     <>
-      <Header title={`№ ${order.number}`} showBack onBack={() => navigate(ROUTES.ORDERS)} />
+      <Header title={`№ ${order.number}`} showBack backFallback={ROUTES.ORDERS} />
       <ScreenContainer withTopInset={false}>
         <div className="order-detail">
           <ProgressStepper order={order} />

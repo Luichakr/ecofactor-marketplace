@@ -6,7 +6,6 @@ import { useSearchTrigger } from '../../features/search/ui/SearchTrigger/SearchT
 import { closeMarketplace } from '../../shared/lib/webview/webviewBridge'
 import { CategoryGrid } from '../../features/marketplace/ui/CategoryGrid/CategoryGrid'
 import { CatalogGrid } from '../../features/catalog/ui/CatalogGrid/CatalogGrid'
-import { SponsoredCarousel } from '../../features/catalog/ui/SponsoredCarousel/SponsoredCarousel'
 import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
 import { mockCategories } from '../../data/mockCategories'
 import { catalogCategoryPath, ROUTES } from '../../shared/config/routes'
@@ -119,11 +118,6 @@ export function MarketplaceHomePage() {
           </Link>
         ))}
       </nav>
-
-      {/* Hero promo — auto-rotating carousel through SPONSORED_CARDS.
-          Swipeable, 5-second auto-advance, ~3% peek of neighbouring
-          slides on each side. */}
-      <SponsoredCarousel />
 
       {/* "Популярне" product grid — main "shop" feel. Two-column,
           tappable cards with photo swipe (same as catalog). */}

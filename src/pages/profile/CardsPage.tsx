@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Header } from '../../shared/ui/Header/Header'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
@@ -22,13 +21,12 @@ function detectBrand(num: string): SavedCard['brand'] {
 }
 
 export function CardsPage() {
-  const navigate = useNavigate()
   const cards = useCards()
   const [open, setOpen] = useState(false)
 
   return (
     <>
-      <Header title="ПЛАТІЖНІ КАРТКИ" showBack onBack={() => navigate(ROUTES.PROFILE)} />
+      <Header title="ПЛАТІЖНІ КАРТКИ" showBack backFallback={ROUTES.PROFILE} />
       <ScreenContainer withTopInset={false}>
         {cards.length === 0 ? (
           <EmptyState

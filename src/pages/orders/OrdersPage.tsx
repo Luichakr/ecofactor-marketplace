@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Header } from '../../shared/ui/Header/Header'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
@@ -25,7 +25,6 @@ function dateUA(iso: string) {
 }
 
 export function OrdersPage() {
-  const navigate = useNavigate()
   const orders = useOrders()
   const [filter, setFilter] = useState<Filter>('all')
 
@@ -39,7 +38,7 @@ export function OrdersPage() {
 
   return (
     <>
-      <Header title="МОЇ ЗАМОВЛЕННЯ" showBack onBack={() => navigate(ROUTES.PROFILE)} />
+      <Header title="МОЇ ЗАМОВЛЕННЯ" showBack backFallback={ROUTES.PROFILE} />
       <ScreenContainer withTopInset={false}>
         <div className="orders-page__tabs">
           {(['all', 'active', 'delivered', 'cancelled'] as Filter[]).map((t) => (

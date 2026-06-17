@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useGoBack } from '../../../shared/lib/useGoBack';
 import { useChargerConfig } from '../hooks/useChargerConfig';
 import { ConfiguratorPreview } from './ConfiguratorPreview';
 import { Step1TypeSelection } from './steps/Step1TypeSelection';
@@ -18,7 +18,7 @@ const TOTAL_STEPS = 6;
 const WIZARD_LABELS = ['Форм-фактор', 'Потужність', 'Конектори', 'Функції', 'Зведення'];
 
 export const ChargerConfigurator: React.FC = () => {
-  const navigate = useNavigate();
+  const goBack = useGoBack();
 
   const {
     config,
@@ -59,7 +59,7 @@ export const ChargerConfigurator: React.FC = () => {
       <Header
         title="КОНФІГУРАТОР СТАНЦІЇ"
         showBack
-        onBack={() => config.step > 1 ? setStep(config.step - 1) : navigate(-1)}
+        onBack={() => config.step > 1 ? setStep(config.step - 1) : goBack()}
       />
       <ScreenContainer withTopInset={false}>
         <div className="charger-configurator">

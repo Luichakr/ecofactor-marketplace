@@ -11,7 +11,7 @@ import {
   type ReturnReason,
   type ReturnRefundMethod,
 } from '../../features/returns/model/returnsStore'
-import { orderDetailPath } from '../../shared/config/routes'
+import { ROUTES, orderDetailPath } from '../../shared/config/routes'
 import './ReturnFormPage.css'
 
 const REFUND_LABELS: Record<ReturnRefundMethod, string> = {
@@ -33,7 +33,7 @@ export function ReturnFormPage() {
   if (!order) {
     return (
       <>
-        <Header title="ПОВЕРНЕННЯ" showBack onBack={() => navigate(-1)} />
+        <Header title="ПОВЕРНЕННЯ" showBack backFallback={ROUTES.ORDERS} />
         <ScreenContainer withTopInset={false}>
           <EmptyState title="Замовлення не знайдено" />
         </ScreenContainer>
@@ -66,7 +66,7 @@ export function ReturnFormPage() {
 
   return (
     <>
-      <Header title={`ПОВЕРНЕННЯ № ${order.number}`} showBack onBack={() => navigate(orderDetailPath(order.id))} />
+      <Header title={`ПОВЕРНЕННЯ № ${order.number}`} showBack backFallback={orderDetailPath(order.id)} />
       <ScreenContainer withTopInset={false}>
         <div className="return-form">
           <Section title="ОБЕРІТЬ ТОВАРИ ДЛЯ ПОВЕРНЕННЯ">
