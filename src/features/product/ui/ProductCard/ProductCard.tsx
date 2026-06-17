@@ -5,6 +5,7 @@ import { productPath } from '../../../../shared/config/routes'
 import { ProductImageSlider } from '../ProductImageSlider/ProductImageSlider'
 import { quickAdd } from '../../../quick-add/model/quickAddStore'
 import { favorites, useIsFavorite } from '../../../favorites/model/favoritesStore'
+import { Icon } from '../../../../shared/ui/Icon/Icon'
 import './ProductCard.css'
 
 type Props = {
@@ -54,14 +55,7 @@ export function ProductCard({ product, compact = false, pool }: Props) {
           aria-label={isFav ? 'Прибрати із закладок' : 'Додати в закладки'}
           aria-pressed={isFav}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill={isFav ? 'currentColor' : 'none'}>
-            <path
-              d="M12 21s-7-4.5-7-10.5C5 7.5 7.5 5 10.5 5c1.5 0 3 .8 1.5 2 1.5-1.2 3-2 4.5-2C19.5 5 22 7.5 22 10.5 22 16.5 12 21 12 21z"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <Icon name="favorite" filled={isFav} size={20} />
         </button>
       </div>
 
