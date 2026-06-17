@@ -81,7 +81,7 @@
 
 .season-showcase__image {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   background-color: var(--color-surface-elevated);
   overflow: hidden;
   border-radius: var(--radius-md);

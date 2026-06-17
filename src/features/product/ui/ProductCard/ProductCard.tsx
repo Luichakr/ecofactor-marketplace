@@ -4,6 +4,7 @@ import { formatPrice, formatOldPrice } from '../../../../entities/product/model/
 import { productPath } from '../../../../shared/config/routes'
 import { ProductImageSlider } from '../ProductImageSlider/ProductImageSlider'
 import { quickAdd } from '../../../quick-add/model/quickAddStore'
+import { favorites, useIsFavorite } from '../../../favorites/model/favoritesStore'
 import './ProductCard.css'
 
 type Props = {
@@ -21,9 +22,15 @@ type Props = {
  */
 export function ProductCard({ product, compact = false, pool }: Props) {
   const navigate = useNavigate()
+  const isFav = useIsFavorite(product.id)
 
   function go() {
     navigate(productPath(product.id))
+  }
+
+  function toggleFav(e: React.MouseEvent) {
+    e.stopPropagation()
+    favorites.toggle(product.id)
   }
 
   function openQuickAdd(e: React.MouseEvent) {
@@ -40,6 +47,22 @@ export function ProductCard({ product, compact = false, pool }: Props) {
           categoryId={product.categoryId}
           onTap={go}
         />
+        <button
+          type="button"
+          className={`product-card__fav ${isFav ? 'product-card__fav--active' : ''}`}
+          onClick={toggleFav}
+          aria-label={isFav ? 'Прибрати із закладок' : 'Додати в закладки'}
+          aria-pressed={isFav}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill={isFav ? 'currentColor' : 'none'}>
+            <path
+              d="M12 21s-7-4.5-7-10.5C5 7.5 7.5 5 10.5 5c1.5 0 3 .8 1.5 2 1.5-1.2 3-2 4.5-2C19.5 5 22 7.5 22 10.5 22 16.5 12 21 12 21z"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
       </div>
 
       <div className="product-card__body">

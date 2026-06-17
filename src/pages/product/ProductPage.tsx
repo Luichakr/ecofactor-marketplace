@@ -279,8 +279,9 @@ export function ProductPage() {
               alt={product.title}
               categoryId={product.categoryId}
               /* Cars use a 4:3 landscape ratio because Lubeavto delivers
-                 wide source photos and they should show the whole car. */
-              aspectRatio={product.categoryId === 'cars' ? '4 / 3' : '3 / 4'}
+                 wide source photos and they should show the whole car;
+                 everything else is square. */
+              aspectRatio={product.categoryId === 'cars' ? '4 / 3' : '1 / 1'}
               onSlideClick={(i) => setFullscreen(i)}
               className="product-page__gallery"
             />
@@ -288,7 +289,7 @@ export function ProductPage() {
             <PlaceholderImage
               size="1248 × 1664"
               caption={product.title}
-              aspectRatio={product.categoryId === 'cars' ? '4 / 3' : '3 / 4'}
+              aspectRatio={product.categoryId === 'cars' ? '4 / 3' : '1 / 1'}
               className="product-page__hero-placeholder"
             />
           )}
