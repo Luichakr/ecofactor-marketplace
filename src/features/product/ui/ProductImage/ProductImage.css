@@ -14,6 +14,13 @@
   display: block;
 }
 
+/* Mobile-charger cable photos ship in landscape; rotate them 90° clockwise so
+   the cable reads vertically. scale(1.3333) re-fills the 3:4 portrait box after
+   the rotation swaps the visual width/height. */
+.product-image__img[src*="mobile-7-efc-r-"] {
+  transform: rotate(90deg) scale(1.3333);
+}
+
 .product-image__skeleton {
   position: absolute;
   inset: 0;
