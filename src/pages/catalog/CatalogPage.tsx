@@ -193,10 +193,13 @@ export function CatalogPage() {
         backFallback={ROUTES.MARKETPLACE}
       />
       <ScreenContainer withTopInset={false}>
-        {category?.subcategories && !activeSubcategory && (
+        {/* Subcategory tabs stay visible while a subcategory is selected —
+            the chosen one is highlighted and tapping another just re-filters
+            the grid (no navigation, no hidden menu). */}
+        {category?.subcategories && (
           <SubcategoryTabs
             subcategories={category.subcategories}
-            active={null}
+            active={activeSubcategory}
             onChange={setSubcategory}
             counts={subcategoryCounts}
           />
@@ -236,7 +239,7 @@ export function CatalogPage() {
           // Once they drill into a brand or any other deep filter, fall
           // back to the standard grid so the carousels don't show
           // duplicates of the same brand.
-          view === 1 && category && activeFiltersCount === 0 ? (
+          view === 1 && category && activeFiltersCount === 0 && !activeSubcategory ? (
             <div className="catalog-page__editorial">
               <EditorialLayout
                 products={result}
