@@ -1,25 +1,15 @@
-import { useEffect } from 'react'
 import { Header } from '../../shared/ui/Header/Header'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { ROUTES } from '../../shared/config/routes'
 import { profile, useSettings } from '../../features/profile/model/profileStore'
-import { useTheme } from '../../shared/lib/theme/ThemeContext'
 import './SimpleProfileList.css'
 import './SettingsPage.css'
 
 export function SettingsPage() {
   const settings = useSettings()
-  const { setTheme } = useTheme()
 
-  // Sync the theme from settings store on mount and whenever it changes.
-  useEffect(() => {
-    if (settings.theme === 'auto') {
-      const dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      setTheme(dark ? 'dark' : 'light')
-    } else {
-      setTheme(settings.theme)
-    }
-  }, [settings.theme, setTheme])
+  // Theme application lives in ThemeProvider (reads this same setting and
+  // resolves 'auto' against the phone). Here we only edit the preference.
 
   // Wipe browsing-history keys, then reload so the in-memory stores reset.
   function clearHistory() {
