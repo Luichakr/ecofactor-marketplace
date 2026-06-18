@@ -51,10 +51,6 @@ export function CatalogPage() {
   const [filtersOpen, setFiltersOpen] = useState(false)
   const goBack = useGoBack(ROUTES.MARKETPLACE)
   const { open: openSearch } = useSearchTrigger()
-  // Hide the sticky subcategory tabs on scroll-down, slide them back on
-  // scroll-up — so the user can switch category without scrolling to top.
-  const [tabsHidden, setTabsHidden] = useState(false)
-
   useEffect(() => {
     try {
       localStorage.setItem(VIEW_KEY, String(view))
@@ -63,41 +59,25 @@ export function CatalogPage() {
     }
   }, [view])
 
+  // Sticky subcategory tabs slide with the scroll 1:1 (like the Safari address
+  // bar) — moving up as you scroll down and back down as you scroll up, at the
+  // exact speed of the finger, instead of a separate snap animation.
+  const tabsRef = useRef<HTMLDivElement>(null)
   const lastScrollY = useRef(0)
-  const accDelta = useRef(0)
+  const tabsOffset = useRef(0)
   useEffect(() => {
-    // Hysteresis so the tabs don't vanish on the first pixel of scroll:
-    // accumulate movement in the current direction and only flip once it
-    // passes a threshold. Always keep them visible near the very top.
-    const STAY_NEAR_TOP = 64 // px from top where tabs always show
-    const HIDE_THRESHOLD = 72 // cumulative down-scroll before hiding
-    const SHOW_THRESHOLD = 36 // cumulative up-scroll before revealing
-    let ticking = false
     function onScroll(e: Event) {
       const t = e.target as HTMLElement | null
       if (!t || typeof t.scrollTop !== 'number') return
-      if (ticking) return
-      ticking = true
+      const el = tabsRef.current
+      if (!el) return
+      const barH = el.offsetHeight || 100
       const y = t.scrollTop
-      requestAnimationFrame(() => {
-        const dy = y - lastScrollY.current
-        // Reset the accumulator whenever the direction changes.
-        if ((dy > 0 && accDelta.current < 0) || (dy < 0 && accDelta.current > 0)) {
-          accDelta.current = 0
-        }
-        accDelta.current += dy
-
-        if (y < STAY_NEAR_TOP) {
-          setTabsHidden(false)
-          accDelta.current = 0
-        } else if (accDelta.current > HIDE_THRESHOLD) {
-          setTabsHidden(true)
-        } else if (accDelta.current < -SHOW_THRESHOLD) {
-          setTabsHidden(false)
-        }
-        lastScrollY.current = y
-        ticking = false
-      })
+      const dy = y - lastScrollY.current
+      lastScrollY.current = y
+      // Accumulate the offset in [0, barH]; clamp so it never over-shoots.
+      tabsOffset.current = y <= 0 ? 0 : Math.min(barH, Math.max(0, tabsOffset.current + dy))
+      el.style.transform = `translateY(${-tabsOffset.current}px)`
     }
     document.addEventListener('scroll', onScroll, true)
     return () => document.removeEventListener('scroll', onScroll, true)
@@ -268,11 +248,7 @@ export function CatalogPage() {
             back in on scroll-up so the category switcher is always one swipe
             away, no scroll-to-top needed. */}
         {category?.subcategories && (
-          <div
-            className={`catalog-page__sticky-tabs ${
-              tabsHidden ? 'catalog-page__sticky-tabs--hidden' : ''
-            }`}
-          >
+          <div ref={tabsRef} className="catalog-page__sticky-tabs">
             <SubcategoryTabs
               subcategories={category.subcategories}
               active={activeSubcategory}

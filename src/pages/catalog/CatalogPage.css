@@ -81,12 +81,9 @@ main.screen-container.catalog-page {
   z-index: 6;
   padding-top: var(--space-2);
   background-color: var(--color-bg);
-  transition: transform var(--transition-normal);
+  /* Transform is driven directly from the scroll position (1:1), so no
+     transition — it tracks the finger instead of snapping. */
   will-change: transform;
-}
-
-.catalog-page__sticky-tabs--hidden {
-  transform: translateY(-110%);
 }
 
 /* Editorial (view 1) layout is full-bleed — the hero blocks reach the
