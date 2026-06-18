@@ -17,7 +17,6 @@
   scrollbar-width: none;
   /* Horizontal pan only — let vertical drags scroll the page (iOS WebKit
      would otherwise swallow the gesture on the hero photo). */
-  touch-action: pan-x;
 }
 
 .product-gallery__rail::-webkit-scrollbar { display: none; }

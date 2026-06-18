@@ -80,7 +80,6 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
-  touch-action: pan-x; /* let vertical drags scroll the page */
   /* Respect the row's left padding when snap aligns the first card */
   scroll-padding-left: var(--space-4);
   scroll-padding-right: var(--space-4);

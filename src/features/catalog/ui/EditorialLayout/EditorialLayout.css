@@ -188,7 +188,6 @@
   gap: var(--space-3);
   padding: 0 var(--space-4);
   overflow-x: auto;
-  touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
