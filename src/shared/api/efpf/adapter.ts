@@ -128,6 +128,67 @@ function mapAttributes(item: EfpfProduct, routing: Routing): ProductAttribute[] 
 }
 
 /**
+ * Selling, clean title + subtitle generated from the product's own attributes
+ * (subcategory + manufacturer + power + connector) — not the raw, often
+ * duplicated API copy. Attached per product, no per-id hardcoding.
+ */
+function buildCopy(
+  item: EfpfProduct,
+  routing: Routing,
+  attrs: ProductAttribute[],
+): { title: string; subtitle?: string } {
+  const get = (k: string): string | undefined => {
+    const a = attrs.find((x) => x.key === k)
+    return typeof a?.value === 'string' && a.value ? a.value : undefined
+  }
+  const name = (item.name || '').trim()
+  const brand = get('manufacturer') ?? 'ECOFACTOR'
+  const power = get('power')
+  const connector = get('connector')
+  const spec = [power, connector].filter(Boolean).join(' ')
+
+  switch (routing.subcategoryId) {
+    case 'mobile-charging-stations':
+      return {
+        title: `Мобільна зарядна станція${spec ? ` ${spec}` : ''}`,
+        subtitle: `Мобільна зарядна станція ${brand}${spec ? ` ${spec}` : ''} для зарядки вашого електромобіля`,
+      }
+    case 'cables':
+      return {
+        title: name || `Зарядний кабель${connector ? ` ${connector}` : ''}`,
+        subtitle: `Зарядний кабель ${brand}${connector ? ` ${connector}` : ''} для заряджання електромобіля`,
+      }
+    case 'accessories':
+      return {
+        title: name,
+        subtitle: `${name} — аксесуар ${brand} для зарядних станцій`,
+      }
+    case 'solar-panels':
+      return {
+        title: name || `Сонячна панель${power ? ` ${power}` : ''}`,
+        subtitle: `Сонячна панель ${brand}${power ? ` ${power}` : ''} для автономної енергосистеми`,
+      }
+    case 'hybrid-inverters':
+      return {
+        title: name || `Гібридний інвертор${power ? ` ${power}` : ''}`,
+        subtitle: `Гібридний інвертор ${brand}${power ? ` ${power}` : ''} для сонячної електростанції`,
+      }
+    case 'accumulator-batteries':
+      return {
+        title: name,
+        subtitle: `Акумуляторна батарея ${brand} для резервного живлення дому під час відключень`,
+      }
+    case 'komplektuiuchi':
+      return {
+        title: name,
+        subtitle: `${name} — комплектуючі ${brand} для сонячної станції`,
+      }
+    default:
+      return { title: name, subtitle: stripHtml(item.short_description).slice(0, 120) || undefined }
+  }
+}
+
+/**
  * Adapt one EFPF product into a MarketplaceProduct. Returns null if the product
  * doesn't belong to a known top-level category.
  */
@@ -139,11 +200,14 @@ export function adaptEfpfProduct(item: EfpfProduct): MarketplaceProduct | null {
   const badges: string[] = []
   if (item.price.on_sale) badges.push('Знижка')
 
+  const attributes = mapAttributes(item, routing)
+  const { title, subtitle } = buildCopy(item, routing, attributes)
+
   return {
     id: `efpf-${item.id}`,
     categoryId: routing.categoryId,
-    title: item.name,
-    subtitle: stripHtml(item.short_description).slice(0, 120) || undefined,
+    title,
+    subtitle,
     description: stripHtml(item.description) || undefined,
     price: priceValue !== undefined ? {
       value: priceValue,
@@ -153,7 +217,7 @@ export function adaptEfpfProduct(item: EfpfProduct): MarketplaceProduct | null {
     image: item.images.main?.full,
     gallery: item.images.gallery.map((g) => g.full),
     badges: badges.length > 0 ? badges : undefined,
-    attributes: mapAttributes(item, routing),
+    attributes,
     createdAt: item.modified_at,
   }
 }

@@ -25,7 +25,7 @@ export function CatalogToolbar({
     <div className="catalog-toolbar">
       <button
         className="catalog-toolbar__view"
-        onClick={() => onViewChange(view === 3 ? 1 : ((view + 1) as ViewMode))}
+        onClick={() => onViewChange(view === 1 ? 2 : 1)}
       >
         ВИД {view}
       </button>

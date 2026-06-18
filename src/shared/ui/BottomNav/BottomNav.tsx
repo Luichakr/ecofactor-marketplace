@@ -7,20 +7,18 @@ import { Icon } from '../Icon/Icon'
 import './BottomNav.css'
 
 /**
- * Single unified floating bar. "Зарядка" is the first item (a hand-off back to
- * the host ECOFACTOR charging app) followed by the four in-app routes. An
- * animated highlight slides to the active tab, and the whole bar shrinks —
- * narrower and shorter — while scrolling down, restoring on scroll-up.
+ * Floating bottom nav, Monobank-style: "Зарядка" is a standalone round button
+ * (returns to the host charging app), the four in-app routes live in a pill
+ * with an animated highlight that slides to the active tab. The whole bar
+ * shrinks — narrower and shorter — while scrolling down, restoring on scroll-up.
  */
 const PILL_LINKS = [
   { to: ROUTES.MARKETPLACE, end: true, icon: 'storefront', label: 'Маркет' },
-  { to: ROUTES.FAVORITES, end: false, icon: 'favorite', label: 'Закладки' },
   { to: ROUTES.PROFILE, end: false, icon: 'person', label: 'Аккаунт' },
   { to: ROUTES.CART, end: false, icon: 'shopping_cart', label: 'Кошик' },
 ] as const
 
-// Total slots in the pill = Зарядка + the route links. Equal-width flex items.
-const SLOTS = PILL_LINKS.length + 1
+const SLOTS = PILL_LINKS.length
 // Horizontal padding inside the pill (must match .bottom-nav__pill padding).
 const PAD = 6
 
@@ -34,14 +32,11 @@ export function BottomNav() {
   const [compact, setCompact] = useState(false)
 
   const activeIndex = PILL_LINKS.findIndex((l) => isMatch(pathname, l.to, l.end))
-  // DOM slot of the active tab (Зарядка occupies slot 0).
-  const slot = activeIndex + 1
   // Indicator geometry as a function of the pill width only — percentages mean
-  // it tracks the bar's width animation in lockstep (no separate JS-driven
-  // transform that could lag/desync). The `left` only changes when the active
-  // tab changes, so the slide animation fires on tab switch, not on resize.
+  // it tracks the bar's width animation in lockstep. `left` only changes when
+  // the active tab changes, so the slide animates on tab switch, not on resize.
   const indicatorStyle = {
-    left: `calc(${PAD}px + (100% - ${PAD * 2}px) * ${slot} / ${SLOTS})`,
+    left: `calc(${PAD}px + (100% - ${PAD * 2}px) * ${activeIndex} / ${SLOTS})`,
     width: `calc((100% - ${PAD * 2}px) / ${SLOTS})`,
     opacity: activeIndex >= 0 ? 1 : 0,
   }
@@ -77,20 +72,16 @@ export function BottomNav() {
 
   return (
     <nav className={`bottom-nav ${compact ? 'bottom-nav--compact' : ''}`}>
+      {/* Зарядка — standalone round segment; returns to the host charging app. */}
+      <button type="button" className="bottom-nav__charge" onClick={closeMarketplace}>
+        <span className="bottom-nav__icon">
+          <Icon name="ev_station" size={24} />
+        </span>
+        <span className="bottom-nav__label">Зарядка</span>
+      </button>
+
       <div className="bottom-nav__pill">
         <span className="bottom-nav__indicator" aria-hidden="true" style={indicatorStyle} />
-
-        {/* Зарядка — returns to the host charging app (action, not a tab). */}
-        <button
-          type="button"
-          className="bottom-nav__item bottom-nav__item--charge"
-          onClick={closeMarketplace}
-        >
-          <span className="bottom-nav__icon">
-            <Icon name="ev_station" size={24} />
-          </span>
-          <span className="bottom-nav__label">Зарядка</span>
-        </button>
 
         {PILL_LINKS.map((it) => (
           <NavLink

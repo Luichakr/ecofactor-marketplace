@@ -66,8 +66,8 @@ export function RecsTabs({ current, sameCat, bundlePool }: Props) {
 
       <div className="recs-tabs__body">
         {tab === 'recs' && (
-          <div className="recs-tabs__grid catalog-grid catalog-grid--cols-3">
-            {sameCat.map((p) => (
+          <div className="recs-tabs__grid catalog-grid catalog-grid--cols-2">
+            {sameCat.slice(0, 10).map((p) => (
               <ProductCard key={p.id} product={p} pool={sameCat} />
             ))}
           </div>
@@ -78,8 +78,8 @@ export function RecsTabs({ current, sameCat, bundlePool }: Props) {
         )}
 
         {tab === 'similar' && (
-          <div className="recs-tabs__grid catalog-grid catalog-grid--cols-3">
-            {similar.map((p) => (
+          <div className="recs-tabs__grid catalog-grid catalog-grid--cols-2">
+            {similar.slice(0, 10).map((p) => (
               <ProductCard key={p.id} product={p} pool={similar} />
             ))}
           </div>

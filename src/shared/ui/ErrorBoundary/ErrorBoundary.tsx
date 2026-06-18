@@ -44,14 +44,15 @@ export class ErrorBoundary extends Component<Props, State> {
             type="button"
             onClick={() => window.location.reload()}
             style={{
-              background: 'var(--color-text)',
-              color: 'var(--color-bg)',
+              background: 'var(--color-accent)',
+              color: '#fff',
               border: 'none',
-              padding: '12px 24px',
+              borderRadius: 'var(--radius-pill, 9999px)',
+              padding: '12px 32px',
               fontFamily: 'inherit',
-              fontSize: 13,
-              letterSpacing: 1,
-              textTransform: 'uppercase',
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: 'var(--letter-spacing-label, 0.1px)',
               cursor: 'pointer',
             }}
           >

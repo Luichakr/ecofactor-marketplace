@@ -9,11 +9,18 @@
   padding-top: var(--safe-area-top);
   /* Green breathing room below the title + room for the white lip, so the
      title sits with the same space below as above (not crammed on the lip). */
-  padding-bottom: calc(var(--radius-lg) + var(--space-3));
+  padding-bottom: calc(var(--radius-lg) + var(--space-1));
 }
 
 .header--transparent {
   background-color: transparent;
+  /* No green lip here, so drop the extra bottom padding and shrink the bar —
+     it only carries a back arrow, so it shouldn't eat so much top space. */
+  padding-bottom: var(--space-2);
+}
+
+.header--transparent .header__inner {
+  height: 48px;
 }
 
 /* White rounded lip at the bottom of the green bar → the app's

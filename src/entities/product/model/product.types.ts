@@ -96,7 +96,10 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
 }
 
 function formatAmount(value: number, currency: string): string {
-  const formatted = new Intl.NumberFormat('uk-UA').format(value)
+  // Whole-hryvnia prices only — no kopecks.
+  const formatted = new Intl.NumberFormat('uk-UA', { maximumFractionDigits: 0 }).format(
+    Math.round(value),
+  )
   return `${formatted} ${CURRENCY_SYMBOLS[currency] ?? currency}`
 }
 

@@ -14,12 +14,16 @@
   position: sticky;
   top: 0;
   z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
   padding: calc(var(--safe-area-top) + var(--space-3)) var(--space-4) var(--space-3);
   background-color: var(--color-bg);
 }
 
 .market-home__search {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -37,6 +41,25 @@
 
 .market-home__search:active { opacity: 0.7; }
 .market-home__search svg { flex-shrink: 0; }
+
+/* Каталог button (top-right) — 4-squares glyph only, no label. */
+.market-home__catalog {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  background-color: var(--color-surface-elevated);
+  color: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  min-height: 0;
+}
+
+.market-home__catalog:active { opacity: 0.7; }
 
 /* ─── Category shortcuts row ──────────────────────────────────── */
 .market-home__shortcuts {
@@ -129,6 +152,51 @@
 }
 
 .market-home__section-link:active { opacity: 0.6; }
+
+/* ─── Trust strip (ECOFACTOR scale) ───────────────────────────── */
+.market-home__trust {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: var(--space-2);
+  margin: var(--space-2) var(--space-4) 0;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-lg);
+}
+
+.market-home__trust-item {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.market-home__trust-item b {
+  display: block;
+  font-size: var(--font-size-subtitle2);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+}
+
+/* ─── Horizontal product rail ("Популярне") ───────────────────── */
+.market-home__rail {
+  display: flex;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: var(--space-4);
+}
+
+.market-home__rail::-webkit-scrollbar { display: none; }
+
+.market-home__rail-item {
+  flex: 0 0 60%;
+  max-width: 220px;
+  scroll-snap-align: start;
+}
 
 /* ─── Categories bottom block ─────────────────────────────────── */
 .market-home__categories {

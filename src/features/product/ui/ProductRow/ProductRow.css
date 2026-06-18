@@ -1,0 +1,225 @@
+.product-row {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-4);
+  /* No padding — the photo is flush to the card's left/top/bottom edges. */
+  padding: 0;
+  background-color: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  cursor: pointer;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.product-row:active { opacity: 0.85; }
+
+/* ─── Media (photo flush to the block edges) ──────────────────── */
+.product-row__media {
+  position: relative;
+  flex: 0 0 50%;
+  max-width: 186px;
+}
+
+.product-row__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-surface-elevated);
+  overflow: hidden;
+}
+
+.product-row__img .product-image {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+
+.product-row__img .product-image__img {
+  object-fit: contain;
+}
+
+.product-row__fav {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  min-height: 0;
+  padding: 0;
+}
+
+.product-row__fav:active { transform: scale(0.88); }
+.product-row__fav--active { color: var(--color-accent); }
+
+[data-theme="dark"] .product-row__fav {
+  background: rgba(28, 28, 30, 0.6);
+  color: var(--color-text);
+}
+
+/* ─── Info column ─────────────────────────────────────────────── */
+.product-row__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* Row has no padding now — info supplies its own gutter. */
+  padding: var(--space-3) var(--space-3) var(--space-3) 0;
+}
+
+.product-row__title {
+  margin: 0;
+  /* Match the grid card (view 2) type scale. */
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-body2);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: balance;
+}
+
+.product-row__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.product-row__stars {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-accent);
+  line-height: 0;
+}
+
+.product-row__rating-count {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
+
+.product-row__colors {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.product-row__color {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.product-row__price-line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.product-row__price {
+  font-size: var(--font-size-subtitle2);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.2px;
+  color: var(--color-text);
+}
+
+.product-row__price-old {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+/* ─── Add-to-cart CTA (full card width, slim) ─────────────────── */
+.product-row__cta {
+  box-sizing: border-box;
+  margin-top: var(--space-2);
+  width: 100%;
+  height: 34px;
+  /* Override the global 44px button min-height so it matches the stepper. */
+  min-height: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 var(--space-3);
+  border: none;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: var(--font-size-button);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-label);
+  cursor: pointer;
+}
+
+.product-row__cta:active { opacity: 0.7; }
+
+.product-row__cta:disabled {
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+/* ─── Quantity stepper (Amazon-style) ─────────────────────────── */
+.product-row__stepper {
+  box-sizing: border-box;
+  margin-top: var(--space-2);
+  width: 100%;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid var(--color-accent);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.product-row__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  min-height: 0;
+  flex-shrink: 0;
+}
+
+.product-row__step:active { opacity: 0.5; }
+
+.product-row__step-count {
+  flex: 1;
+  text-align: center;
+  font-size: var(--font-size-button);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-accent);
+}

@@ -75,10 +75,21 @@
 /* ── Items list ─────────────────────────────────────────────── */
 .cart-page__list {
   list-style: none;
-  padding: 0;
+  padding: 0 var(--space-4);
   margin: 0;
   display: flex;
   flex-direction: column;
+  gap: var(--gap-card);
+}
+
+.cart-page__row {
+  list-style: none;
+}
+
+/* Cart photo 20% smaller than the shared default (checkout keeps 48%). */
+.cart-page__row .co-item__img {
+  width: 38%;
+  max-width: 154px;
 }
 
 .cart-page__item {
@@ -101,18 +112,18 @@
 }
 
 .cart-page__checkbox {
-  width: 18px;
-  height: 18px;
-  border: 1px solid var(--color-border);
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-xs);
-  background: var(--color-bg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
   padding: 0;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--color-bg);
-  margin-top: 4px;
   min-height: 0;
 }
 

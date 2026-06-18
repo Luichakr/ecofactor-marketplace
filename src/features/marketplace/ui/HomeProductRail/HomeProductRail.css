@@ -1,0 +1,109 @@
+.home-rail {
+  margin: var(--space-5) 0;
+}
+
+.home-rail__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+.home-rail__title {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-subtitle1);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-subtitle1);
+  color: var(--color-text);
+}
+
+.home-rail__link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+  cursor: pointer;
+  min-height: 0;
+}
+
+.home-rail__link:active { opacity: 0.6; }
+
+.home-rail__list {
+  display: flex;
+  gap: var(--gap-card);
+  padding: 0 var(--space-4);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: var(--space-4);
+}
+
+.home-rail__list::-webkit-scrollbar { display: none; }
+
+.home-rail__item {
+  /* ~35% narrower than the previous 60% basis → more cards per screen. */
+  flex: 0 0 39%;
+  max-width: 145px;
+  scroll-snap-align: start;
+}
+
+/* ─── Card surface (home only) ────────────────────────────────────
+   Lift the whole card onto a distinct "podlozhka": white surface, soft
+   shadow, rounded corners, and a tinted photo zone — so image, rating,
+   title and price read as one unified card (Monobank/Amazon style).
+   Scoped to the home rails; the catalog grid keeps its flat cards. */
+.home-rail__item .product-card {
+  height: 100%;
+  background-color: var(--color-surface);
+  /* Framing at ~50% strength: half-opacity border + softer shadow so the
+     podlozhka reads but doesn't shout. */
+  border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+/* Photo zone sits on a faint grey inside the card, flush to the top edge. */
+.home-rail__item .product-card__hit {
+  background-color: var(--color-surface-elevated);
+}
+
+/* Pad the text block away from the card edges. Fill the height under the
+   photo so the price can be pinned to the bottom. */
+.home-rail__item .product-card__body {
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  flex: 1;
+}
+
+/* Pin the price to the bottom of every card so it always sits on the same
+   line, regardless of how many lines the title wraps to. */
+.home-rail__item .product-card__price-row {
+  margin-top: auto;
+  padding-top: var(--space-1);
+}
+
+/* Text 20% smaller on home cards (title, price, rating count). */
+.home-rail__item .product-card__title {
+  font-size: calc(var(--font-size-body2) * 0.8);
+  line-height: 1.3;
+  /* Allow up to 3 short lines so suffixes like "7 кВт Type 1" stay visible
+     instead of being truncated; reserve ~2 lines so card bottoms stay even. */
+  -webkit-line-clamp: 3;
+  min-height: 2.6em;
+}
+
+/* Price back to original size, plus ~10% for emphasis. */
+.home-rail__item .product-card__price,
+.home-rail__item .product-card__price-new {
+  font-size: calc(var(--font-size-subtitle2) * 1.1);
+}
+
+.home-rail__item .product-card__price-old,
+.home-rail__item .product-card__rating-count {
+  font-size: calc(var(--font-size-caption) * 0.8);
+}

@@ -66,10 +66,53 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 1px;
+  gap: 4px;
   text-align: left;
   min-width: 0;
   width: 100%;
+}
+
+/* ─── Rating row (gold stars + review count) ──────────────────── */
+.product-card__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.product-card__stars {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-accent);
+  line-height: 0;
+}
+
+.product-card__rating-count {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  letter-spacing: 0.2px;
+}
+
+/* ─── Colour swatches ─────────────────────────────────────────── */
+.product-card__colors {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.product-card__color {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+/* ─── Price row (price + quick-add) ───────────────────────────── */
+.product-card__price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: 1px;
 }
 
 .product-card__title-btn {
@@ -130,6 +173,11 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* Balance the two lines so model suffixes ("Type 1", "GB/T") don't get
+     left as a lone orphan on the second line; keep whole words intact. */
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 
 .product-card__plus {

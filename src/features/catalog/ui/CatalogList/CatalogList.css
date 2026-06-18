@@ -1,0 +1,6 @@
+.catalog-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-card);
+  padding: 0 var(--space-4);
+}

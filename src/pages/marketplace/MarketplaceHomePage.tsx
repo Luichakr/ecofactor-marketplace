@@ -3,91 +3,63 @@ import { useNavigate } from 'react-router-dom'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { RecentlyViewed } from '../../features/recently-viewed/ui/RecentlyViewed/RecentlyViewed'
 import { useSearchTrigger } from '../../features/search/ui/SearchTrigger/SearchTrigger'
-import { closeMarketplace } from '../../shared/lib/webview/webviewBridge'
-import { CategoryGrid } from '../../features/marketplace/ui/CategoryGrid/CategoryGrid'
-import { CategoryShowcase } from '../../features/marketplace/ui/CategoryShowcase/CategoryShowcase'
-import { CatalogGrid } from '../../features/catalog/ui/CatalogGrid/CatalogGrid'
+import { HomePromoSlider } from '../../features/marketplace/ui/HomePromoSlider/HomePromoSlider'
+import { HomeCategoryRow } from '../../features/marketplace/ui/HomeCategoryRow/HomeCategoryRow'
+import { HomeProductRail } from '../../features/marketplace/ui/HomeProductRail/HomeProductRail'
+import { buildHomeSections } from '../../features/marketplace/lib/buildHomeSections'
+import { Icon } from '../../shared/ui/Icon/Icon'
 import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
-import { mockCategories } from '../../data/mockCategories'
 import { ROUTES } from '../../shared/config/routes'
 import './MarketplaceHomePage.css'
 
 /**
- * Marketplace home — proper shop landing in the spirit of Yandex Market
- * / AliExpress / Temu. Top: tappable search bar + horizontal scroll of
- * category shortcuts. Body: sponsored hero, "Популярне" product grid,
- * recently viewed strip, full categories card grid.
+ * ECOFACTOR Marketplace home — Monobank/Rozetka-style shop landing, fully
+ * themed around our verticals (EV-зарядка + Сонячні станції). Top: search +
+ * Каталог. Then a promo slider with real ECOFACTOR offers, one row of
+ * category shortcuts, and a stack of feed-driven themed product rails.
  */
 export function MarketplaceHomePage() {
   const navigate = useNavigate()
   const { open: openSearch } = useSearchTrigger()
   const live = useEfpfProducts()
 
-  // Featured products: first 12 from the live feed (already curated by
-  // category/relevance upstream). Shuffle would be nice, but stable order
-  // keeps the demo predictable when showing to internal users.
-  const featured = useMemo(() => (live.data ?? []).slice(0, 12), [live.data])
+  const sections = useMemo(() => buildHomeSections(live.data ?? []), [live.data])
 
   return (
     <ScreenContainer className="market-home" withTopInset={false}>
-      {/* Sticky search header — close (return-to-app) + tappable search. */}
+      {/* Sticky header — search bar + Каталог button. */}
       <header className="market-home__top">
-        <button
-          type="button"
-          className="market-home__close"
-          onClick={closeMarketplace}
-          aria-label="Закрити маркетплейс"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-          </svg>
+        <button type="button" className="market-home__search" onClick={openSearch}>
+          <Icon name="search" size={20} />
+          <span>Пошук</span>
         </button>
         <button
           type="button"
-          className="market-home__search"
-          onClick={openSearch}
+          className="market-home__catalog"
+          onClick={() => navigate(ROUTES.CATALOG)}
+          aria-label="Каталог"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.4" />
-            <path d="M20 20L16.5 16.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-          </svg>
-          <span>Знайти товари…</span>
+          <Icon name="grid_view" size={24} />
         </button>
       </header>
 
-      {/* Tabbed category showcase (Зарядки / Сонце / Про нас) at the top. */}
-      <CategoryShowcase />
+      {/* Promo banners slider with dots. */}
+      <HomePromoSlider />
 
-      {/* "Популярне" product grid — main "shop" feel. Two-column,
-          tappable cards with photo swipe (same as catalog). */}
-      <section className="market-home__section">
-        <header className="market-home__section-head">
-          <h2 className="market-home__section-title">ПОПУЛЯРНЕ</h2>
-          <button
-            type="button"
-            className="market-home__section-link"
-            onClick={() => navigate(ROUTES.CATALOG)}
-          >
-            УСІ
-          </button>
-        </header>
-        {featured.length === 0 ? (
-          <p className="market-home__loading">Завантаження…</p>
-        ) : (
-          <CatalogGrid products={featured} columns={2} />
-        )}
-      </section>
+      {/* One row of category shortcuts. */}
+      <HomeCategoryRow />
 
-      {/* Recently viewed — empty on a fresh device, populates as user
-          opens product pages. */}
+      {/* Feed-driven themed product collections. */}
+      {sections.length === 0 ? (
+        <p className="market-home__loading">Завантаження…</p>
+      ) : (
+        sections.map((s) => (
+          <HomeProductRail key={s.id} title={s.title} products={s.products} viewAllTo={s.viewAllTo} />
+        ))
+      )}
+
+      {/* Recently viewed — populates as the user opens product pages. */}
       <RecentlyViewed />
-
-
-      {/* Category cards at the bottom — full collection link-out. */}
-      <div className="market-home__categories">
-        <h2 className="market-home__section-title">КАТЕГОРІЇ</h2>
-        <CategoryGrid categories={mockCategories} />
-      </div>
     </ScreenContainer>
   )
 }

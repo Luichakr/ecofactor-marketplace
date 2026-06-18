@@ -5,6 +5,7 @@ import { trackPageView } from '../shared/lib/analytics/analytics'
 import { ROUTES } from '../shared/config/routes'
 import { MarketplaceHomePage } from '../pages/marketplace/MarketplaceHomePage'
 import { CatalogPage } from '../pages/catalog/CatalogPage'
+import { CatalogHomePage } from '../pages/catalog/CatalogHomePage'
 import { ProductPage } from '../pages/product/ProductPage'
 import { FavoritesPage } from '../pages/favorites/FavoritesPage'
 import { RequestHubPage } from '../pages/request/RequestHubPage'
@@ -53,7 +54,9 @@ export function AppRouter() {
         <Route path={ROUTES.CHARGER_CONFIGURATOR} element={<ChargerConfiguratorPage />} />
         <Route path={ROUTES.CHARGER_CONFIGURATOR_DC} element={<DcConfiguratorPage />} />
         <Route path={ROUTES.MARKETPLACE} element={<MarketplaceHomePage />} />
-        <Route path={ROUTES.CATALOG} element={<CatalogPage />} />
+        {/* /catalog → category landing; /catalog/all → whole-assortment list. */}
+        <Route path={ROUTES.CATALOG} element={<CatalogHomePage />} />
+        <Route path="/catalog/all" element={<CatalogPage />} />
         {/* Cars & wheels temporarily hidden — bounce those categories home. */}
         <Route path="/catalog/cars" element={<Navigate to={ROUTES.MARKETPLACE} replace />} />
         <Route path="/catalog/wheels" element={<Navigate to={ROUTES.MARKETPLACE} replace />} />

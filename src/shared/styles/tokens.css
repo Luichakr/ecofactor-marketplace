@@ -122,10 +122,13 @@
   --space-12: 48px;
   --space-16: 64px;
 
+  /* Single standard gap between cards / tiles / grid items across the app. */
+  --gap-card: 12px;
+
   /* ── Layout ── */
   --mobile-max-width: 430px;
   --bottom-nav-height: 64px;
-  --header-height: 72px;
+  --header-height: 60px;
   --safe-area-top: env(safe-area-inset-top, 0px);
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
 

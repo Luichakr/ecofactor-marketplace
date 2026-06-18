@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, useEffect } from 'react'
+import { useMemo, useCallback, useState, useEffect, useRef } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { ROUTES } from '../../shared/config/routes'
 import { mockCategories } from '../../data/mockCategories'
@@ -8,13 +8,15 @@ import { parseCatalogSearchParams } from '../../features/catalog/lib/catalogSear
 import { getActiveFiltersCount } from '../../features/catalog/lib/getActiveFiltersCount'
 import type { SortOption } from '../../features/catalog/model/catalog.types'
 import { CatalogGrid } from '../../features/catalog/ui/CatalogGrid/CatalogGrid'
-import { EditorialLayout } from '../../features/catalog/ui/EditorialLayout/EditorialLayout'
+import { CatalogList } from '../../features/catalog/ui/CatalogList/CatalogList'
 import { CatalogToolbar } from '../../features/catalog/ui/CatalogToolbar/CatalogToolbar'
 import { SubcategoryTabs } from '../../features/catalog/ui/SubcategoryTabs/SubcategoryTabs'
 import { FiltersSheet } from '../../features/catalog/ui/FiltersSheet/FiltersSheet'
 import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
 import { Header } from '../../shared/ui/Header/Header'
-import { SearchIconButton } from '../../features/search/ui/SearchTrigger/SearchTrigger'
+import { useSearchTrigger } from '../../features/search/ui/SearchTrigger/SearchTrigger'
+import { useGoBack } from '../../shared/lib/useGoBack'
+import { Icon } from '../../shared/ui/Icon/Icon'
 import { GridSkeleton } from '../../shared/ui/Skeleton/Skeleton'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
@@ -26,23 +28,32 @@ type ViewMode = 1 | 2 | 3
 const VIEW_KEY = 'ecofactor-catalog-view'
 
 export function CatalogPage() {
-  const { categoryId } = useParams<{ categoryId?: string }>()
+  const { categoryId: routeCategoryId } = useParams<{ categoryId?: string }>()
+  // `/catalog/all` is the whole-assortment list (no category filter).
+  const isAll = routeCategoryId === 'all'
+  const categoryId = isAll ? undefined : routeCategoryId
   const [searchParams, setSearchParams] = useSearchParams()
   const [view, setView] = useState<ViewMode>(() => {
     // An explicit ?view= in the URL wins (e.g. the home EV-зарядка tile forces
     // Вид 2). Otherwise fall back to the saved preference, then to grid (2).
+    // View 3 is retired — only the Amazon list (1) and the 2-col grid (2).
     const fromUrl = Number(searchParams.get('view'))
-    if (fromUrl === 1 || fromUrl === 2 || fromUrl === 3) return fromUrl as ViewMode
+    if (fromUrl === 1 || fromUrl === 2) return fromUrl as ViewMode
     // Guarded — localStorage throws in private-mode WebView / when storage
     // is disabled, which would otherwise crash the catalog on mount.
     try {
       const saved = Number(localStorage.getItem(VIEW_KEY))
-      return saved === 1 || saved === 3 ? saved : 2
+      return saved === 1 ? 1 : 2
     } catch {
       return 2
     }
   })
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const goBack = useGoBack(ROUTES.MARKETPLACE)
+  const { open: openSearch } = useSearchTrigger()
+  // Hide the sticky subcategory tabs on scroll-down, slide them back on
+  // scroll-up — so the user can switch category without scrolling to top.
+  const [tabsHidden, setTabsHidden] = useState(false)
 
   useEffect(() => {
     try {
@@ -51,6 +62,46 @@ export function CatalogPage() {
       /* storage disabled — view preference just won't persist */
     }
   }, [view])
+
+  const lastScrollY = useRef(0)
+  const accDelta = useRef(0)
+  useEffect(() => {
+    // Hysteresis so the tabs don't vanish on the first pixel of scroll:
+    // accumulate movement in the current direction and only flip once it
+    // passes a threshold. Always keep them visible near the very top.
+    const STAY_NEAR_TOP = 64 // px from top where tabs always show
+    const HIDE_THRESHOLD = 72 // cumulative down-scroll before hiding
+    const SHOW_THRESHOLD = 36 // cumulative up-scroll before revealing
+    let ticking = false
+    function onScroll(e: Event) {
+      const t = e.target as HTMLElement | null
+      if (!t || typeof t.scrollTop !== 'number') return
+      if (ticking) return
+      ticking = true
+      const y = t.scrollTop
+      requestAnimationFrame(() => {
+        const dy = y - lastScrollY.current
+        // Reset the accumulator whenever the direction changes.
+        if ((dy > 0 && accDelta.current < 0) || (dy < 0 && accDelta.current > 0)) {
+          accDelta.current = 0
+        }
+        accDelta.current += dy
+
+        if (y < STAY_NEAR_TOP) {
+          setTabsHidden(false)
+          accDelta.current = 0
+        } else if (accDelta.current > HIDE_THRESHOLD) {
+          setTabsHidden(true)
+        } else if (accDelta.current < -SHOW_THRESHOLD) {
+          setTabsHidden(false)
+        }
+        lastScrollY.current = y
+        ticking = false
+      })
+    }
+    document.addEventListener('scroll', onScroll, true)
+    return () => document.removeEventListener('scroll', onScroll, true)
+  }, [])
 
   const category = categoryId
     ? mockCategories.find((c) => c.id === categoryId)
@@ -167,6 +218,11 @@ export function CatalogPage() {
     return sortProducts(filtered, sort)
   }, [baseProducts, activeSubcategory, filters, search, sort])
 
+  // A lone result reads better as a full-width list row than a half-width
+  // grid card, so a single match always renders as view 1; otherwise the
+  // user's chosen view (default the 2-col grid) applies.
+  const effectiveView: ViewMode = result.length === 1 ? 1 : view
+
   if (categoryId && !category) {
     return (
       <>
@@ -188,35 +244,52 @@ export function CatalogPage() {
 
   return (
     <>
-      <Header
-        title={headerTitle}
-        showBack={!!categoryId}
-        rightSlot={<SearchIconButton />}
-        // Go to the real previous step; if opened deep (no in-app history)
-        // fall back to the marketplace home rather than jumping to /menu.
-        backFallback={ROUTES.MARKETPLACE}
-      />
-      <ScreenContainer withTopInset={false}>
-        {/* Subcategory tabs stay visible while a subcategory is selected —
-            the chosen one is highlighted and tapping another just re-filters
-            the grid (no navigation, no hidden menu). */}
-        {category?.subcategories && (
-          <SubcategoryTabs
-            subcategories={category.subcategories}
-            active={activeSubcategory}
-            onChange={setSubcategory}
-            counts={subcategoryCounts}
-            variant="tiles"
-          />
-        )}
+      {/* Top bar: round back button (brand style) + search field. The category
+          name lives below as a heading, then tabs, then products. */}
+      <div className="catalog-page__bar">
+        <button
+          type="button"
+          className="catalog-page__back"
+          onClick={goBack}
+          aria-label="Назад"
+        >
+          <Icon name="arrow_back" size={24} />
+        </button>
+        <button type="button" className="catalog-page__search" onClick={openSearch}>
+          <Icon name="search" size={20} />
+          <span>Пошук</span>
+        </button>
+      </div>
 
-        {activeSubcategory && brandList.length > 0 && (
-          <SubcategoryTabs
-            subcategories={brandList}
-            active={activeBrand}
-            onChange={setBrand}
-            counts={brandCounts}
-          />
+      <ScreenContainer withTopInset={false} className="catalog-page">
+        <h1 className="catalog-page__title">{headerTitle}</h1>
+
+        {/* Sticky subcategory tabs — slide up out of view on scroll-down and
+            back in on scroll-up so the category switcher is always one swipe
+            away, no scroll-to-top needed. */}
+        {category?.subcategories && (
+          <div
+            className={`catalog-page__sticky-tabs ${
+              tabsHidden ? 'catalog-page__sticky-tabs--hidden' : ''
+            }`}
+          >
+            <SubcategoryTabs
+              subcategories={category.subcategories}
+              active={activeSubcategory}
+              onChange={setSubcategory}
+              counts={subcategoryCounts}
+              variant="tiles"
+            />
+
+            {activeSubcategory && brandList.length > 0 && (
+              <SubcategoryTabs
+                subcategories={brandList}
+                active={activeBrand}
+                onChange={setBrand}
+                counts={brandCounts}
+              />
+            )}
+          </div>
         )}
 
         <CatalogToolbar
@@ -239,25 +312,20 @@ export function CatalogPage() {
         )}
 
         {!isLoading && !liveError && (
-          // Editorial view 1 is a category/subcategory look-book — it only
-          // makes sense when the user is browsing the whole assortment.
-          // Once they drill into a brand or any other deep filter, fall
-          // back to the standard grid so the carousels don't show
-          // duplicates of the same brand.
-          view === 1 && category && activeFiltersCount === 0 && !activeSubcategory ? (
-            <div className="catalog-page__editorial">
-              <EditorialLayout
-                products={result}
-                categoryTitle={category.title}
-                subcategories={category.subcategories}
-                imageAspect={categoryId === 'cars' ? 'landscape' : 'portrait'}
-              />
-            </div>
+          // View 1 — Amazon-style list (photo left, details right, one per
+          // row). Views 2/3 — 2- and 3-column product grids.
+          effectiveView === 1 ? (
+            <CatalogList
+              products={result}
+              onReset={() => {
+                setSearchParams(new URLSearchParams(), { replace: true })
+              }}
+            />
           ) : (
             <div className="catalog-page__grid">
               <CatalogGrid
                 products={result}
-                columns={view === 1 ? 2 : view}
+                columns={effectiveView}
                 imageAspect={categoryId === 'cars' ? 'landscape' : 'portrait'}
                 onReset={() => {
                   setSearchParams(new URLSearchParams(), { replace: true })

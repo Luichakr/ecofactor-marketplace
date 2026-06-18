@@ -91,8 +91,9 @@ export function StationIllustration({ model, color = 'black', picks, className =
   // Total qty across picks determines which body for ECO Wall.
   const totalPicks = picks.reduce((s, p) => s + p.qty, 0)
 
-  let family: Family = 'aw'
-  let maxSlots = 3
+  // Assigned in every branch below — no redundant initial value.
+  let family: Family
+  let maxSlots: number
   let showStand = false
 
   if (model === 'eco-totem') {

@@ -31,5 +31,5 @@
 }
 
 .fav-btn--active {
-  color: var(--color-text);
+  color: var(--color-accent);
 }

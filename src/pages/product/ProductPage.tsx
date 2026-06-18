@@ -7,8 +7,7 @@ import { ProductGallery } from '../../features/product/ui/ProductGallery/Product
 import { ProductGalleryFullscreen } from '../../features/product/ui/ProductGalleryFullscreen/ProductGalleryFullscreen'
 import { useEfpfProducts } from '../../features/catalog/hooks/useEfpfProducts'
 import { cart } from '../../features/cart/model/cartStore'
-import { AddedToCartSheet } from '../../features/cart/ui/AddedToCartSheet/AddedToCartSheet'
-import { StatusBadge } from '../../shared/ui/StatusBadge/StatusBadge'
+import { showCartToast } from '../../features/cart/ui/CartToast/bus'
 import { Button } from '../../shared/ui/Button/Button'
 import { Header } from '../../shared/ui/Header/Header'
 import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer'
@@ -25,6 +24,9 @@ import { StockIndicator } from '../../features/product/ui/StockIndicator/StockIn
 import { SocialProof } from '../../features/product/ui/SocialProof/SocialProof'
 import { SellerBadge } from '../../features/seller/ui/SellerBadge/SellerBadge'
 import { RecsTabs } from '../../features/product/ui/RecsTabs/RecsTabs'
+import { ProductTabs, type ProductTabId } from '../../features/product/ui/ProductTabs/ProductTabs'
+import { Icon } from '../../shared/ui/Icon/Icon'
+import { useGoBack } from '../../shared/lib/useGoBack'
 import { CarReservationSheet } from '../../features/car-reservation/ui/CarReservationSheet/CarReservationSheet'
 import { useAutoCarPhotos } from '../../features/auto/hooks/useAutoCarPhotos'
 import { SALES_PHONE_TEL } from '../../shared/config/contacts'
@@ -48,9 +50,16 @@ export function ProductPage() {
   const navigate = useNavigate()
   const live = useEfpfProducts()
   const [qty, setQty] = useState(1)
+  const [descOpen, setDescOpen] = useState(false)
+  const goBack = useGoBack(ROUTES.MARKETPLACE)
+  const [activeTab, setActiveTab] = useState<ProductTabId>('description')
+  const descSecRef = useRef<HTMLDivElement>(null)
+  const specsSecRef = useRef<HTMLDivElement>(null)
+  const reviewsSecRef = useRef<HTMLDivElement>(null)
+  const spyLockRef = useRef(false)
+  const spyTimerRef = useRef<number | undefined>(undefined)
   const [delivery, setDelivery] = useState<NovaPoshtaSelection | undefined>()
   const [added, setAdded] = useState(false)
-  const [sheetOpen, setSheetOpen] = useState(false)
   const [reserveOpen, setReserveOpen] = useState(false)
   const [fullscreen, setFullscreen] = useState<number | null>(null)
   const [ctaCompact, setCtaCompact] = useState(false)
@@ -118,13 +127,70 @@ export function ProductPage() {
     check()
     scroller.addEventListener('scroll', check, { passive: true })
     return () => scroller.removeEventListener('scroll', check)
-  }, [showTopFab])
+  }, [showTopFab, live.data])
 
   function scrollToTop() {
     const scroller = (heroRef.current?.closest('.screen-container') as HTMLElement | null)
     if (scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' })
     else window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  // Scroll-spy: as each section reaches the sticky tab bar, move the active
+  // underline to it. Tapping a tab scrolls that section up to the bar.
+  const sectionRefs: Record<ProductTabId, React.RefObject<HTMLDivElement | null>> = {
+    description: descSecRef,
+    specs: specsSecRef,
+    reviews: reviewsSecRef,
+  }
+
+  function goToSection(id: ProductTabId) {
+    setActiveTab(id)
+    // Lock the scroll-spy while the smooth scroll runs — otherwise the scroll
+    // handler recomputes the active tab from intermediate positions and the
+    // underline snaps back until the scroll settles.
+    spyLockRef.current = true
+    if (spyTimerRef.current) window.clearTimeout(spyTimerRef.current)
+    spyTimerRef.current = window.setTimeout(() => {
+      spyLockRef.current = false
+    }, 600)
+    const scroller = heroRef.current?.closest('.screen-container') as HTMLElement | null
+    const el = sectionRefs[id].current
+    if (!scroller || !el) return
+    const tabsEl = scroller.querySelector('.product-tabs') as HTMLElement | null
+    const offset = tabsEl ? tabsEl.getBoundingClientRect().height : 48
+    const top =
+      scroller.scrollTop + el.getBoundingClientRect().top - scroller.getBoundingClientRect().top - offset
+    scroller.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    const scroller = heroRef.current?.closest('.screen-container') as HTMLElement | null
+    if (!scroller) return
+    let ticking = false
+    function onScroll() {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        ticking = false
+        if (spyLockRef.current) return
+        const tabsEl = scroller!.querySelector('.product-tabs') as HTMLElement | null
+        // The line just below the sticky tab bar — sections crossing it win.
+        const probe = (tabsEl?.getBoundingClientRect().bottom ?? 0) + 1
+        const order: ProductTabId[] = ['description', 'specs', 'reviews']
+        let current: ProductTabId = 'description'
+        for (const id of order) {
+          const el = sectionRefs[id].current
+          if (el && el.getBoundingClientRect().top <= probe) current = id
+        }
+        setActiveTab((prev) => (prev === current ? prev : current))
+      })
+    }
+    onScroll()
+    scroller.addEventListener('scroll', onScroll, { passive: true })
+    return () => scroller.removeEventListener('scroll', onScroll)
+    // Re-attach once product data loads and the hero/sections actually mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [live.data])
 
   // Watch the hero (1st photo): once ≥20% of it has scrolled out of view
   // (i.e., visible ratio drops below 80%), collapse the sticky CTA. Hides
@@ -138,7 +204,8 @@ export function ProductPage() {
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+    // Re-attach once product data loads and the hero actually mounts.
+  }, [live.data])
 
   // Hide the sticky CTA entirely once the 2nd row of recs becomes visible —
   // by then the user is browsing other products and the bar would block them.
@@ -161,7 +228,8 @@ export function ProductPage() {
     update()
     scroller.addEventListener('scroll', update, { passive: true })
     return () => scroller.removeEventListener('scroll', update)
-  }, [])
+    // Re-attach once product data loads and the recs row actually mounts.
+  }, [live.data])
 
   const product =
     live.data?.find((p) => p.id === productId) ??
@@ -239,7 +307,8 @@ export function ProductPage() {
     })
     setAdded(true)
     window.setTimeout(() => setAdded(false), 1500)
-    setSheetOpen(true)
+    // Phone-style push toast at the top instead of the bottom sheet.
+    showCartToast({ title: product.title, image: product.image })
   }
 
   /** Express path — add to cart and jump straight to /checkout. Skips the
@@ -247,17 +316,22 @@ export function ProductPage() {
   function handleBuyNow() {
     if (!product) return
     if (product.stock === 0) return
-    cart.add({
-      productId: product.id,
-      title: product.title,
-      subtitle: product.subtitle,
-      image: product.image,
-      price: product.price?.value,
-      currency: product.price?.currency,
-      qty,
-      stock: product.stock,
+    // Quick buy — a single product, NOT added to the cart. Checkout opens in
+    // "buy now" mode showing only this item.
+    navigate(ROUTES.CHECKOUT, {
+      state: {
+        buyNow: {
+          productId: product.id,
+          title: product.title,
+          subtitle: product.subtitle,
+          image: product.image,
+          price: product.price?.value,
+          currency: product.price?.currency,
+          qty,
+          stock: product.stock,
+        },
+      },
     })
-    navigate(ROUTES.CHECKOUT)
   }
 
   const galleryImages = (() => {
@@ -270,7 +344,18 @@ export function ProductPage() {
 
   return (
     <>
-      <Header title={product.title} showBack />
+      {/* Top bar — round back button + divider; same height across pages. */}
+      <div className="product-page__bar">
+        <button
+          type="button"
+          className="product-page__back"
+          onClick={goBack}
+          aria-label="Назад"
+        >
+          <Icon name="arrow_back" size={24} />
+        </button>
+      </div>
+
       <ScreenContainer withTopInset={false}>
         <div ref={heroRef} className="product-page__hero">
           {galleryImages.length > 0 ? (
@@ -293,61 +378,64 @@ export function ProductPage() {
               className="product-page__hero-placeholder"
             />
           )}
+          {/* Favorite heart — standard top-right corner of the photo. */}
+          <div className="product-page__hero-fav">
+            <FavoriteButton productId={product.id} />
+          </div>
         </div>
 
         <div className="product-page__content">
-          {/* Title row */}
+          {/* Title — full width */}
           <div className="product-page__title-row">
-            <div>
-              <h1 className="product-page__title">{product.title}</h1>
-              {product.subtitle && (
-                <p className="product-page__subtitle">{product.subtitle}</p>
-              )}
-              <div className="product-page__rating-row">
-                <StarRating
-                  rating={getRatingFor(product.id).average}
-                  showValue
-                  count={getRatingFor(product.id).count}
-                  size={13}
-                />
-              </div>
-            </div>
-            <div className="product-page__title-actions">
-              {product.status && <StatusBadge status={product.status} />}
-              <FavoriteButton productId={product.id} />
-              <button
-                type="button"
-                className="product-page__share"
-                aria-label="Поділитися"
-                onClick={() => {
-                  const url = window.location.href
-                  const shareData: { title?: string; text?: string; url: string } = {
-                    title: product.title,
-                    text: product.subtitle,
-                    url,
-                  }
-                  const nav = navigator as Navigator & {
-                    share?: (data: ShareData) => Promise<void>
-                  }
-                  if (typeof nav.share === 'function') {
-                    nav.share(shareData).catch(() => {})
-                  } else if (navigator.clipboard) {
-                    navigator.clipboard.writeText(url).catch(() => {})
-                  }
-                }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M14 9V5l7 7-7 7v-4H8c-2.2 0-4 1.8-4 4V18c0-4.4 3.6-8 8-8h2z"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
+            <h1 className="product-page__title">{product.title}</h1>
+            {product.subtitle && (
+              <p className="product-page__subtitle">{product.subtitle}</p>
+            )}
           </div>
+
+          {/* Rating + share in one row. */}
+          <div className="product-page__rating-share">
+            <div className="product-page__rating-row">
+              <StarRating
+                rating={getRatingFor(product.id).average}
+                showValue
+                count={getRatingFor(product.id).count}
+                size={13}
+              />
+            </div>
+            <button
+              type="button"
+              className="product-page__share"
+              aria-label="Поділитися"
+              onClick={() => {
+                const url = window.location.href
+                const shareData: { title?: string; text?: string; url: string } = {
+                  title: product.title,
+                  text: product.subtitle,
+                  url,
+                }
+                const nav = navigator as Navigator & {
+                  share?: (data: ShareData) => Promise<void>
+                }
+                if (typeof nav.share === 'function') {
+                  nav.share(shareData).catch(() => {})
+                } else if (navigator.clipboard) {
+                  navigator.clipboard.writeText(url).catch(() => {})
+                }
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M14 9V5l7 7-7 7v-4H8c-2.2 0-4 1.8-4 4V18c0-4.4 3.6-8 8-8h2z"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
 
           {/* Seller + stock + social proof */}
           <div className="product-page__trust">
@@ -355,27 +443,48 @@ export function ProductPage() {
             <StockIndicator productId={product.id} stock={product.stock} size="md" />
           </div>
 
-          <SocialProof productId={product.id} />
+          <SocialProof productId={product.id} variant="compact" />
 
           {/* Delivery estimate */}
           <div className="product-page__delivery">
             <DeliveryEstimate categoryId={product.categoryId} />
           </div>
-
-          {/* Description right under the title (Zara pattern). */}
-          {product.description && (
-            <p className="product-page__desc">{product.description}</p>
-          )}
-
-          {/* Badges row */}
-          {product.badges && product.badges.length > 0 && (
-            <div className="product-page__badges">
-              {product.badges.map((badge) => (
-                <span key={badge} className="product-page__badge">{badge}</span>
-              ))}
-            </div>
-          )}
         </div>
+
+        {/* Tabbed scope — the sticky tabs pin only while this block (Опис /
+            Характеристики / Відгуки) is on screen, then scroll away so the
+            recommendations below get the top to themselves. */}
+        <div className="product-page__tabbed">
+        {/* Sticky section tabs — first child of the tabbed scope. */}
+        <ProductTabs active={activeTab} onChange={goToSection} />
+
+        {/* Опис — collapsible so the wall of text doesn't dominate. */}
+        {product.description && (
+          <div ref={descSecRef} className="product-page__section">
+            <p
+              className={`product-page__desc ${
+                descOpen ? '' : 'product-page__desc--clamped'
+              }`}
+            >
+              {product.description}
+            </p>
+            <button
+              type="button"
+              className="product-page__desc-toggle"
+              onClick={() => setDescOpen((o) => !o)}
+            >
+              {descOpen ? 'Згорнути' : 'Детальніше'}
+            </button>
+
+            {product.badges && product.badges.length > 0 && (
+              <div className="product-page__badges">
+                {product.badges.map((badge) => (
+                  <span key={badge} className="product-page__badge">{badge}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Placeholder photo strip — only when the product has NO real
             imagery at all. With real photos (live EFPF / Lubeavto) the
@@ -396,7 +505,7 @@ export function ProductPage() {
 
         {/* Spec table */}
         {detailSpecs.length > 0 && (
-          <div className="product-page__section">
+          <div ref={specsSecRef} className="product-page__section">
             <h2 className="product-page__section-title">ХАРАКТЕРИСТИКИ</h2>
             <dl className="product-page__spec">
               {detailSpecs.map((a) => (
@@ -443,8 +552,11 @@ export function ProductPage() {
         </div>
 
         {/* Reviews + Q&A */}
-        <ReviewsSection productId={product.id} />
-        <QASection productId={product.id} />
+        <div ref={reviewsSecRef}>
+          <ReviewsSection productId={product.id} />
+          <QASection productId={product.id} />
+        </div>
+        </div>
 
         {/* Tabbed recommendations — replaces the old separate BundleSection
             and "ВАС ТАКОЖ МОЖЕ ЗАЦІКАВИТИ" grid. Yandex-style pills. */}
@@ -533,7 +645,7 @@ export function ProductPage() {
             {/* Express buy — primary CTA that adds + opens checkout in one
              *  tap. Hidden in compact (collapsed) mode to keep that bar
              *  minimal, and skipped for OOS / no-price items. */}
-            {product.stock !== 0 && hasPrice && !ctaCompact && (
+            {product.stock !== 0 && hasPrice && (
               <div className="product-page__cta-row product-page__cta-row--primary">
                 <Button variant="primary" fullWidth size="lg" onClick={handleBuyNow}>
                   КУПИТИ ОДРАЗУ
@@ -564,7 +676,7 @@ export function ProductPage() {
                   size="lg"
                   onClick={handleAddToCart}
                 >
-                  {added ? 'ДОДАНО' : 'ДОДАТИ'}
+                  {added ? 'ДОДАНО' : 'В КОШИК'}
                 </Button>
               ) : (
                 <Button
@@ -612,14 +724,6 @@ export function ProductPage() {
           </button>
         )}
       </ScreenContainer>
-
-      <AddedToCartSheet
-        open={sheetOpen}
-        onClose={() => setSheetOpen(false)}
-        product={product}
-        allProducts={live.data ?? []}
-        qty={qty}
-      />
 
       {product.categoryId === 'cars' && (
         <CarReservationSheet

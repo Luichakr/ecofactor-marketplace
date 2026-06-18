@@ -82,13 +82,31 @@ export function CardsPage() {
 function CardForm({ onSubmit }: { onSubmit: (c: Omit<SavedCard, 'id'>) => void }) {
   const [num, setNum] = useState('')
   const [expiry, setExpiry] = useState('')
+  const [cvv, setCvv] = useState('')
   const [holder, setHolder] = useState('')
   const [isDefault, setIsDefault] = useState(false)
 
+  const digits = num.replace(/\D/g, '')
+  const mm = Number(expiry.slice(0, 2))
+  const expiryOk = /^\d{2}\/\d{2}$/.test(expiry) && mm >= 1 && mm <= 12
+  const valid = digits.length >= 13 && digits.length <= 19 && expiryOk && cvv.length >= 3
+
+  // Group the card number in 4s as the user types.
+  function onNum(v: string) {
+    const d = v.replace(/\D/g, '').slice(0, 19)
+    setNum(d.replace(/(\d{4})(?=\d)/g, '$1 '))
+  }
+  // Auto-insert the "/" after MM.
+  function onExpiry(v: string) {
+    const d = v.replace(/\D/g, '').slice(0, 4)
+    setExpiry(d.length >= 3 ? `${d.slice(0, 2)}/${d.slice(2)}` : d)
+  }
+
   function submit(e: React.FormEvent) {
     e.preventDefault()
-    const digits = num.replace(/\s/g, '')
-    if (digits.length < 4 || !expiry.match(/^\d{2}\/\d{2}$/)) return
+    if (!valid) return
+    // Never store the full PAN or CVV — only last 4 + expiry, like a real app
+    // (the rest stays with the payment provider).
     onSubmit({
       brand: detectBrand(digits),
       last4: digits.slice(-4),
@@ -100,29 +118,36 @@ function CardForm({ onSubmit }: { onSubmit: (c: Omit<SavedCard, 'id'>) => void }
 
   return (
     <form className="simple-form" onSubmit={submit}>
-      <Field label="Номер картки" value={num} onChange={setNum} placeholder="4242 4242 4242 4242" />
+      <Field label="Номер картки" value={num} onChange={onNum} placeholder="4242 4242 4242 4242" inputMode="numeric" />
       <div className="simple-form__row">
-        <Field label="Термін" value={expiry} onChange={setExpiry} placeholder="MM/YY" />
-        <Field label="CVV" value={''} onChange={() => {}} placeholder="•••" />
+        <Field label="Термін" value={expiry} onChange={onExpiry} placeholder="MM/YY" inputMode="numeric" />
+        <Field label="CVV" value={cvv} onChange={(v) => setCvv(v.replace(/\D/g, '').slice(0, 4))} placeholder="•••" inputMode="numeric" />
       </div>
       <Field label="Власник" value={holder} onChange={setHolder} placeholder="IVAN IVANENKO" />
       <label className="simple-form__toggle">
         <input type="checkbox" checked={isDefault} onChange={(e) => setIsDefault(e.target.checked)} />
         <span>Використовувати за замовчанням</span>
       </label>
-      <Button variant="primary" fullWidth size="lg" type="submit">ЗБЕРЕГТИ</Button>
+      <Button variant="primary" fullWidth size="lg" type="submit" disabled={!valid}>ЗБЕРЕГТИ</Button>
     </form>
   )
 }
 
 function Field({
-  label, value, onChange, placeholder,
-}: { label: string; value: string; onChange: (v: string) => void; placeholder?: string }) {
+  label, value, onChange, placeholder, inputMode,
+}: {
+  label: string
+  value: string
+  onChange: (v: string) => void
+  placeholder?: string
+  inputMode?: 'numeric' | 'text'
+}) {
   return (
     <label className="simple-form__field">
       <span className="simple-form__label">{label}</span>
       <input
         type="text"
+        inputMode={inputMode}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}

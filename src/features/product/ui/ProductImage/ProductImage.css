@@ -17,7 +17,9 @@
 /* Mobile-charger cable photos ship in landscape; rotate them 90° clockwise so
    the cable reads vertically. No up-scale — the full cable stays visible and
    isn't clipped by the card edges (zoomed out 25% vs the earlier fill). */
-.product-image__img[src*="mobile-7-efc-r-"] {
+.product-image__img[src*="mobile-7-efc-r-"],
+/* 3,5 кВт Type 1 ships under a hashed filename — rotate it the same way. */
+.product-image__img[src*="9cc8a5f9f03dc55db94c9304bf2c5fe447903699"] {
   transform: rotate(90deg);
   object-fit: contain;
 }

@@ -9,13 +9,24 @@
 }
 
 .recs-tabs__header {
+  /* Sticky pills — take over the top once the Опис/Характеристики/Відгуки
+     bar above has scrolled away, so the user always knows which block they're
+     in. Tucked up by the container's top padding so nothing bleeds through. */
+  position: sticky;
+  top: calc(-1 * var(--space-2));
+  z-index: 19;
   display: flex;
+  align-items: center;
   gap: var(--space-2);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding: 0 var(--space-4);
-  margin-bottom: var(--space-3);
+  /* Top padding = tuck (8px) + desired visible gap (16px) so, once stuck,
+     the gap above the pills equals the gap below (~16px each). */
+  padding: var(--space-6) var(--space-4) var(--space-4);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .recs-tabs__header::-webkit-scrollbar { display: none; }

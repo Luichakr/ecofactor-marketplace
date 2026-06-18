@@ -2,6 +2,93 @@
   padding: 0 var(--space-1);
 }
 
+/* Sticky subcategory tabs that hide on scroll-down, reveal on scroll-up. */
+/* ─── Top bar (round back + search) — sits on its own elevated
+   podlozhka so it reads as a separated, fixed bar. ──────────────── */
+.catalog-page__bar {
+  position: relative;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: calc(var(--safe-area-top) + var(--space-3)) var(--space-4) var(--space-3);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.catalog-page__back {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+  cursor: pointer;
+  min-height: 0;
+}
+
+.catalog-page__back:active { opacity: 0.7; }
+
+.catalog-page__search {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-muted);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body2);
+  text-align: left;
+  cursor: pointer;
+  min-height: 0;
+}
+
+.catalog-page__search:active { opacity: 0.7; }
+
+/* Category name as a big heading below the bar (scrolls away). Equal space
+   above (from the bar) and below (to the tabs) for symmetry. */
+.catalog-page__title {
+  /* Bottom gap is supplied by the sticky-tabs + tiles padding (~16px), so
+     only a top margin here keeps the heading symmetric with the icon row. */
+  margin: var(--space-4) 0 0;
+  padding: 0 var(--space-4);
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  /* Tight line box so the top/bottom margins equal the visual gaps. */
+  line-height: 1;
+  color: var(--color-text);
+}
+
+/* No `.header` sibling now, so own the background + kill the default top
+   inset (the bar already handles the safe area). */
+main.screen-container.catalog-page {
+  padding-top: 0;
+  background-color: var(--color-bg);
+}
+
+.catalog-page__sticky-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  padding-top: var(--space-2);
+  background-color: var(--color-bg);
+  transition: transform var(--transition-normal);
+  will-change: transform;
+}
+
+.catalog-page__sticky-tabs--hidden {
+  transform: translateY(-110%);
+}
+
 /* Editorial (view 1) layout is full-bleed — the hero blocks reach the
    shell edges; inner grids/strips supply their own padding. */
 .catalog-page__editorial {

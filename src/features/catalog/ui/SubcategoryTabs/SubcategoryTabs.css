@@ -56,7 +56,7 @@
 
 /* ─── Tiles variant — square icon tiles like the home category showcase ─── */
 .subcategory-tabs--tiles {
-  gap: var(--space-3);
+  gap: var(--gap-card);
   padding: var(--space-2) var(--space-4) var(--space-3);
   align-items: flex-start;
 }

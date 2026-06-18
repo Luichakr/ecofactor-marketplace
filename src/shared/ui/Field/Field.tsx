@@ -34,19 +34,24 @@ export function Field(props: Props) {
 
   return (
     <div className={`field ${error ? 'field--error' : ''} ${className}`}>
-      <label htmlFor={id} className="field__label">
-        <span>
+      <div className="field__box">
+        {props.as === 'textarea' ? (
+          <textarea
+            id={id}
+            className="field__control field__textarea"
+            {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+          />
+        ) : (
+          <input id={id} className="field__control" {...(rest as InputHTMLAttributes<HTMLInputElement>)} />
+        )}
+
+        {/* Notch label — sits on the top outline (Material-3 outlined field). */}
+        <label htmlFor={id} className="field__label">
           {label}
           {required && <span className="field__required" aria-hidden="true"> *</span>}
-        </span>
+        </label>
         {labelAside && <span className="field__aside">{labelAside}</span>}
-      </label>
-
-      {props.as === 'textarea' ? (
-        <textarea id={id} className="field__textarea" {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)} />
-      ) : (
-        <input id={id} className="field__input" {...(rest as InputHTMLAttributes<HTMLInputElement>)} />
-      )}
+      </div>
 
       {error ? (
         <p className="field__error">{error}</p>

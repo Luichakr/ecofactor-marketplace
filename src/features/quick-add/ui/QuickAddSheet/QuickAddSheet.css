@@ -124,6 +124,10 @@
   height: 18px;
 }
 
+.quick-add__bookmark--active {
+  color: var(--color-accent);
+}
+
 /* ───────────────────────── Phase 2 — added + recs ──────────────────────── */
 
 .added {

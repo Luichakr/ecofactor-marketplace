@@ -1,6 +1,7 @@
 .catalog-grid {
   display: grid;
-  gap: var(--space-6) var(--space-3);
+  /* Equal gap between cards horizontally and vertically. */
+  gap: var(--gap-card);
   padding: 0 var(--space-4);
 }
 
@@ -25,9 +26,30 @@
 
 /* Views 1 + 2: title left, "+" right, price left under title.
    Body padding 0 so it aligns with the image's left/right edges. */
+/* Card podlozhka — same treatment as the home rails: white surface, soft
+   shadow, rounded corners, tinted photo zone. Price pinned to the bottom so
+   it lines up across cards. */
+.catalog-grid .product-card {
+  height: 100%;
+  background-color: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.catalog-grid .product-card__hit {
+  background-color: var(--color-surface-elevated);
+}
+
 .catalog-grid--cols-1 .product-card__body,
 .catalog-grid--cols-2 .product-card__body {
-  padding: 4px 0 8px;
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  flex: 1;
+}
+
+.catalog-grid .product-card__price-row {
+  margin-top: auto;
 }
 
 /* View 3: dense — hide title, stack price on top and "+" below it,

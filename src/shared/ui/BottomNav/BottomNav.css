@@ -9,15 +9,49 @@
 
 .bottom-nav {
   position: absolute;
-  left: var(--space-3);
-  right: var(--space-3);
+  /* Inset ~5% each side so the bar reads ~10% narrower than full width. */
+  left: 5%;
+  right: 5%;
   bottom: calc(var(--safe-area-bottom) + var(--space-3));
   display: flex;
+  align-items: stretch;
   justify-content: center;
+  gap: var(--space-3);
   z-index: 100;
   pointer-events: none; /* let the page below catch taps in the empty gap */
   transition: left var(--transition-normal), right var(--transition-normal);
 }
+
+/* Зарядка — standalone round button beside the pill (Monobank-style). */
+.bottom-nav__charge {
+  pointer-events: auto;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 62px;
+  min-height: 56px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: width var(--transition-normal), min-height var(--transition-normal);
+}
+
+[data-theme="dark"] .bottom-nav__charge {
+  background-color: rgba(28, 28, 30, 0.62);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.bottom-nav__charge:active { opacity: 0.6; }
 
 .bottom-nav__pill {
   position: relative;

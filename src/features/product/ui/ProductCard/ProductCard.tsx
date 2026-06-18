@@ -3,7 +3,8 @@ import type { MarketplaceProduct } from '../../../../entities/product/model/prod
 import { formatPrice, formatOldPrice } from '../../../../entities/product/model/product.types'
 import { productPath } from '../../../../shared/config/routes'
 import { ProductImageSlider } from '../ProductImageSlider/ProductImageSlider'
-import { quickAdd } from '../../../quick-add/model/quickAddStore'
+import { getSwatches } from '../../lib/productColors'
+import { displayRating } from '../../lib/productRating'
 import { favorites, useIsFavorite } from '../../../favorites/model/favoritesStore'
 import { Icon } from '../../../../shared/ui/Icon/Icon'
 import './ProductCard.css'
@@ -21,9 +22,20 @@ type Props = {
  * bookmark icon lives only inside the product detail header. Catalog
  * cards keep only the quick-add "+" affordance.
  */
+/** Split a title into display lines. For cables we break "Кабель" onto its
+ *  own line so the connector spec ("Type 2 — Type 2", "GB/T", …) reads as a
+ *  clear second line instead of a confusing orphan. */
+function titleLines(title: string): string[] {
+  const m = title.match(/^(Кабель)\s+(.+)$/i)
+  return m ? [m[1], m[2]] : [title]
+}
+
 export function ProductCard({ product, compact = false, pool }: Props) {
   const navigate = useNavigate()
   const isFav = useIsFavorite(product.id)
+  const lines = titleLines(product.title)
+  const rating = displayRating(product)
+  const swatches = getSwatches(product, pool)
 
   function go() {
     navigate(productPath(product.id))
@@ -32,11 +44,6 @@ export function ProductCard({ product, compact = false, pool }: Props) {
   function toggleFav(e: React.MouseEvent) {
     e.stopPropagation()
     favorites.toggle(product.id)
-  }
-
-  function openQuickAdd(e: React.MouseEvent) {
-    e.stopPropagation()
-    quickAdd.open(product, pool ?? [])
   }
 
   return (
@@ -60,41 +67,68 @@ export function ProductCard({ product, compact = false, pool }: Props) {
       </div>
 
       <div className="product-card__body">
-        <div className="product-card__head">
-          <button
-            type="button"
-            className="product-card__title-btn"
-            onClick={go}
-            aria-label={product.title}
-          >
-            <h3 className="product-card__title">{product.title}</h3>
-          </button>
-          <button
-            type="button"
-            className="product-card__plus"
-            onClick={openQuickAdd}
-            disabled={product.stock === 0}
-            aria-label={product.stock === 0 ? 'Немає в наявності' : 'Швидке додавання'}
-            style={product.stock === 0 ? { opacity: 0.3, cursor: 'not-allowed' } : undefined}
-          >+</button>
+        <div className="product-card__rating" aria-label={`Рейтинг ${rating.average} з 5`}>
+          <span className="product-card__stars">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Icon
+                key={i}
+                name="star"
+                size={13}
+                filled={i < Math.round(rating.average)}
+              />
+            ))}
+          </span>
+          <span className="product-card__rating-count">{rating.count}</span>
         </div>
-        {product.price && (
-          <button
-            type="button"
-            className="product-card__price-btn"
-            onClick={go}
-            aria-label="Переглянути товар"
-          >
-            {product.price.oldValue ? (
-              <p className="product-card__price product-card__price--discount">
-                <span className="product-card__price-old">{formatOldPrice(product.price)}</span>
-                <span className="product-card__price-new">{formatPrice(product.price)}</span>
-              </p>
-            ) : (
-              <p className="product-card__price">{formatPrice(product.price)}</p>
-            )}
-          </button>
+
+        <button
+          type="button"
+          className="product-card__title-btn"
+          onClick={go}
+          aria-label={product.title}
+        >
+          <h3 className="product-card__title">
+            {lines.map((l, i) => (
+              <span key={i}>
+                {i > 0 && <br />}
+                {l}
+              </span>
+            ))}
+          </h3>
+        </button>
+
+        {swatches.length > 0 && (
+          <div className="product-card__colors" aria-label={`Кольорів: ${swatches.length}`}>
+            {swatches.map((s) => (
+              <span
+                key={s.hex}
+                className="product-card__color"
+                style={{ backgroundColor: s.hex }}
+                title={s.name}
+              />
+            ))}
+          </div>
         )}
+
+        <div className="product-card__price-row">
+          {product.price && (
+            <button
+              type="button"
+              className="product-card__price-btn"
+              onClick={go}
+              aria-label="Переглянути товар"
+            >
+              {product.price.oldValue ? (
+                <p className="product-card__price product-card__price--discount">
+                  <span className="product-card__price-old">{formatOldPrice(product.price)}</span>
+                  <span className="product-card__price-new">{formatPrice(product.price)}</span>
+                </p>
+              ) : (
+                <p className="product-card__price">{formatPrice(product.price)}</p>
+              )}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

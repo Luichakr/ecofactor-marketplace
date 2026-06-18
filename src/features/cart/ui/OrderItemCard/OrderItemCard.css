@@ -1,0 +1,109 @@
+.co-item {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  /* No padding — the photo is flush with the card edges (like the home card),
+     overflow clips it to the rounded corners. */
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.co-item__overlay {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 2;
+}
+
+.co-item__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+/* Leave room for the top-left overlay (cart checkbox) so it never sits on
+   top of the title. */
+.co-item--with-overlay .co-item__info {
+  padding-left: calc(var(--space-2) + 22px + var(--space-2));
+}
+
+.co-item__title {
+  margin: 0;
+  font-size: var(--font-size-subtitle2);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-subtitle2);
+  color: var(--color-text);
+}
+
+.co-item__seller {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--font-size-body2);
+  color: var(--color-text-muted);
+}
+
+.co-item__price {
+  font-size: var(--font-size-subtitle1);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.co-item__img {
+  flex-shrink: 0;
+  width: 48%;
+  max-width: 193px;
+  align-self: stretch;
+  overflow: hidden;
+  background-color: var(--color-surface-elevated);
+}
+
+.co-item__img .product-image {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Item stepper (delete/minus · qty · plus) ── */
+.co-item__stepper {
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px;
+  background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-pill);
+}
+
+.co-item__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  color: var(--color-accent);
+  cursor: pointer;
+  min-height: 0;
+}
+
+.co-item__step:active { opacity: 0.6; }
+
+.co-item__qty {
+  min-width: 20px;
+  text-align: center;
+  font-size: var(--font-size-subtitle2);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
