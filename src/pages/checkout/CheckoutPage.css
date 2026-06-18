@@ -79,7 +79,11 @@
 
 /* ─── Single-screen order layout ("Ваше замовлення") ──────────── */
 .checkout-page {
-  padding: 0 var(--space-4);
+  /* Only horizontal gutters — must NOT reset padding-bottom, or it kills the
+     ScreenContainer's bottom-nav reservation and the last fields hide under
+     the sticky CTA. */
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
 }
 
 .checkout-page__title {

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '../../../../shared/ui/Icon/Icon'
 import { ROUTES } from '../../../../shared/config/routes'
@@ -48,6 +48,20 @@ export function HomePromoSlider() {
   const navigate = useNavigate()
   const railRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
+
+  // Auto-advance every 5s (wraps around). The native smooth scroll keeps the
+  // dots in sync via onScroll.
+  useEffect(() => {
+    const rail = railRef.current
+    if (!rail) return
+    const id = window.setInterval(() => {
+      const w = rail.clientWidth
+      if (w === 0) return
+      const next = (Math.round(rail.scrollLeft / w) + 1) % SLIDES.length
+      rail.scrollTo({ left: next * w, behavior: 'smooth' })
+    }, 5000)
+    return () => window.clearInterval(id)
+  }, [])
 
   function onScroll() {
     const rail = railRef.current

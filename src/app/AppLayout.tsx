@@ -6,11 +6,13 @@ import { CartToast } from '../features/cart/ui/CartToast/CartToast'
 import { QuickAddSheet } from '../features/quick-add/ui/QuickAddSheet/QuickAddSheet'
 import { SearchProvider } from '../features/search/ui/SearchTrigger/SearchTrigger'
 import { SupportLauncher } from '../features/support/ui/SupportLauncher/SupportLauncher'
+import { EdgeBackGesture } from '../shared/ui/EdgeBackGesture/EdgeBackGesture'
 
 export function AppLayout() {
   return (
     <SearchProvider>
       <AppShell>
+        <EdgeBackGesture />
         <Outlet />
         <BottomNav />
         <BookmarkToast />

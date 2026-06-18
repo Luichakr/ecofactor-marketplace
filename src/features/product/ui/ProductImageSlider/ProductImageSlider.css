@@ -48,6 +48,10 @@
   justify-content: center;
   gap: 4px;
   pointer-events: none;
+  z-index: 2;
+  /* Promote to its own layer so iOS WebView paints the dots on mount
+     instead of only after the first scroll/repaint. */
+  transform: translateZ(0);
 }
 
 .product-slider__dot {

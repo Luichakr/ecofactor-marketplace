@@ -211,6 +211,12 @@
   margin: 0;
 }
 
+/* No-price fallback — lighter, not a bold number. */
+.product-card__price--quote {
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+}
+
 /* Discount layout — old price strikethrough on the left, new price in
  * an inverted (fg-bg) chip on the right. Same line. */
 .product-card__price--discount {

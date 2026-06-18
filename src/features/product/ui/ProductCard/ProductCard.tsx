@@ -111,23 +111,25 @@ export function ProductCard({ product, compact = false, pool }: Props) {
         )}
 
         <div className="product-card__price-row">
-          {product.price && (
-            <button
-              type="button"
-              className="product-card__price-btn"
-              onClick={go}
-              aria-label="Переглянути товар"
-            >
-              {product.price.oldValue ? (
-                <p className="product-card__price product-card__price--discount">
-                  <span className="product-card__price-old">{formatOldPrice(product.price)}</span>
-                  <span className="product-card__price-new">{formatPrice(product.price)}</span>
-                </p>
-              ) : (
-                <p className="product-card__price">{formatPrice(product.price)}</p>
-              )}
-            </button>
-          )}
+          <button
+            type="button"
+            className="product-card__price-btn"
+            onClick={go}
+            aria-label="Переглянути товар"
+          >
+            {product.price?.oldValue ? (
+              <p className="product-card__price product-card__price--discount">
+                <span className="product-card__price-old">{formatOldPrice(product.price)}</span>
+                <span className="product-card__price-new">{formatPrice(product.price)}</span>
+              </p>
+            ) : product.price?.value != null ? (
+              <p className="product-card__price">{formatPrice(product.price)}</p>
+            ) : (
+              // No price from the feed — show a request-a-quote label instead
+              // of a blank gap.
+              <p className="product-card__price product-card__price--quote">Ціна за запитом</p>
+            )}
+          </button>
         </div>
       </div>
     </div>
