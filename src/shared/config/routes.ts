@@ -22,6 +22,7 @@ export const ROUTES = {
   ADDRESSES: '/profile/addresses',
   PAYMENT_METHODS: '/profile/cards',
   SETTINGS: '/profile/settings',
+  LISTINGS: '/profile/listings',
   RETURN_OPEN: '/orders/:orderId/return',
   WISHLIST_SHARED: '/wishlist/shared/:hash',
 } as const

@@ -10,6 +10,7 @@ import {
 } from '../../features/orders/model/ordersStore'
 import { useAddresses, useCards } from '../../features/profile/model/profileStore'
 import { useFavorites } from '../../features/favorites/model/favoritesStore'
+import { useListings } from '../../features/listings/model/listingsStore'
 import { openSupport } from '../../features/support/ui/SupportLauncher/SupportLauncher'
 import { getLaunchParams } from '../../shared/lib/webview/launchParams'
 import { Icon } from '../../shared/ui/Icon/Icon'
@@ -53,6 +54,7 @@ function StatusDot({ status }: { status: Order['status'] }) {
 const ICONS = {
   orders: <Icon name="package_2" size={22} />,
   favorites: <Icon name="favorite" size={22} />,
+  listings: <Icon name="sell" size={22} />,
   address: <Icon name="location_on" size={22} />,
   card: <Icon name="credit_card" size={22} />,
   settings: <Icon name="settings" size={22} />,
@@ -68,6 +70,7 @@ export function ProfilePage() {
   const addresses = useAddresses()
   const cards = useCards()
   const favorites = useFavorites()
+  const myListings = useListings()
 
   // Avatar — hydrated from localStorage on mount. Stored as a data: URL so
   // it survives reloads without a backend. ~200KB-ish quota is fine for one
@@ -197,6 +200,17 @@ export function ProfilePage() {
         <div className="profile-page__menu">
           <MenuRow to={ROUTES.ORDERS} icon={ICONS.orders} label="Мої замовлення" badge={String(orders.length)} />
           <MenuRow to={ROUTES.FAVORITES} icon={ICONS.favorites} label="Закладки" badge={String(favorites.length)} />
+        </div>
+
+        <div className="profile-page__menu-group-label">Продаж</div>
+        <div className="profile-page__menu">
+          <MenuRow
+            to={ROUTES.LISTINGS}
+            icon={ICONS.listings}
+            label="Мої оголошення"
+            sub="Додавайте власні товари на продаж"
+            badge={myListings.length > 0 ? String(myListings.length) : undefined}
+          />
         </div>
 
         <div className="profile-page__menu-group-label">Аккаунт</div>

@@ -28,6 +28,7 @@ import { OrderDetailPage } from '../pages/orders/OrderDetailPage'
 import { AddressesPage } from '../pages/profile/AddressesPage'
 import { CardsPage } from '../pages/profile/CardsPage'
 import { SettingsPage } from '../pages/profile/SettingsPage'
+import { MyListingsPage } from '../pages/listings/MyListingsPage'
 import { ReturnFormPage } from '../pages/orders/ReturnFormPage'
 import { WishlistSharedPage } from '../pages/favorites/WishlistSharedPage'
 import { ChargerConfiguratorPage } from '../pages/charger-configurator/ChargerConfiguratorPage'
@@ -86,6 +87,7 @@ export function AppRouter() {
         <Route path={ROUTES.ADDRESSES} element={<AddressesPage />} />
         <Route path={ROUTES.PAYMENT_METHODS} element={<CardsPage />} />
         <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
+        <Route path={ROUTES.LISTINGS} element={<MyListingsPage />} />
         <Route path={ROUTES.RETURN_OPEN} element={<ReturnFormPage />} />
         <Route path={ROUTES.WISHLIST_SHARED} element={<WishlistSharedPage />} />
         <Route path={ROUTES.MENU} element={<MenuPage />} />
