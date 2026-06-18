@@ -15,8 +15,9 @@
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  /* Horizontal pan only — let vertical drags scroll the page (iOS WebKit
-     would otherwise swallow the gesture on the hero photo). */
+  /* Vertical-only touch so the page always scrolls when a finger is on the
+     hero photo. Horizontal swipe by touch is disabled (was trapping scroll). */
+  touch-action: pan-y;
 }
 
 .product-gallery__rail::-webkit-scrollbar { display: none; }

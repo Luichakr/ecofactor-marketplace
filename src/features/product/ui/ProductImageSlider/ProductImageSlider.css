@@ -18,10 +18,10 @@
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  /* Only own horizontal panning — vertical drags fall through to the page so
-     the user can scroll even with a finger on the photo (iOS WebKit traps it
-     otherwise). */
-  /* Hide scrollbar in WebKit too. */
+  /* Vertical-only touch: the page always scrolls when a finger is on a photo.
+     Horizontal swipe of the carousel by touch is intentionally disabled — it
+     was trapping vertical page scroll on the WebView. */
+  touch-action: pan-y;
 }
 
 .product-slider__rail::-webkit-scrollbar { display: none; }
