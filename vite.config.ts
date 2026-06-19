@@ -10,7 +10,8 @@ export default defineConfig(({ command }) => ({
   plugins: [react()],
   base: command === 'build' ? BASE : '/',
   server: {
-    port: 3000,
+    // Honor the harness-assigned PORT (autoPort); fall back to 3000 locally.
+    port: Number(process.env.PORT) || 3000,
   },
   test: {
     environment: 'node',

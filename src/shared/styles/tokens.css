@@ -128,7 +128,7 @@
   /* ── Layout ── */
   --mobile-max-width: 430px;
   --bottom-nav-height: 64px;
-  --header-height: 60px;
+  --header-height: 72px;
   --safe-area-top: env(safe-area-inset-top, 0px);
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
 
