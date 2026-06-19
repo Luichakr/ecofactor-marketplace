@@ -1,17 +1,17 @@
 /*
- * Single unified floating frosted-glass bar.
- *
- * One pill holds Зарядка + the four route tabs. An animated highlight slides
- * under the active tab. On scroll-down the whole bar shrinks — narrower (via
- * animated side insets) and shorter (height + hidden labels) — and restores on
+ * Single unified floating frosted-glass bar — mirrors the host ECOFACTOR app's
+ * bottom bar: ONE continuous capsule, Зарядка + the three route tabs evenly
+ * spaced, an animated highlight sliding under the active tab. Height and bottom
+ * inset are tuned to match the native bar so WebView↔native feels seamless.
+ * On scroll-down the bar shrinks (shorter + labels hidden), restoring on
  * scroll-up.
  */
 
 .bottom-nav {
   position: absolute;
-  /* Inset ~5% each side so the bar reads ~10% narrower than full width. */
-  left: 5%;
-  right: 5%;
+  /* Match the native bar's side margins. */
+  left: var(--space-4);
+  right: var(--space-4);
   bottom: calc(var(--safe-area-bottom) + var(--space-3));
   display: flex;
   align-items: stretch;
@@ -22,7 +22,8 @@
   transition: left var(--transition-normal), right var(--transition-normal);
 }
 
-/* Зарядка — standalone round button beside the pill (Monobank-style). */
+/* Зарядка — standalone round button beside the pill (Monobank-style).
+   Square footprint = the pill's height so it reads as a clean circle. */
 .bottom-nav__charge {
   pointer-events: auto;
   flex-shrink: 0;
@@ -31,19 +32,23 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  width: 62px;
-  min-height: 56px;
+  align-self: center; /* don't stretch to the pill's height — stay a true circle */
+  width: 58px;
+  height: 58px;
+  min-height: 0;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  /* Figma "Glass" effect (Frost 6 / Refraction 60 / Depth 30, light −45°). */
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  background-color: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55);
   color: var(--color-text-muted);
   cursor: pointer;
   font-family: var(--font-family);
-  transition: width var(--transition-normal), min-height var(--transition-normal);
+  transition: width var(--transition-normal), height var(--transition-normal);
 }
 
 [data-theme="dark"] .bottom-nav__charge {
@@ -56,25 +61,34 @@
 .bottom-nav__pill {
   position: relative;
   pointer-events: auto;
-  background-color: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  /* Figma "Glass" effect (Frost 6 / Refraction 60 / Depth 30, light −45°). */
+  background-color: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55);
   flex: 1;
   min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding: 6px;
+  /* Fully-rounded pill (Figma corner radius 296). */
   border-radius: 999px;
-  min-height: 56px;
+  /* Tab Bar height from Figma (58). */
+  min-height: 58px;
   transition: min-height var(--transition-normal);
 }
 
 [data-theme="dark"] .bottom-nav__pill {
   background-color: rgba(28, 28, 30, 0.62);
   border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .bottom-nav__indicator {
+  background-color: rgba(255, 255, 255, 0.16);
+  box-shadow: none;
 }
 
 /* Sliding highlight under the active tab. Position/width set inline from the
@@ -84,7 +98,10 @@
   top: 6px;
   bottom: 6px;
   border-radius: 999px;
-  background-color: var(--color-accent-soft);
+  /* Light glass chip under the active tab (Figma active state). */
+  background-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7);
   pointer-events: none;
   z-index: 0;
   /* `left`/`width` are percentage calcs of the pill, so they follow the bar's
@@ -164,8 +181,13 @@
   right: 14%;
 }
 
+.bottom-nav--compact .bottom-nav__charge {
+  width: 50px;
+  height: 50px;
+}
+
 .bottom-nav--compact .bottom-nav__pill {
-  min-height: 46px;
+  min-height: 50px;
   /* Keep horizontal padding at 6px (don't change it) so the indicator's calc
      stays constant and never re-triggers a transition while the bar shrinks. */
 }

@@ -34,9 +34,9 @@ export function RecommendStrip({ title, products, layout = 'row', compact = fals
               <ProductImage src={p.image} alt={p.title} categoryId={p.categoryId} />
             </button>
             <div className="reco-strip__info">
-              {p.price && (
-                <span className="reco-strip__price">{formatPrice(p.price)}</span>
-              )}
+              <span className="reco-strip__price">
+                {p.price?.value != null ? formatPrice(p.price) : 'За запитом'}
+              </span>
               <button
                 type="button"
                 className="reco-strip__add"

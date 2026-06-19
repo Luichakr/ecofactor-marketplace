@@ -8,9 +8,10 @@ import './BottomNav.css'
 
 /**
  * Floating bottom nav, Monobank-style: "Зарядка" is a standalone round button
- * (returns to the host charging app), the four in-app routes live in a pill
- * with an animated highlight that slides to the active tab. The whole bar
- * shrinks — narrower and shorter — while scrolling down, restoring on scroll-up.
+ * (returns to the host charging app), the three in-app routes live in a pill
+ * with an animated highlight that slides to the active tab. Height and bottom
+ * inset are tuned to match the host ECOFACTOR app's bar. The bar shrinks —
+ * shorter, labels hidden — while scrolling down, restoring on scroll-up.
  */
 const PILL_LINKS = [
   { to: ROUTES.MARKETPLACE, end: true, icon: 'storefront', label: 'Маркет' },
