@@ -139,6 +139,7 @@
   font-family: var(--font-family);
 }
 
+/* Active tab (Figma): green icon AND green label, on the light glass chip. */
 .bottom-nav__item--active {
   color: var(--color-accent);
 }
