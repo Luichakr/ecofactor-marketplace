@@ -1,0 +1,14 @@
+{
+  "name": "ecofactor-marketplace-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Worker backend for the ECOFACTOR Marketplace (orders relay + AI listing moderation via Telegram).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "wrangler": "^3.80.0"
+  }
+}

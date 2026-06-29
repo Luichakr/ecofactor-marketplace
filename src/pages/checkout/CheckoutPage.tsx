@@ -16,7 +16,7 @@ import { useAddresses, useCards } from '../../features/profile/model/profileStor
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import { ROUTES, orderDetailPath } from '../../shared/config/routes'
 import { getLaunchParams } from '../../shared/lib/webview/launchParams'
-import { notifyTelegram } from '../../shared/lib/telegram/notify'
+import { submitOrder } from '../../shared/lib/backend/api'
 import novaPoshtaLogo from '../../assets/brands/nova-poshta.jpg'
 import './CheckoutPage.css'
 
@@ -176,20 +176,32 @@ export function CheckoutPage() {
     orders.add(order)
     setCreatedOrderId(order.id)
 
-    // Demo: notify the shop owner in Telegram (no real payment taken).
-    const lines = items
-      .map((it) => `• ${it.title} ×${it.qty} — ${formatMoney((it.price ?? 0) * it.qty, it.currency ?? 'UAH')}`)
-      .join('\n')
-    const deliveryText =
-      deliveryType === 'np'
-        ? `Нова Пошта — ${branchDesc ?? city}`
-        : `Курʼєр — ${city}, ${homeAddress}`
-    notifyTelegram(
-      `🛒 <b>Нове замовлення #${order.number}</b>\n\n${lines}\n\n` +
-        `<b>Разом: ${formatMoney(total, currency)}</b>\n` +
-        `🚚 ${deliveryText}\n` +
-        `👤 ${name}${phone?.e164 ? `, ${phone.e164}` : ''}`,
-    )
+    // Record the order: through the Worker (durable KV log + manager Telegram)
+    // when VITE_API_BASE is set, otherwise a direct Telegram ping. The local
+    // mp:orders store above is always the on-device journal regardless.
+    void submitOrder({
+      order: {
+        id: order.id,
+        number: order.number,
+        createdAt: now,
+        items: order.items.map((it) => ({
+          title: it.title,
+          qty: it.qty,
+          price: it.price,
+          currency: it.currency,
+          variant: it.variant,
+        })),
+        total,
+        currency,
+        deliveryType,
+        deliveryCity: city,
+        deliveryBranch: deliveryType === 'np' ? branchDesc : undefined,
+        deliveryAddress: deliveryType === 'home' ? homeAddress : undefined,
+        deliveryPrice: deliveryCost,
+      },
+      customer: { name: name.trim(), phone: phone?.e164 ?? phone?.digits ?? '' },
+      source: 'webview',
+    })
     // Cart mode: clear the ordered items. Buy-now items were never in the
     // cart, so leave it untouched.
     if (!buyNow) for (const it of items) cart.remove(it.productId, it.variant)

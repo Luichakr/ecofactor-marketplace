@@ -1,5 +1,8 @@
 name: Deploy to GitHub Pages
 
+# TEMPORARY host while we test, before migrating to Cloudflare (leechan.xyz).
+# Vite `base` defaults to "/" (for the future root-served Cloudflare host), so
+# here we override it to the GH Pages subpath at build time.
 on:
   push:
     branches: [main]
@@ -32,6 +35,11 @@ jobs:
 
       - name: Build
         env:
+          # GH Pages serves under /ecofactor-marketplace/ (subpath).
+          VITE_BASE: /ecofactor-marketplace/
+          # Test-mode: client-side Telegram notifications (token ships in the
+          # public bundle — acceptable for testing, move to the Worker later).
+          VITE_TELEGRAM_BOT_TOKEN: ${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}
           VITE_LUBEAVTO_API_BASE: ${{ vars.VITE_LUBEAVTO_API_BASE }}
           VITE_LUBEAVTO_API_TOKEN: ${{ secrets.VITE_LUBEAVTO_API_TOKEN }}
           VITE_EFPF_API_BASE: ${{ vars.VITE_EFPF_API_BASE }}

@@ -1,0 +1,26 @@
+# ---------------------------------------------------------------------------
+# Local development secrets for `wrangler dev`.
+#
+# Copy this file to `.dev.vars` (which is gitignored) and fill in REAL values.
+# These are loaded automatically by `wrangler dev`. They are the local
+# equivalent of the production secrets you set with `wrangler secret put`.
+#
+# ALL VALUES BELOW ARE FAKE PLACEHOLDERS — replace them.
+# ---------------------------------------------------------------------------
+
+# Telegram bot token from @BotFather (format: <id>:<hash>)
+TELEGRAM_BOT_TOKEN="123456789:FAKE-replace-with-your-real-bot-token"
+
+# Telegram chat id of the manager who receives orders + moderation requests.
+# (Optional locally — wrangler.toml already provides a fallback var.)
+TELEGRAM_MANAGER_CHAT_ID="436984255"
+
+# Anthropic API key from console.anthropic.com (starts with sk-ant-...)
+ANTHROPIC_API_KEY="sk-ant-FAKE-replace-with-your-real-key"
+
+# Shared secret for the Telegram webhook (any long random string).
+# Must match the `secret_token` you pass to Telegram's setWebhook.
+WEBHOOK_SECRET="FAKE-long-random-string-change-me"
+
+# CORS origin (optional locally). In prod set it in wrangler.toml [vars].
+# ALLOWED_ORIGIN="http://localhost:5173"

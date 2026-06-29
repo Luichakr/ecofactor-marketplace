@@ -216,6 +216,56 @@ export function useOrders(): Order[] {
   return useSyncExternalStore(orders.subscribe, orders.getAll, orders.getAll)
 }
 
+/**
+ * Export the full order journal as a single downloadable file — the "one file"
+ * record of everything ordered. (In backend mode the Worker also keeps a
+ * durable KV log; this is the on-device copy.)
+ */
+export function downloadOrdersLog(format: 'json' | 'csv' = 'json'): void {
+  try {
+    const stamp = new Date().toISOString().slice(0, 10)
+    let content: string
+    let mime: string
+    let ext: string
+    if (format === 'csv') {
+      const esc = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`
+      const header = ['number', 'createdAt', 'status', 'total', 'currency', 'deliveryCity', 'deliveryBranch', 'items']
+      const rows = snapshot.map((o) =>
+        [
+          o.number,
+          o.createdAt,
+          o.status,
+          o.total,
+          o.currency,
+          o.deliveryCity,
+          o.deliveryBranch ?? '',
+          o.items.map((i) => `${i.title} x${i.qty}`).join('; '),
+        ]
+          .map(esc)
+          .join(','),
+      )
+      content = [header.map(esc).join(','), ...rows].join('\n')
+      mime = 'text/csv;charset=utf-8'
+      ext = 'csv'
+    } else {
+      content = JSON.stringify(snapshot, null, 2)
+      mime = 'application/json'
+      ext = 'json'
+    }
+    const blob = new Blob([content], { type: mime })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `ecofactor-orders-${stamp}.${ext}`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+  } catch {
+    /* download is best-effort */
+  }
+}
+
 /** Cancel-window helper — true while order is within 30 minutes of paidAt. */
 export function isCancellable(order: Order): boolean {
   if (!['placed', 'paid', 'packing'].includes(order.status)) return false

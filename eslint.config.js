@@ -5,7 +5,9 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules'] },
+  // `worker/` is a standalone Cloudflare Worker package with its own tsconfig
+  // and runtime (not part of the app build) — lint it separately, not here.
+  { ignores: ['dist', 'node_modules', 'worker'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],

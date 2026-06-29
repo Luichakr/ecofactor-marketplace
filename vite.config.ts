@@ -1,10 +1,10 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
-// GitHub Pages serves the app under https://<user>.github.io/<repo>/ ,
-// so production assets need the subpath prefix. Override via VITE_BASE if
-// you later move to a root-served host (Cloudflare Pages, custom domain).
-const BASE = process.env.VITE_BASE ?? '/ecofactor-marketplace/'
+// Hosted on Cloudflare Pages at the root of a custom domain (leechan.xyz),
+// so assets are served from `/`. Override via VITE_BASE only if you ever need
+// a subpath host again (e.g. GitHub Pages: VITE_BASE=/ecofactor-marketplace/).
+const BASE = process.env.VITE_BASE ?? '/'
 
 export default defineConfig(({ command }) => ({
   plugins: [react()],

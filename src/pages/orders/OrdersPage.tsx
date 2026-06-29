@@ -5,6 +5,7 @@ import { ScreenContainer } from '../../shared/ui/ScreenContainer/ScreenContainer
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState'
 import {
   useOrders,
+  downloadOrdersLog,
   ORDER_STATUS_LABELS,
   type Order,
   type OrderStatus,
@@ -64,6 +65,14 @@ export function OrdersPage() {
             {filtered.map((o) => (
               <OrderCard key={o.id} order={o} />
             ))}
+          </div>
+        )}
+
+        {orders.length > 0 && (
+          <div className="orders-page__export">
+            <button type="button" className="orders-page__export-btn" onClick={() => downloadOrdersLog('json')}>
+              Завантажити журнал замовлень (.json)
+            </button>
           </div>
         )}
       </ScreenContainer>

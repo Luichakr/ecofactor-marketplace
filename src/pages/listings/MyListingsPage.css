@@ -59,6 +59,13 @@
   padding-right: var(--space-5);
 }
 
+.listing-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
 .listing-card__title {
   margin: 0;
   font-size: var(--font-size-subtitle2);
@@ -66,6 +73,86 @@
   line-height: var(--line-height-subtitle2);
   color: var(--color-text);
 }
+
+/* Status tint on the card edge */
+.listing-card--pending { border-left: 3px solid var(--color-warning); }
+.listing-card--rejected { border-left: 3px solid var(--color-error); }
+.listing-card--rejected .listing-card__img { opacity: 0.55; }
+
+.listing-card__reason {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-text-muted);
+}
+
+/* ── Status badge ── */
+.listing-status {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+.listing-status--approved { background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.listing-status--pending { background: color-mix(in srgb, var(--color-warning) 16%, transparent); color: #b26a00; }
+.listing-status--rejected { background: color-mix(in srgb, var(--color-error) 14%, transparent); color: var(--color-error); }
+
+/* ── Submission result banner ── */
+.listing-banner {
+  position: relative;
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+}
+.listing-banner--pending { background: color-mix(in srgb, var(--color-warning) 12%, var(--color-surface)); border-color: color-mix(in srgb, var(--color-warning) 40%, transparent); }
+.listing-banner--approved { background: var(--color-accent-soft); border-color: color-mix(in srgb, var(--color-accent) 40%, transparent); }
+.listing-banner--rejected { background: color-mix(in srgb, var(--color-error) 10%, var(--color-surface)); border-color: color-mix(in srgb, var(--color-error) 35%, transparent); }
+.listing-banner__body { flex: 1; min-width: 0; }
+.listing-banner__title { display: block; font-size: var(--font-size-subtitle2); color: var(--color-text); }
+.listing-banner__lead { margin: 2px 0 0; font-size: var(--font-size-body2); color: var(--color-text-muted); }
+.listing-banner__reasons {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-4);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-text-muted);
+}
+.listing-banner__close {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  min-height: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-radius: 50%;
+}
+.listing-banner__close:active { opacity: 0.5; }
+
+/* ── Moderation notice in the form ── */
+.listing-form__notice {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  margin: 0;
+  padding: var(--space-3);
+  background: var(--color-accent-soft);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-text);
+}
+.listing-form__notice svg { flex-shrink: 0; color: var(--color-accent-strong); margin-top: 1px; }
 
 .listing-card__desc {
   margin: 0;
@@ -109,7 +196,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  padding-bottom: var(--space-6);
+  /* Match the sheet header's side gutter so fields aren't flush to the edges. */
+  padding: var(--space-4) var(--space-4) var(--space-6);
 }
 
 .listing-form__label {
