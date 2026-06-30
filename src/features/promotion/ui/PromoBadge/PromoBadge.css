@@ -1,0 +1,32 @@
+.promo-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: var(--font-family);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.promo-badge--top {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.promo-badge--vip {
+  background: linear-gradient(135deg, #c9a227, #e8c75a);
+  color: #1a1a1a;
+  border-color: rgba(0, 0, 0, 0.12);
+}

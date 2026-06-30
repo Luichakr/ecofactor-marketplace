@@ -28,6 +28,7 @@
 }
 
 .listing-card__img {
+  position: relative;
   flex-shrink: 0;
   width: 96px;
   height: 96px;
@@ -38,6 +39,37 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Promoted card tint */
+.listing-card:has(.promo-badge--top) { border-color: rgba(16, 180, 82, 0.35); background: #f2fbf6; }
+.listing-card:has(.promo-badge--vip) { border-color: rgba(201, 162, 39, 0.45); background: #fffcf2; }
+[data-theme="dark"] .listing-card:has(.promo-badge--top),
+[data-theme="dark"] .listing-card:has(.promo-badge--vip) { background: var(--color-surface); }
+
+/* Promo status chip + promote button inside the card */
+.listing-card__promo {
+  margin-top: var(--space-1);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.2px;
+}
+.listing-card__promo--active { color: var(--color-accent-strong); }
+.listing-card__promo--pending { color: var(--color-warning); }
+.listing-card__promote {
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  padding: 6px 12px;
+  min-height: 0;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-full);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+.listing-card__promote:active { opacity: 0.6; }
+.listing-card__promote:disabled { opacity: 0.5; cursor: default; }
 
 .listing-card__img img {
   width: 100%;
@@ -263,3 +295,21 @@
 
 .listing-form__add-photo:active { opacity: 0.6; }
 .listing-form__add-photo:disabled { opacity: 0.5; cursor: default; }
+
+/* "Promote to top" button under the submit button */
+.listing-form__promote {
+  width: 100%;
+  margin-top: calc(-1 * var(--space-2));
+  padding: var(--space-3);
+  min-height: 0;
+  border: 1.5px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  font-size: var(--font-size-button);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-button);
+  cursor: pointer;
+}
+.listing-form__promote:active { opacity: 0.6; }
+.listing-form__promote:disabled { opacity: 0.45; cursor: default; }

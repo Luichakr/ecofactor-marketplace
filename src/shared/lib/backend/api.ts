@@ -11,7 +11,7 @@
  * identical, so callers don't care which path ran.
  */
 import { classifyListing } from '../../../features/listings/lib/moderation'
-import type { ListingStatus, ModerationVerdict } from '../../../features/listings/model/listingsStore'
+import type { ListingPromo, ListingStatus, ModerationVerdict } from '../../../features/listings/model/listingsStore'
 import { hasTelegram, sendTelegramMessage, sendTelegramPhoto } from '../telegram/notify'
 
 export const API_BASE = ((import.meta.env.VITE_API_BASE as string | undefined) ?? '').replace(/\/+$/, '')
@@ -93,6 +93,8 @@ export type ListingSubmission = {
     images: string[]
   }
   user?: { name?: string; phone?: string; userId?: string }
+  /** Paid promotion bought for this listing, if any (mock). */
+  promo?: ListingPromo
 }
 
 export type ListingDecision = { id: string; status: ListingStatus; moderation: ModerationVerdict }
@@ -101,10 +103,25 @@ function statusFromVerdict(v: ModerationVerdict): ListingStatus {
   return v.allowed && v.relevant && v.score >= 0.5 ? 'pending' : 'rejected'
 }
 
+const TIER_LABEL: Record<ListingPromo['tier'], string> = { bump: 'Підняття', top: 'ТОП', vip: 'VIP' }
+
+function promoBlock(p: ListingPromo): string {
+  const until = new Date(p.promoExpiresAt).toLocaleDateString('uk-UA')
+  return (
+    `💸 <b>ПЛАТНЕ ПРОСУВАННЯ</b>\n` +
+    `Тариф: <b>${TIER_LABEL[p.tier]}</b> · ${p.durationDays === 0 ? 'разове' : p.durationDays + ' дн.'}\n` +
+    `Сплачено: <b>${p.pricePaid} ₴</b> (тест)\n` +
+    `Замовлення: <code>#${p.orderId}</code>\n` +
+    `Діє до: ${until} (активується після схвалення)\n` +
+    `────────────\n`
+  )
+}
+
 function listingCaption(s: ListingSubmission, v: ModerationVerdict): string {
   const { listing, user } = s
   const price = listing.price != null ? money(listing.price, listing.currency) : 'Ціна за домовленістю'
   return (
+    `${s.promo ? promoBlock(s.promo) : ''}` +
     `🆕 <b>Нове оголошення на перевірку</b>\n\n` +
     `<b>${listing.title}</b>\n` +
     `${listing.description ? `${listing.description}\n` : ''}` +

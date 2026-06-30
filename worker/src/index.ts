@@ -99,9 +99,21 @@ interface ListingUser {
   userId?: string | number;
 }
 
+interface ListingPromo {
+  tier: 'bump' | 'top' | 'vip';
+  durationDays: number;
+  pricePaid: number;
+  orderId: string;
+  purchasedAt: string;
+  promoExpiresAt: string;
+  promoStatus: 'paid' | 'active' | 'expired';
+}
+
 interface ListingsRequest {
   listing: Listing;
   user?: ListingUser;
+  /** Paid promotion bought for this listing, if any (mock). */
+  promo?: ListingPromo;
 }
 
 interface ModerationVerdict {
@@ -122,6 +134,7 @@ interface StoredListing {
   /** Listing metadata WITHOUT image data — only the image count is kept. */
   listing: Omit<Listing, 'images'> & { imageCount: number };
   user?: ListingUser;
+  promo?: ListingPromo;
   receivedAt: string;
   moderatedAt?: string;
 }
@@ -302,6 +315,7 @@ async function handleListings(request: Request, env: Env, ctx: ExecutionContext)
       imageCount: images.length,
     },
     user: body.user,
+    promo: body.promo,
     receivedAt,
   };
   await env.ECOFACTOR_KV.put(`listing:${listing.id}`, JSON.stringify(stored));
@@ -311,7 +325,7 @@ async function handleListings(request: Request, env: Env, ctx: ExecutionContext)
     // Send to Telegram. Do not block the response on full media-group upload —
     // but the first photo (with buttons) is important, so we await it.
     try {
-      await sendListingToManager(env, listing, verdict, images, ctx);
+      await sendListingToManager(env, listing, verdict, images, ctx, body.promo);
     } catch (err) {
       console.error('Failed to notify manager about listing:', err);
       // The verdict is already stored; the frontend still gets status=pending.
@@ -517,10 +531,11 @@ async function sendListingToManager(
   listing: Listing,
   verdict: ModerationVerdict,
   images: string[],
-  ctx: ExecutionContext
+  ctx: ExecutionContext,
+  promo?: ListingPromo
 ): Promise<void> {
   const chatId = managerChatId(env);
-  const caption = formatListingCaption(listing, verdict);
+  const caption = formatListingCaption(listing, verdict, promo);
   const keyboard = {
     inline_keyboard: [
       [
@@ -564,9 +579,19 @@ async function sendListingToManager(
   }
 }
 
+const PROMO_TIER_LABEL: Record<ListingPromo['tier'], string> = { bump: 'Підняття', top: 'ТОП', vip: 'VIP' };
+
 /** HTML caption for a listing under review. */
-function formatListingCaption(listing: Listing, verdict: ModerationVerdict): string {
+function formatListingCaption(listing: Listing, verdict: ModerationVerdict, promo?: ListingPromo): string {
   const lines: string[] = [];
+  if (promo) {
+    const until = new Date(promo.promoExpiresAt).toLocaleDateString('uk-UA');
+    lines.push(`💸 <b>ПЛАТНЕ ПРОСУВАННЯ</b>`);
+    lines.push(`Тариф: <b>${PROMO_TIER_LABEL[promo.tier]}</b> · ${promo.durationDays === 0 ? 'разове' : promo.durationDays + ' дн.'}`);
+    lines.push(`Сплачено: <b>${promo.pricePaid} ₴</b> (тест) · <code>#${esc(promo.orderId)}</code>`);
+    lines.push(`Діє до: ${until} (активується після схвалення)`);
+    lines.push('────────────');
+  }
   lines.push(`🆕 <b>Нове оголошення на модерацію</b>`);
   lines.push(`<b>${esc(listing.title ?? '')}</b>`);
   if (listing.price != null) lines.push(`💵 Ціна: ${formatMoney(listing.price, listing.currency)}`);

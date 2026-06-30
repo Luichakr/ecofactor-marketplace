@@ -12,9 +12,19 @@ import {
   STATUS_LABELS,
   type Listing,
   type ListingStatus,
+  type ListingPromo,
 } from '../../features/listings/model/listingsStore'
 import { submitListing, getListingStatus, hasBackend } from '../../shared/lib/backend/api'
 import { getLaunchParams } from '../../shared/lib/webview/launchParams'
+import { PromoteSheet } from '../../features/promotion/ui/PromoteSheet/PromoteSheet'
+import { PromoBadge } from '../../features/promotion/ui/PromoBadge/PromoBadge'
+import {
+  sortByPromo,
+  activeBadge,
+  isPromoActive,
+  isPromoPending,
+  promoDaysLeft,
+} from '../../features/promotion/model/promoPlans'
 import { ROUTES } from '../../shared/config/routes'
 import './MyListingsPage.css'
 
@@ -62,12 +72,16 @@ function fileToDataUrl(file: File): Promise<string> {
   })
 }
 
-type SubmitResult = { status: ListingStatus; reasons: string[] }
+type SubmitResult = { status: ListingStatus; reasons: string[]; promoted?: boolean }
+type PromoTarget =
+  | { mode: 'new'; data: FormData }
+  | { mode: 'existing'; id: string; title: string }
 
 export function MyListingsPage() {
-  const items = useListings()
+  const items = sortByPromo(useListings())
   const [open, setOpen] = useState(false)
   const [result, setResult] = useState<SubmitResult | null>(null)
+  const [promoTarget, setPromoTarget] = useState<PromoTarget | null>(null)
 
   // Backend mode: poll for the manager's Approve/Reject decision on pending items.
   useEffect(() => {
@@ -88,7 +102,8 @@ export function MyListingsPage() {
     }
   }, [])
 
-  async function handleSubmit(data: FormData): Promise<void> {
+  /** Create + submit a listing, optionally with a paid promotion. */
+  async function createListing(data: FormData, promo?: ListingPromo): Promise<void> {
     const id = listings.newId()
     const decision = await submitListing({
       listing: {
@@ -100,8 +115,14 @@ export function MyListingsPage() {
         images: data.images,
       },
       user: { name: launch.name, phone: launch.phone, userId: launch.userId },
+      promo,
     })
-    // Store everything (including rejected) so the user sees the outcome and why.
+    // A promo activates only once approved; if the decision is already approved, go live now.
+    const promoFinal = promo
+      ? decision.status === 'approved'
+        ? { ...promo, promoStatus: 'active' as const }
+        : promo
+      : undefined
     listings.create({
       id,
       title: data.title,
@@ -111,9 +132,22 @@ export function MyListingsPage() {
       images: data.images,
       status: decision.status,
       moderation: decision.moderation,
+      promo: promoFinal,
     })
-    setOpen(false)
-    setResult({ status: decision.status, reasons: decision.moderation.reasons })
+    setResult({ status: decision.status, reasons: decision.moderation.reasons, promoted: !!promo })
+  }
+
+  function onPaid(promo: ListingPromo) {
+    const target = promoTarget
+    if (!target) return
+    if (target.mode === 'new') {
+      void createListing(target.data, promo)
+    } else {
+      const l = listings.get().find((x) => x.id === target.id)
+      const promoFinal = l && l.status === 'approved' ? { ...promo, promoStatus: 'active' as const } : promo
+      listings.setPromo(target.id, promoFinal)
+    }
+    // Sheet stays on the thank-you screen; it clears promoTarget on close.
   }
 
   return (
@@ -131,7 +165,14 @@ export function MyListingsPage() {
           ) : (
             <ul className="listings-page__list">
               {items.map((l) => (
-                <ListingCard key={l.id} listing={l} />
+                <ListingCard
+                  key={l.id}
+                  listing={l}
+                  onPromote={() => {
+                    setOpen(false)
+                    setPromoTarget({ mode: 'existing', id: l.id, title: l.title })
+                  }}
+                />
               ))}
             </ul>
           )}
@@ -145,8 +186,24 @@ export function MyListingsPage() {
       </ScreenContainer>
 
       <BottomSheet open={open} onClose={() => setOpen(false)} title="НОВЕ ОГОЛОШЕННЯ" maxHeightPct={92}>
-        <ListingForm onSubmit={handleSubmit} />
+        <ListingForm
+          onSubmit={async (data) => {
+            setOpen(false)
+            await createListing(data)
+          }}
+          onPromote={(data) => {
+            setOpen(false)
+            setPromoTarget({ mode: 'new', data })
+          }}
+        />
       </BottomSheet>
+
+      <PromoteSheet
+        open={!!promoTarget}
+        listingTitle={promoTarget?.mode === 'existing' ? promoTarget.title : promoTarget?.data.title}
+        onPaid={onPaid}
+        onClose={() => setPromoTarget(null)}
+      />
     </>
   )
 }
@@ -164,7 +221,9 @@ function ResultBanner({ result, onClose }: { result: SubmitResult; onClose: () =
       ? 'Публікацію не дозволено.'
       : result.status === 'approved'
         ? 'Ваше оголошення вже видно на майданчику.'
-        : 'Модератор перевірить оголошення (текст і фото) і опублікує його.'
+        : result.promoted
+          ? 'Оплату прийнято. Модератор перевірить оголошення — просування активується після схвалення.'
+          : 'Модератор перевірить оголошення (текст і фото) і опублікує його.'
   return (
     <div className={`listing-banner listing-banner--${tone}`} role="status">
       <div className="listing-banner__body">
@@ -189,11 +248,15 @@ function StatusBadge({ status }: { status: ListingStatus }) {
   return <span className={`listing-status listing-status--${status}`}>{STATUS_LABELS[status]}</span>
 }
 
-function ListingCard({ listing }: { listing: Listing }) {
+function ListingCard({ listing, onPromote }: { listing: Listing; onPromote: () => void }) {
   const reason = listing.status !== 'approved' ? listing.moderation?.reasons?.[0] : undefined
+  const badge = activeBadge(listing)
+  const canPromote = listing.status !== 'rejected' && !isPromoActive(listing) && !isPromoPending(listing)
+
   return (
     <li className={`listing-card listing-card--${listing.status}`}>
       <span className="listing-card__img">
+        {badge && <PromoBadge type={badge} />}
         {listing.images[0] ? (
           <img src={listing.images[0]} alt={listing.title} />
         ) : (
@@ -212,6 +275,22 @@ function ListingCard({ listing }: { listing: Listing }) {
           {listing.price != null ? formatMoney(listing.price) : 'Ціна за домовленістю'}
         </span>
         {reason && <p className="listing-card__reason">{reason}</p>}
+
+        {isPromoActive(listing) && listing.promo && (
+          <span className="listing-card__promo listing-card__promo--active">
+            {listing.promo.tier === 'vip' ? '★ VIP' : '▲ ТОП'} · залишилось {promoDaysLeft(listing.promo)} дн.
+          </span>
+        )}
+        {isPromoPending(listing) && (
+          <span className="listing-card__promo listing-card__promo--pending">
+            Просування оплачено · активується після перевірки
+          </span>
+        )}
+        {canPromote && (
+          <button type="button" className="listing-card__promote" onClick={onPromote}>
+            🚀 Просунути в ТОП
+          </button>
+        )}
       </div>
       <button
         type="button"
@@ -227,7 +306,13 @@ function ListingCard({ listing }: { listing: Listing }) {
   )
 }
 
-function ListingForm({ onSubmit }: { onSubmit: (data: FormData) => Promise<void> }) {
+function ListingForm({
+  onSubmit,
+  onPromote,
+}: {
+  onSubmit: (data: FormData) => Promise<void>
+  onPromote: (data: FormData) => void
+}) {
   const [images, setImages] = useState<string[]>([])
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -238,6 +323,15 @@ function ListingForm({ onSubmit }: { onSubmit: (data: FormData) => Promise<void>
 
   const priceNum = Number(price.replace(/\s/g, ''))
   const valid = title.trim().length >= 3 && images.length > 0
+
+  function collect(): FormData {
+    return {
+      title: title.trim(),
+      description: description.trim() || undefined,
+      price: price.trim() ? priceNum : undefined,
+      images,
+    }
+  }
 
   async function onFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? [])
@@ -260,12 +354,7 @@ function ListingForm({ onSubmit }: { onSubmit: (data: FormData) => Promise<void>
     if (!valid || submitting) return
     setSubmitting(true)
     try {
-      await onSubmit({
-        title: title.trim(),
-        description: description.trim() || undefined,
-        price: price.trim() ? priceNum : undefined,
-        images,
-      })
+      await onSubmit(collect())
     } finally {
       setSubmitting(false)
     }
@@ -334,6 +423,14 @@ function ListingForm({ onSubmit }: { onSubmit: (data: FormData) => Promise<void>
       <Button variant="primary" fullWidth size="lg" type="submit" disabled={!valid || busy || submitting}>
         {submitting ? 'ПЕРЕВІРЯЄМО…' : 'ВІДПРАВИТИ НА ПЕРЕВІРКУ'}
       </Button>
+      <button
+        type="button"
+        className="listing-form__promote"
+        disabled={!valid || busy || submitting}
+        onClick={() => valid && onPromote(collect())}
+      >
+        🚀 Просунути в ТОП — швидший продаж
+      </button>
     </form>
   )
 }

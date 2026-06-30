@@ -21,6 +21,30 @@ export type ModerationVerdict = {
   at: string
 }
 
+/** Paid promotion tier. */
+export type PromoTier = 'bump' | 'top' | 'vip'
+
+/** Paid promotion attached to a listing (mock payment). */
+export type ListingPromo = {
+  tier: PromoTier
+  /** Plan duration in days (0 = one-shot bump). */
+  durationDays: number
+  /** Mock amount paid, UAH. */
+  pricePaid: number
+  /** Mock receipt id shown on the thank-you screen, e.g. "A4F29". */
+  orderId: string
+  /** When the seller paid (ISO). */
+  purchasedAt: string
+  /** When the promo window ends (ISO). Ignored once now > this. */
+  promoExpiresAt: string
+  /**
+   * 'paid'   = bought, listing still pending moderation (no badge yet)
+   * 'active' = listing approved → badge + top placement live
+   * 'expired'= past the window
+   */
+  promoStatus: 'paid' | 'active' | 'expired'
+}
+
 /** A user-created marketplace listing (persisted in localStorage). */
 export type Listing = {
   id: string
@@ -35,6 +59,8 @@ export type Listing = {
   status: ListingStatus
   /** Last moderation verdict (AI pre-screen and/or manager decision). */
   moderation?: ModerationVerdict
+  /** Paid promotion, if any. Absent = organic listing. */
+  promo?: ListingPromo
 }
 
 const KEY = 'ecofactor-listings'
@@ -91,9 +117,20 @@ export const listings = {
   },
   /** Update moderation outcome (e.g. after polling the backend for a manager decision). */
   setStatus(id: string, status: ListingStatus, moderation?: ModerationVerdict) {
-    items = items.map((i) =>
-      i.id === id ? { ...i, status, moderation: moderation ?? i.moderation } : i,
-    )
+    items = items.map((i) => {
+      if (i.id !== id) return i
+      // A paid promotion activates only once the listing is approved.
+      const promo =
+        i.promo && i.promo.promoStatus === 'paid' && status === 'approved'
+          ? { ...i.promo, promoStatus: 'active' as const }
+          : i.promo
+      return { ...i, status, moderation: moderation ?? i.moderation, promo }
+    })
+    emit()
+  },
+  /** Attach a paid promotion to a listing (after mock payment). */
+  setPromo(id: string, promo: ListingPromo) {
+    items = items.map((i) => (i.id === id ? { ...i, promo } : i))
     emit()
   },
   get() {
